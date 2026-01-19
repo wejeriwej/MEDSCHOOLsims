@@ -10,7 +10,90 @@ app.use(cors()); // Allow requests from your web page
 
 
 // ---------------- CHAT GPT API ---------------- //
+
+
+
+
+
+app.post("/api/oscetrial", async (req, res) => {
+  const { input, previousquestion, response_question } = req.body;
+
+  try {
+    const completeSentence = async (responseText) => {
+      // Loop until we have a sentence-ending punctuation mark
+      while (!(responseText.endsWith('.') || responseText.endsWith('!') || responseText.endsWith('?'))) {
+        // Make a request to complete the sentence
+        const additionalResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo", // or another model, like "gpt-4"
+            messages: [
+              { role: "system", content: "you're Marc, a 31-year-old male, experiencing constant severe chest pain." },
+              { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}\nYour previous response: ${response_question || "N/A"}\nNew Dr question: ${input}\nMarc's answer:`},
+            ],
+            temperature: 0.1,
+            max_tokens: 20, // Allow a bit more tokens for completion
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0
+          }),
+        });
+
+        const data = await additionalResponse.json();
+        responseText += ' ' + data.choices[0].message.content.trim(); // Add the extra tokens
+      }
+      return responseText.trim();
+    };
+
+    // Initial request to OpenAI 
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo", //gpt-4o-mini
+        messages: [
+          { role: "system", content: "you're Marc, a 31-year-old male, experiencing constant severe chest pain." },
+              { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}\nYour previous response: ${response_question || "N/A"}\nNew Dr question: ${input}\nMarc's answer:`},        ],
+        temperature: 0.1,
+        max_tokens: 15,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0
+      }),
+    });
+
+    const data = await response.json();
+    res.json({ content: data.choices[0].message.content.trim() });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to connect to OpenAI" });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
+
 const completeSentence = async (responseText) => {
   // Loop until we have a sentence-ending punctuation mark
   while (!(responseText.endsWith('.') || responseText.endsWith('!') || responseText.endsWith('?'))) {
@@ -90,7 +173,6 @@ app.post("/api/oscetrial", async (req, res) => {
     res.status(500).json({ error: "Failed to connect to OpenAI" });
   }
 });
-
 */
 
 
@@ -99,6 +181,7 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 
+/*
 
 app.post("/api/oscetrial", async (req, res) => {
   const { input, previousquestion, response_question } = req.body;
@@ -195,7 +278,7 @@ Marc's answer:`,
 });
 
 
-
+*/
 
 
 
