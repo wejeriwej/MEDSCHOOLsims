@@ -2170,7 +2170,7 @@ fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
 .then(blob => {
     const url = window.URL.createObjectURL(blob);
     const audio = new Audio(url);
-
+    audio.play();
 
     const gptvideo = document.getElementById('mutedVideo');
     gptvideo.style.display = 'unset';
