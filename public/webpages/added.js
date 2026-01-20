@@ -40,11 +40,11 @@ class SpecialHeader extends HTMLElement {
         
             <li class = "secondheaderbtn" id="r1s">
               
-              <a href="../webpages/searchbarr.html" style="border-bottom-left-radius: 0%; border-bottom-right-radius: 0%;">Cases by Topic ᵕ</a>
+              <a href="searchbarr.html" style="border-bottom-left-radius: 0%; border-bottom-right-radius: 0%;">Cases by Topic ᵕ</a>
               <ul id = "casebytopiclayout">
                 
               <li>
-                  <a href="../webpages/searchbarr.html" style="border-radius: 0%; border-radius: 0%;">All cases</a>
+                  <a href="searchbarr.html" style="border-radius: 0%; border-radius: 0%;">All cases</a>
 
                 </li>
                 <li>
@@ -96,12 +96,12 @@ class SpecialHeader extends HTMLElement {
             </li>
             
             <li class = "thirdheaderbtn" id="r1">
-              <a href="../webpages/aboutus.html" >About us</a>
+              <a href="aboutus.html" >About us</a>
             </li>
             
         
             <li class = "fourthheaderbtn" id="r1">
-              <a href="../webpages/contactus.html" >Contact us</a>
+              <a href="contactus.html" >Contact us</a>
             </li>
           
         
@@ -114,7 +114,7 @@ class SpecialHeader extends HTMLElement {
             </li>
             
             <li class = "searchbtn">
-              <a href="../webpages/searchbarr.html" style="font-size: 30px; margin-top: -13px;" >⌕</a>
+              <a href="searchbarr.html" style="font-size: 30px; margin-top: -13px;" >⌕</a>
             </li>
         
                   
@@ -176,22 +176,22 @@ class OtherCases extends HTMLElement {
         <center><h2 style="font-family: LTSoul;">Other cases:</h2></center>
         <div class="scroll-container">
               <div class="image-container">
-                <img src="pics/1stcase.png" onclick="window.location.href='page1.html';" alt="Cinque Terre" width="600" height="400">
+                <img src="../pics/1stcase.png" onclick="window.location.href='../page1.html';" alt="Cinque Terre" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='page1.html';" style="cursor: pointer;">Chest pain</div>            
             </div>
 
             <div class="image-container">
-                <img src="pics/2ndcase.png" onclick="window.location.href='OTHERCASES/2ndcase/page1.html';" alt="Forest" width="600" height="400">
+                <img src="../pics/2ndcase.png" onclick="window.location.href='../OTHERCASES/2ndcase/page1.html';" alt="Forest" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/2ndcase/page1.html';" style="cursor: pointer;">Abdo pain</div>            
             </div>
 
             <div class="image-container">
-                <img src="pics/3rdcase.png" onclick="window.location.href='OTHERCASES/3rdcase/page1.html';" alt="Northern Lights" width="600" height="400">
+                <img src="../pics/3rdcase.png" onclick="window.location.href='../OTHERCASES/3rdcase/page1.html';" alt="Northern Lights" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/3rdcase/page1.html';" style="cursor: pointer;">Cough</div>            
             </div>
 
             <div class="image-container">
-                <img src="pics/4thcase.png" onclick="window.location.href='OTHERCASES/4thcase/page1.html';" alt="Mountains" width="600" height="400">
+                <img src="../pics/4thcase.png" onclick="window.location.href='../OTHERCASES/4thcase/page1.html';" alt="Mountains" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/4thcase/page1.html';" style="cursor: pointer;">Limb weakness</div>            
             </div>
         </div>

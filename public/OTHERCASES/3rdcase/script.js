@@ -1711,7 +1711,7 @@ const handleUserInput = async (noteContent) => {
 
 
 
-
+  const text11L = response;
 
 fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
     method: 'POST',

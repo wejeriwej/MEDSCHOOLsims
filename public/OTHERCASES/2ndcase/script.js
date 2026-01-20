@@ -1769,6 +1769,7 @@ const handleUserInput = async (noteContent) => {
 
 
 
+  const text11L = response;
 
 // Call the Eleven Labs API for text-to-speech
 fetch('https://oscesimstrial1.onrender.com/api/voicezak', {

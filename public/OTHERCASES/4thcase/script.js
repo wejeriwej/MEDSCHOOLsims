@@ -1766,6 +1766,7 @@ try {
     const utterance = new SpeechSynthesisUtterance(response);
   */
   
+      const text11L = response;
   
   fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
     method: 'POST',

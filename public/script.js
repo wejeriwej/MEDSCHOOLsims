@@ -2152,7 +2152,10 @@ const handleUserInput = async (noteContent) => {
 
 
 
-// Call the Eleven Labs API for text-to-speech
+
+
+  const text11L = response;
+
 fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -2167,10 +2170,11 @@ fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
     }
     return response.blob();
 })
+
 .then(blob => {
     const url = window.URL.createObjectURL(blob);
     const audio = new Audio(url);
-    audio.play();
+
 
     const gptvideo = document.getElementById('mutedVideo');
     gptvideo.style.display = 'unset';
