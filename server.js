@@ -59,10 +59,10 @@ app.post("/api/oscetrial", async (req, res) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo", //gpt-4o-mini
         messages: [
-          { role: "system", content: "you're Marc, a 31-year-old male, experiencing constant severe chest pain. You're in a consultation room & the Dr is asking you questions. Answer as Marc be extremely minimal max 1 short sentence" },
+          { role: "system", content: "you're Marc, a 31-year-old male, experiencing constant severe chest pain. You're in a consultation room & the Dr is asking you questions. Answer as Marc be extremely minimal max 1 sentence" },
               { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}\nYour previous response: ${response_question || "N/A"}\nNew Dr question: ${input}\nMarc's answer:`},        ],
         temperature: 0.1,
-        max_tokens: 15,
+        max_tokens: 25,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0
@@ -105,7 +105,7 @@ app.post("/api/2ndcase", async (req, res) => {
   const { input, previousquestion, response_question } = req.body;
 
   try {
-    const completeSentence = async (responseText) => {
+    /*const completeSentence = async (responseText) => {
       // Loop until we have a sentence-ending punctuation mark
       while (!(responseText.endsWith('.') || responseText.endsWith('!') || responseText.endsWith('?'))) {
         // Make a request to complete the sentence
@@ -137,7 +137,7 @@ app.post("/api/2ndcase", async (req, res) => {
       }
       return responseText.trim();
     };
-
+*/
     // Initial request to OpenAI 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -148,14 +148,14 @@ app.post("/api/2ndcase", async (req, res) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo", //gpt-4o-mini
         messages: [
-          { role: "system", content: "you're Jason, a 40 year old male. with right upper quadrant sharp pain that comes + goes for last 2 months + happened this morning. You're in a consultation room & the Dr is asking you questions. Answer as Jason" },
+          { role: "system", content: "you're Jason, a 40 year old male. with right upper quadrant sharp pain that comes + goes for last 2 months + happened this morning. You're in a consultation room & the Dr is asking you questions. Answer as Jason be extremely minimal max 1 sentence" },
           { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
                                     Your previous response: ${response_question || "N/A"}
                                     New Dr question: ${input}
                                     Jason's answer:` },
         ],
         temperature: 0.1,
-        max_tokens: 15,
+        max_tokens: 25,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0
@@ -187,7 +187,7 @@ app.post("/api/3rdcase", async (req, res) => {
   const { input, previousquestion, response_question } = req.body;
 
   try {
-    
+  /*  
     const completeSentence = async (responseText) => {
       // Loop until we have a sentence-ending punctuation mark
       while (!(responseText.endsWith('.') || responseText.endsWith('!') || responseText.endsWith('?'))) {
@@ -220,7 +220,7 @@ app.post("/api/3rdcase", async (req, res) => {
       }
       return responseText.trim();
     };
-
+*/
     // Initial request to OpenAI
     
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -232,14 +232,14 @@ app.post("/api/3rdcase", async (req, res) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo", //gpt-4o-mini
         messages: [
-          { role: "system", content: "you're Daniel, a 33 yr old male. with a worsening cough over last 6 weeks associated with pleuritic Rt chest pain + fever. You're in a consultation room & the Dr is asking you questions. Answer as Daniel" },
+          { role: "system", content: "you're Daniel, a 33 yr old male. with a worsening cough over last 6 weeks associated with pleuritic Rt chest pain + fever. You're in a consultation room & the Dr is asking you questions. Answer as Daniel be extremely minimal max 1 sentence" },
           { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
                                     Your previous response: ${response_question || "N/A"}
                                     New Dr question: ${input}
                                     Daniel's answer:` },
         ],
         temperature: 0.1,
-        max_tokens: 15,
+        max_tokens: 25,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0
@@ -269,7 +269,7 @@ app.post("/api/4thcase", async (req, res) => {
   const { input, previousquestion, response_question } = req.body;
 
   try {
-const completeSentence = async (responseText) => {
+/*const completeSentence = async (responseText) => {
       // Loop until we have a sentence-ending punctuation mark
       while (!(responseText.endsWith('.') || responseText.endsWith('!') || responseText.endsWith('?'))) {
         // Make a request to complete the sentence
@@ -301,7 +301,7 @@ const completeSentence = async (responseText) => {
       }
       return responseText.trim();
     };
-
+*/
     // Initial request to OpenAI
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -313,14 +313,14 @@ const completeSentence = async (responseText) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo", //gpt-4o-mini
         messages: [
-          { role: "system", content: "you're John, a 31 year old male. with new right sided arm + leg weakness over last 3 hrs with facial droop + slurred speech. You're in a consultation room & the Dr is asking you questions. Answer as John" },
+          { role: "system", content: "you're John, a 31 year old male. with new right sided arm + leg weakness over last 3 hrs with facial droop + slurred speech. You're in a consultation room & the Dr is asking you questions. Answer as John be extremely minimal max 1 sentence" },
           { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
                                     Your previous response: ${response_question || "N/A"}
                                     New Dr question: ${input}
                                     John's answer:` },
         ],
         temperature: 0.1,
-        max_tokens: 15,
+        max_tokens: 25,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0
