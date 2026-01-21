@@ -21,7 +21,7 @@ class SpecialHeader extends HTMLElement {
           
                     <div class="logoplacement">
                     <a href="../index.html">
-                        <input type="image" id="logo" src="../art/logoupdated1.png" name="saveForm" class="btTxt submit" id="saveForm" />
+                        <input type="image" id="logo" rel="preload" src="../art/logoupdated1.webp" name="saveForm" class="btTxt submit" id="saveForm" />
                     </a>
                 </div>
           
@@ -176,22 +176,22 @@ class OtherCases extends HTMLElement {
         <center><h2 style="font-family: LTSoul;">Other cases:</h2></center>
         <div class="scroll-container">
               <div class="image-container">
-                <img src="pics/1stcase.png" onclick="window.location.href='page1.html';" alt="Cinque Terre" width="600" height="400">
+                <img src="pics/1stcase.webp" onclick="window.location.href='page1.html';" alt="Cinque Terre" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='page1.html';" style="cursor: pointer;">Chest pain</div>            
             </div>
 
             <div class="image-container">
-                <img src="pics/2ndcase.png" onclick="window.location.href='OTHERCASES/2ndcase/page1.html';" alt="Forest" width="600" height="400">
+                <img src="pics/2ndcase.webp" onclick="window.location.href='OTHERCASES/2ndcase/page1.html';" alt="Forest" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/2ndcase/page1.html';" style="cursor: pointer;">Abdo pain</div>            
             </div>
 
             <div class="image-container">
-                <img src="pics/3rdcase.png" onclick="window.location.href='OTHERCASES/3rdcase/page1.html';" alt="Northern Lights" width="600" height="400">
+                <img src="pics/3rdcase.webp" onclick="window.location.href='OTHERCASES/3rdcase/page1.html';" alt="Northern Lights" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/3rdcase/page1.html';" style="cursor: pointer;">Cough</div>            
             </div>
 
             <div class="image-container">
-                <img src="pics/4thcase.png" onclick="window.location.href='OTHERCASES/4thcase/page1.html';" alt="Mountains" width="600" height="400">
+                <img src="pics/4thcase.webp" onclick="window.location.href='OTHERCASES/4thcase/page1.html';" alt="Mountains" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/4thcase/page1.html';" style="cursor: pointer;">Limb weakness</div>            
             </div>
         </div>

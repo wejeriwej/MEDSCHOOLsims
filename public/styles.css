@@ -299,7 +299,7 @@ li {
 .explanationparagraph{
   margin-left: 3%;
   margin-right: 1px;
-  font-size: 12px;
+  font-size: 14px;
   font-style: italic;
   list-style: '- ';
 
@@ -1733,12 +1733,12 @@ div.scroll-container::-webkit-scrollbar-thumb:hover {
 
 /* Image styling */
 div.scroll-container img {
-  padding: 15px;
   border-radius: 30px; /* Rounded corners for images */
   transition: transform 0.4s ease, box-shadow 0.3s ease; /* Smooth transitions */
   display: block; /* Ensure the image behaves as a block element */
   width: 100%; /* Ensure the image fits within the container */
-  height: auto; /* Maintain aspect ratio */
+  height: 100%; /* Maintain aspect ratio */
+  object-fit: cover;
 }
 
 /* Image container positioning */
@@ -1746,9 +1746,17 @@ div.scroll-container img {
   position: relative;
   display: inline-block;
   margin: 15px; /* Space between images */
-  width: 600px; /* Ensure fixed width for consistency */
-  height: 320px; /* Ensure fixed height for consistency */
+  width: 500px; /* Ensure fixed width for consistency */
+  height: 250px; /* Ensure fixed height for consistency */
   cursor: pointer; /* Make the container cursor a pointer to indicate it’s clickable */
+
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+      
 
 }
 
@@ -1769,17 +1777,18 @@ div.scroll-container img {
   transition: transform 0.3s ease-in-out; /* Smooth transition */
   box-sizing: border-box; /* Ensure padding does not affect dimensions */
   border-radius: 10px; /* Rounded corners for images */
-  margin-bottom: 20px;
+  margin-bottom: 54px;
 
 }
 
 /* Hover effect on image caption */
 .image-container:hover .image-caption {
-  transform: translateY(-10%); /* Slide caption up */
+  transform: scale(1.04) translateY(85%)/* Slide caption up */
+
 }
 
 .image-container:hover img {
-  transform: scale(1.05); /* Zoom effect on image */
+  transform: scale(1.04); /* Zoom effect on image */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow on hover */
 }
 

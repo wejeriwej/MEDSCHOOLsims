@@ -427,7 +427,7 @@ pauseBtn.addEventListener("click", function() {
     clearInterval(timer);
     pauseBtn.innerHTML = "1"; pauseBtn.style.fontWeight = "bold"; pauseBtn.style.height = '85px'; pauseBtn.style.padding = '300px 280px'; pauseBtn.style.color = 'transparent';
     pauseBtn.style.top = '50%'; pauseBtn.style.left = '50%'; pauseBtn.style.transform = 'translate(-50%, -50%)';
-    pauseBtn.style.backgroundImage = "url('art/play-button-black-and-white.png')";
+    pauseBtn.style.backgroundImage = "url('../../art/play-button-black-and-white.png')";
 
     myVideo.pause(); recognition.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
     pauseBtn.style.display = "unset"; //actionTriggered = true;
@@ -437,7 +437,7 @@ pauseBtn.addEventListener("click", function() {
     timer = setInterval(updateTimeLeft, 1000);
     pauseBtn.innerHTML = ""; pauseBtn.style.fontWeight = "normal"; pauseBtn.style.fontSize = "15px"; pauseBtn.style.height = '35px'; pauseBtn.style.padding = '10px 17px'; 
     recognition.start();  document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; document.getElementById('replayButton').style.display = 'unset';document.getElementById('home').style.display = 'unset';
-    pauseBtn.style.backgroundImage = "url('art/pause_button_black_and_white-removebg-preview.png')";  document.getElementById('silencemessage').style.display = 'none';
+    pauseBtn.style.backgroundImage = "url('../../art/pause_button_black_and_white-removebg-preview.png')";  document.getElementById('silencemessage').style.display = 'none';
 
     pauseBtn.style.top = ''; pauseBtn.style.left = ''; pauseBtn.style.transform = ''; // Reset the position property to its default value
     pauseBtn.style.display = "unset"; //actionTriggered = true;
