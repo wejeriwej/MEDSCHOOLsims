@@ -534,8 +534,8 @@ app.post("/api/create-checkout-session", verifyFirebaseUser, async (req, res) =>
           quantity: 1
         }
       ],
-      success_url: "http://localhost:5500/forgot.html",
-      cancel_url: "http://localhost:5500/signup.html"
+      success_url: "http://127.0.0.1:5501/public/webpages/contactus.html",
+      cancel_url: "http://127.0.0.1:5501/public/webpages/aboutus.html"
     });
 
     res.json({ url: session.url });
