@@ -24,6 +24,7 @@
 <special-header></special-header>
         
       
+<div id="authStatus"></div>
 
 
 
@@ -47,8 +48,8 @@
 
             
 
-            <video id="myVideo" autoplay playsinline><!--if you add the 'controls' before autoplay then you can pause and mute etc -->
-              <source id="mp4_src" src="WIN_20230328_13_59_37_Pro.webm" type="video/mp4">
+            <video id="myVideo" autoplay  playsinline webkit-playsinline><!--if you add the 'controls' before autoplay then you can pause and mute etc -->
+              <source id="webm_src" src="videos/stress.webm" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>
 
@@ -58,12 +59,12 @@
 
 
             <video id="mutedVideo" autoplay muted loop      playsinline webkit-playsinline><!--LAST 2 THINGS IS FOR IT TO NOT GO FULL SCREEN ON PHONE. if you add the 'controls' before autoplay then you can pause and mute etc -->
-              <source id="mutedmp4_src" src="vid-whatsbroughtyouin.webm" type="video/mp4">
+              <source id="mutedwebm_src" src="vid-whatsbroughtyouin.webm" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>
 
             <video id="inbetweenVideo" autoplay      playsinline webkit-playsinline muted><!--LAST 2 THINGS IS FOR IT TO NOT GO FULL SCREEN ON PHONE. if you add the 'controls' before autoplay then you can pause and mute etc -->
-              <source id="inbetweenmp4_src" src="silentvideo.webm" type="video/mp4">
+              <source id="inbetweenwebm_src" src="silentvideo.webm" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>
 
@@ -508,7 +509,9 @@
 
         <div id="examinations">
                   <h4 id="titleforquestions">Question 1</h4>
-                  <button id="save-note-btn-for-examinations" title="Save examinations">Submit answer</button>
+                  <button id="save-note-btn-for-examinations" title="Save examinations">Submit answer<svg class="w-10 h-10" style="width: 50px;" viewBox="0 0 254 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 103.824C45.3292 106.086 85.2951 90.8282 118.182 63.953C129.508 54.6969 140.763 42.4172 147.387 29.1688C150.391 23.1616 154.398 11.338 149.274 5.78786C140.768 -3.42746 129.585 13.6307 125.893 19.9805C119.22 31.4586 124.234 53.8078 136.148 60.2613C158.264 72.2407 191.043 69.3799 215.315 68.3011C225.006 67.8703 234.869 65.4297 244.439 65.4297C248.152 65.4297 239.179 60.7699 237.794 59.5229C229.618 52.165 229.186 52.3018 239.27 58.7846C240.667 59.6823 250.92 65.2052 250.92 66.168C250.92 66.84 233.48 79.6822 231.887 81.6733" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  </svg></button>
                   <button id="move-onto-questions-btn_examinations" onclick="style.display = 'none', movetoQuestions_examinations()" type="button" title="Skip/next question">Skip/next question</button>
                   <button id="end-consultation-btn1" onclick="style.display = 'none', endConsultation()" type="button" title="End consultation completely">End the questioning to review your consultation</button>
                   <img id="micisworkingexaminations" src="art/micfinal.gif" style="display: none; z-index: 1;"></img>
@@ -526,7 +529,9 @@
       
         <div id="summary">
                   <h4 id="titleforquestions">Question 2</h4>
-                  <button id="save-note-btn-for-summary" title="Save summary">Submit Summary</button>
+                  <button id="save-note-btn-for-summary" title="Save summary">Submit Summary<svg class="w-10 h-10" style="width: 50px;" viewBox="0 0 254 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 103.824C45.3292 106.086 85.2951 90.8282 118.182 63.953C129.508 54.6969 140.763 42.4172 147.387 29.1688C150.391 23.1616 154.398 11.338 149.274 5.78786C140.768 -3.42746 129.585 13.6307 125.893 19.9805C119.22 31.4586 124.234 53.8078 136.148 60.2613C158.264 72.2407 191.043 69.3799 215.315 68.3011C225.006 67.8703 234.869 65.4297 244.439 65.4297C248.152 65.4297 239.179 60.7699 237.794 59.5229C229.618 52.165 229.186 52.3018 239.27 58.7846C240.667 59.6823 250.92 65.2052 250.92 66.168C250.92 66.84 233.48 79.6822 231.887 81.6733" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  </svg></button>
                   <button id="move-onto-questions-btn_summary" onclick="style.display = 'none', movetoQuestions_summary()" type="button" title="Skip/next question">Skip/next question</button>
                   <button id="end-consultation-btn1" onclick="style.display = 'none', endConsultation()" type="button" title="End consultation completely">End the questioning to review your consultation</button>
                   <img id="micisworkingsummary" src="art/micfinal.gif" style="display: none; z-index: 1;"></img>
@@ -546,7 +551,9 @@
         
         <div id="differentials">
           <h4 id="titleforquestions">Question 3</h4>
-          <button id="save-note-btn-for-differentials" title="Save differentials">Submit answer</button>
+          <button id="save-note-btn-for-differentials" title="Save differentials">Submit answer<svg class="w-10 h-10" style="width: 50px;" viewBox="0 0 254 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 103.824C45.3292 106.086 85.2951 90.8282 118.182 63.953C129.508 54.6969 140.763 42.4172 147.387 29.1688C150.391 23.1616 154.398 11.338 149.274 5.78786C140.768 -3.42746 129.585 13.6307 125.893 19.9805C119.22 31.4586 124.234 53.8078 136.148 60.2613C158.264 72.2407 191.043 69.3799 215.315 68.3011C225.006 67.8703 234.869 65.4297 244.439 65.4297C248.152 65.4297 239.179 60.7699 237.794 59.5229C229.618 52.165 229.186 52.3018 239.27 58.7846C240.667 59.6823 250.92 65.2052 250.92 66.168C250.92 66.84 233.48 79.6822 231.887 81.6733" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  </svg></button>
           <button id="move-onto-questions-btn_differentials" onclick="style.display = 'none', movetoQuestions_differentials()" type="button" title="Skip/next question">Skip/next question</button>
           <button id="end-consultation-btn1" onclick="style.display = 'none', endConsultation()" type="button" title="End consultation completely">End the questioning to review your consultation</button>
           <img id="micisworkingdifferentials" src="art/micfinal.gif" style="display: none; z-index: 1;"></img>
@@ -567,7 +574,9 @@
 
         <div id="investigations">
           <h4 id="titleforquestions">Question 4</h4>
-          <button id="save-note-btn-for-investigations" title="Save investigations">Submit answer</button>
+          <button id="save-note-btn-for-investigations" title="Save investigations">Submit answer<svg class="w-10 h-10" style="width: 50px;" viewBox="0 0 254 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 103.824C45.3292 106.086 85.2951 90.8282 118.182 63.953C129.508 54.6969 140.763 42.4172 147.387 29.1688C150.391 23.1616 154.398 11.338 149.274 5.78786C140.768 -3.42746 129.585 13.6307 125.893 19.9805C119.22 31.4586 124.234 53.8078 136.148 60.2613C158.264 72.2407 191.043 69.3799 215.315 68.3011C225.006 67.8703 234.869 65.4297 244.439 65.4297C248.152 65.4297 239.179 60.7699 237.794 59.5229C229.618 52.165 229.186 52.3018 239.27 58.7846C240.667 59.6823 250.92 65.2052 250.92 66.168C250.92 66.84 233.48 79.6822 231.887 81.6733" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  </svg></button>
           <button id="move-onto-questions-btn_investigations" onclick="style.display = 'none', movetoQuestions_investigations()" type="button" title="Skip/next question">Skip/next question</button>
           <button id="end-consultation-btn1" onclick="style.display = 'none', endConsultation()" type="button" title="End consultation completely">End the questioning to review your consultation</button>
           <img id="micisworkinginvestigations" src="art/micfinal.gif" style="display: none; z-index: 1;"></img>
@@ -586,7 +595,9 @@
 
         <div id="riskfactors">
           <h4 id="titleforquestions">Question 5</h4>
-          <button id="save-note-btn-for-riskfactors" title="Save riskfactors">Submit answer</button>
+          <button id="save-note-btn-for-riskfactors" title="Save riskfactors">Submit answer<svg class="w-10 h-10" style="width: 50px;" viewBox="0 0 254 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 103.824C45.3292 106.086 85.2951 90.8282 118.182 63.953C129.508 54.6969 140.763 42.4172 147.387 29.1688C150.391 23.1616 154.398 11.338 149.274 5.78786C140.768 -3.42746 129.585 13.6307 125.893 19.9805C119.22 31.4586 124.234 53.8078 136.148 60.2613C158.264 72.2407 191.043 69.3799 215.315 68.3011C225.006 67.8703 234.869 65.4297 244.439 65.4297C248.152 65.4297 239.179 60.7699 237.794 59.5229C229.618 52.165 229.186 52.3018 239.27 58.7846C240.667 59.6823 250.92 65.2052 250.92 66.168C250.92 66.84 233.48 79.6822 231.887 81.6733" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  </svg></button>
           <button id="move-onto-questions-btn_riskfactors" onclick="style.display = 'none', movetoQuestions_riskfactors()" type="button" title="Skip/next question">Skip/next question</button>
           <button id="end-consultation-btn1" onclick="style.display = 'none', endConsultation()" type="button" title="End consultation completely">End the questioning to review your consultation</button>
           <img id="micisworkingriskfactors" src="art/micfinal.gif" style="display: none; z-index: 1;"></img>
@@ -602,7 +613,9 @@
 
         <div id="treatments">
           <h4 id="titleforquestions">Question 6</h4>
-          <button id="save-note-btn-for-treatments" title="Save treatments">Submit answer</button>
+          <button id="save-note-btn-for-treatments" title="Save treatments">Submit answer<svg class="w-10 h-10" style="width: 50px;" viewBox="0 0 254 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 103.824C45.3292 106.086 85.2951 90.8282 118.182 63.953C129.508 54.6969 140.763 42.4172 147.387 29.1688C150.391 23.1616 154.398 11.338 149.274 5.78786C140.768 -3.42746 129.585 13.6307 125.893 19.9805C119.22 31.4586 124.234 53.8078 136.148 60.2613C158.264 72.2407 191.043 69.3799 215.315 68.3011C225.006 67.8703 234.869 65.4297 244.439 65.4297C248.152 65.4297 239.179 60.7699 237.794 59.5229C229.618 52.165 229.186 52.3018 239.27 58.7846C240.667 59.6823 250.92 65.2052 250.92 66.168C250.92 66.84 233.48 79.6822 231.887 81.6733" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+  </svg></button>
           <!--<button id="move-onto-questions-btn_treatments" onclick="style.display = 'none', movetoQuestions_treatments()" type="button" title="Skip/next question">Skip/next question</button> -->
           <button id="end-consultation-btn1" onclick="style.display = 'none', endConsultation()" type="button" title="End consultation completely">End the questioning to review your consultation</button>
           <img id="micisworkingtreatments" src="art/micfinal.gif" style="display: none; z-index: 1;"></img>
@@ -3105,6 +3118,10 @@
                 </div>
 
         </div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="logins/firebase.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="script.js"></script>

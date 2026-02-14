@@ -20,8 +20,8 @@ class SpecialHeader extends HTMLElement {
           <div id="topbanner"></div>
           
                     <div class="logoplacement">
-                    <a href="../index.html">
-                        <input type="image" id="logo" rel="preload" src="../art/logoupdated1.webp" name="saveForm" class="btTxt submit" id="saveForm" />
+                    <a href="../../index.html">
+                        <input type="image" id="logo" rel="preload" src="../../art/logoupdated1.webp" name="saveForm" class="btTxt submit" id="saveForm" />
                     </a>
                 </div>
           
@@ -31,7 +31,7 @@ class SpecialHeader extends HTMLElement {
            
             
             <li class = "homebtn" id="r1">
-              <a href="../index.html">home</a>
+              <a href="../../index.html">home</a>
             </li>
             
         
@@ -40,27 +40,27 @@ class SpecialHeader extends HTMLElement {
         
             <li class = "secondheaderbtn" id="r1s">
               
-              <a href="searchbarr.html" style="border-bottom-left-radius: 0%; border-bottom-right-radius: 0%;">Cases by Topic ᵕ</a>
+              <a href="../searchbarr.html" style="border-bottom-left-radius: 0%; border-bottom-right-radius: 0%;">Cases by Topic ᵕ</a>
               <ul id = "casebytopiclayout">
                 
               <li>
-                  <a href="searchbarr.html" style="border-radius: 0%; border-radius: 0%;">All cases</a>
+                  <a href="../searchbarr.html" style="border-radius: 0%; border-radius: 0%;">All cases</a>
 
                 </li>
                 <li>
-                  <a href="../searchtopics/cardio.html" style="border-radius: 0%; border-radius: 0%;">Cardiology</a>
+                  <a href="../../searchtopics/cardio.html" style="border-radius: 0%; border-radius: 0%;">Cardiology</a>
                   
                 </li>
                 <li>
-                  <a href="../searchtopics/resp.html" style="border-radius: 0%;">Respiratory</a>
+                  <a href="../../searchtopics/resp.html" style="border-radius: 0%;">Respiratory</a>
                 </li>
         
                 <li>
-                  <a href="../searchtopics/gensurg.html" style="border-radius: 0%;">General surgery</a>
+                  <a href="../../searchtopics/gensurg.html" style="border-radius: 0%;">General surgery</a>
                 </li>
         
                 <li>
-                <a href="../searchtopics/neurology.html" style="border-radius: 0%;">Neurology</a>
+                <a href="../../searchtopics/neurology.html" style="border-radius: 0%;">Neurology</a>
                 </li>
     <!--    
                 <li>
@@ -96,12 +96,12 @@ class SpecialHeader extends HTMLElement {
             </li>
             
             <li class = "thirdheaderbtn" id="r1">
-              <a href="aboutus.html" >About us</a>
+              <a href="../aboutus.html" >About us</a>
             </li>
             
         
             <li class = "fourthheaderbtn" id="r1">
-              <a href="contactus.html" >Contact us</a>
+              <a href="../contactus.html" >Contact us</a>
             </li>
           
         
@@ -110,11 +110,11 @@ class SpecialHeader extends HTMLElement {
         
         
             <li class = "loginbtn">
-              <a href="logins/login.html" >Login</a>
+              <a href="login.html" >Login</a>
             </li>
             
             <li class = "searchbtn">
-              <a href="searchbarr.html" style="font-size: 30px; margin-top: -13px;" >⌕</a>
+              <a href="../searchbarr.html" style="font-size: 30px; margin-top: -13px;" >⌕</a>
             </li>
         
                   
@@ -129,10 +129,10 @@ class SpecialHeader extends HTMLElement {
 
         
             <div id="myLinks" style="display: none;">
-    <a href="../index.html">Home</a>
-    <a href="aboutus.html">About us</a>
-    <a href="contactus.html">Contact us</a>
-    <a href="searchbarr.html">Cases by topic</a>
+    <a href="../../index.html">Home</a>
+    <a href="../aboutus.html">About us</a>
+    <a href="../contactus.html">Contact us</a>
+    <a href="../searchbarr.html">Cases by topic</a>
     
 </div>
             
@@ -176,22 +176,22 @@ class OtherCases extends HTMLElement {
         <center><h2 style="font-family: LTSoul;">Other cases:</h2></center>
         <div class="scroll-container">
               <div class="image-container">
-                <img src="../pics/1stcase.webp" onclick="window.location.href='../page1.html';" alt="Cinque Terre" width="600" height="400">
+                <img src="../../pics/1stcase.webp" onclick="window.location.href='../page1.html';" alt="Cinque Terre" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='page1.html';" style="cursor: pointer;">Chest pain</div>            
             </div>
 
             <div class="image-container">
-                <img src="../pics/2ndcase.webp" onclick="window.location.href='../OTHERCASES/2ndcase/page1.html';" alt="Forest" width="600" height="400">
+                <img src="../../pics/2ndcase.webp" onclick="window.location.href='../OTHERCASES/2ndcase/page1.html';" alt="Forest" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/2ndcase/page1.html';" style="cursor: pointer;">Abdo pain</div>            
             </div>
 
             <div class="image-container">
-                <img src="../pics/3rdcase.webp" onclick="window.location.href='../OTHERCASES/3rdcase/page1.html';" alt="Northern Lights" width="600" height="400">
+                <img src="../../pics/3rdcase.webp" onclick="window.location.href='../OTHERCASES/3rdcase/page1.html';" alt="Northern Lights" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/3rdcase/page1.html';" style="cursor: pointer;">Cough</div>            
             </div>
 
             <div class="image-container">
-                <img src="../pics/4thcase.webp" onclick="window.location.href='../OTHERCASES/4thcase/page1.html';" alt="Mountains" width="600" height="400">
+                <img src="../../pics/4thcase.webp" onclick="window.location.href='../OTHERCASES/4thcase/page1.html';" alt="Mountains" width="600" height="400">
                 <div class="image-caption" onclick="window.location.href='OTHERCASES/4thcase/page1.html';" style="cursor: pointer;">Limb weakness</div>            
             </div>
         </div>
@@ -212,7 +212,7 @@ class SpecialFooter extends HTMLElement {
         this.innerHTML = `
 
         <footer>
-        <a href="mailto:oscesims@gmail.com">oscesims@gmail.com</a></p>
+<a style="color: white;" href="mailto:oscesims@gmail.com">oscesims@gmail.com</a></p>
 <br>
 <p>Medical Disclaimer:<br>
 The information provided on OSCE Sims is for educational and informational purposes only and is intended to support medical students in their exam preparation. It does not constitute medical advice, diagnosis, or treatment.

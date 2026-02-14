@@ -3,9 +3,57 @@ import fetch from "node-fetch";
 import cors from "cors";
 import "dotenv/config";
 
+import admin from "firebase-admin";
+import Stripe from "stripe";
+
 const app = express();
-app.use(express.json());
+
+
+// Enable CORS for requests from your frontend (localhost:5501)
+app.use(cors({
+  origin: "http://127.0.0.1:5501",  // Allow only the frontend to connect
+  methods: "GET,POST",              // Allow only GET and POST methods
+  credentials: true,                // Allow cookies and headers if needed
+}));
+
+
 app.use(cors()); // Allow requests from your web page
+
+app.post(
+  "/api/stripe-webhook",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    const event = req.body;
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+
+      const snapshot = await admin
+        .firestore()
+        .collection("users")
+        .where("email", "==", session.customer_email)
+        .get();
+
+      snapshot.forEach(doc => {
+        doc.ref.update({
+          plan: "pro",
+          subscriptionStatus: "active"
+        });
+      });
+    }
+
+    res.json({ received: true });
+  }
+);
+
+
+
+
+
+
+
+
+app.use(express.json());
 
 
 
@@ -433,6 +481,78 @@ app.post("/api/voicezak", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch from ElevenLabs" });
   }
 });
+
+
+
+
+
+//stripe CARD PAYMENTS////////////////////////////////////
+
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+admin.initializeApp({
+  credential: admin.credential.cert(
+    JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+  )
+});
+
+
+
+async function verifyFirebaseUser(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const token = authHeader.split("Bearer ")[1];
+    const decoded = await admin.auth().verifyIdToken(token);
+
+    req.uid = decoded.uid;
+    req.email = decoded.email;
+    next();
+  } catch (err) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
+
+
+
+
+
+app.post("/api/create-checkout-session", verifyFirebaseUser, async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      payment_method_types: ["card"],
+      customer_email: req.email,
+      line_items: [
+        {
+          price: "price_1SwpGSLCGle4gqnN7fuHPTrr", // Stripe price ID
+          quantity: 1
+        }
+      ],
+      success_url: "http://localhost:5500/forgot.html",
+      cancel_url: "http://localhost:5500/signup.html"
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Stripe error" });
+  }
+});
+
+
+
+
+
+
+
+
+
 
 
 

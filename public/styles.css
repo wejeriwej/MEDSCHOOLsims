@@ -576,6 +576,10 @@ bottom: 20px;
 
 }
 
+
+
+
+
 #end-consultation-btn, #end-consultation-btn1{
   top: 88%;
   right: 2.5%;
@@ -1422,6 +1426,7 @@ margin-top: 40px;
 
 @media only screen and (max-width: 600px) {
   .prev, .next {margin-top: -75px;}
+  .next {font-size: 11px;}
 }
 
 
@@ -1430,6 +1435,63 @@ margin-top: 40px;
 
 
 
+@media screen and (max-width: 700px) {
+#move-onto-questions-btn, #move-onto-questions-btn_examinations, #move-onto-questions-btn_summary, #move-onto-questions-btn_differentials, 
+#move-onto-questions-btn_investigations, #move-onto-questions-btn_riskfactors, #move-onto-questions-btn_treatments{
+  position: fixed;
+  top: auto;
+bottom: calc(2.5% + 50px);
+  left: 50%;
+    transform: translateX(-50%);
+
+  }
+
+  #end-consultation-btn, #end-consultation-btn1{
+   position: fixed;
+  bottom: 2.5%;
+  top:auto;
+  height: auto;
+  left: 0;
+  width: 100%;
+
+  }
+
+#move-onto-questions-btn_examinations, #move-onto-questions-btn_summary, #move-onto-questions-btn_differentials, 
+#move-onto-questions-btn_investigations, #move-onto-questions-btn_riskfactors, #move-onto-questions-btn_treatments{
+font-size: 15px; bottom: calc(0.5% + 40px);
+
+}
+
+#end-consultation-btn1 {font-size: 15px; bottom: 0.5%;}
+
+#save-note-btn-for-summary,#save-note-btn-for-blood,#save-note-btn-for-investigations,
+#save-note-btn-for-riskfactors,#save-note-btn-for-treatments,#save-note-btn-for-differentials,#save-note-btn-for-examinations {
+bottom: calc(0.5% + 80px);
+
+  top:auto;
+  height: 47.5px;
+  width: 250px;
+  border: solid black 1px;
+  font-size: 22.5px;
+  font-family: LTSoul;
+
+
+  color:black;
+  position: absolute;
+  
+  transform: translate(-50%, -50%);
+
+  border-radius: 9px 9px 9px 9px;
+  transition: box-shadow 0.3s;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 4.2);
+  background-color: rgba(239, 236, 236, 0.95);
+  transition: 0.6s ease;
+
+}
+
+
+
+}
 
 
 

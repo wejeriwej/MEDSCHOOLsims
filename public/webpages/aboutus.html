@@ -157,11 +157,17 @@
     </style>
 </head>
 <body>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="logins/firebase.js"></script>
+
     <script src="../script.js"></script>
     <script src="added.js"></script>
 
     <special-header></special-header>
 
+<div id="authStatus"></div>
     <div class="container">
         <h2>About Us</h2>
         <br>
@@ -186,3 +192,28 @@
 
 </body>
 </html>
+
+
+
+
+
+<script>document.addEventListener("DOMContentLoaded", () => {
+  const authStatus = document.getElementById("authStatus");
+  if (!authStatus) return;
+
+  // 🔒 Guard: Firebase not loaded
+  if (typeof auth === "undefined") {
+    authStatus.innerText = "Auth not available";
+    console.error("Firebase auth not loaded");
+    return;
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      authStatus.innerText = `Hello, ${user.email}`;
+    } else {
+      authStatus.innerText = "Not logged in";
+    }
+  });
+});
+</script>

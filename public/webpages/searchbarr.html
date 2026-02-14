@@ -286,6 +286,8 @@ padding: 2px;}
 <body>
 
     <special-header></special-header>
+    
+<div id="authStatus"></div>
     <br><br>
     <div class="container">
         <div class="sidebar">
@@ -437,6 +439,11 @@ padding: 2px;}
 
     </script>
     <special-footer></special-footer>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="logins/firebase.js"></script>
+
     <script src="../script.js"></script>
     <script src="added.js"></script>
 </body>
@@ -464,3 +471,26 @@ padding: 2px;}
 </html>
 </html>
 
+
+
+
+<script>document.addEventListener("DOMContentLoaded", () => {
+  const authStatus = document.getElementById("authStatus");
+  if (!authStatus) return;
+
+  // 🔒 Guard: Firebase not loaded
+  if (typeof auth === "undefined") {
+    authStatus.innerText = "Auth not available";
+    console.error("Firebase auth not loaded");
+    return;
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      authStatus.innerText = `Hello, ${user.email}`;
+    } else {
+      authStatus.innerText = "Not logged in";
+    }
+  });
+});
+</script>

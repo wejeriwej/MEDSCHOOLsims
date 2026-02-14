@@ -8,9 +8,24 @@ try {
     $('.app').hide();
   }
   
+
+  //THIS IS ACTIONED FOR THOSE THAT ARE LOGGED IN!!!!
+document.addEventListener("DOMContentLoaded", () => {
+  const authStatus = document.getElementById("authStatus");
+
+  if (!authStatus) return; // page doesn't need it
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      authStatus.innerText = `Hello, ${user.email}`;
+    } else {
+      authStatus.innerText = "Not logged in";
+    }
+  });
+});
   
   
-  
+
   var noteTextarea = $('#note-textarea');
   var instructions = $('#recording-instructions');
   var notesList = $('ul#notes');
@@ -24,6 +39,49 @@ try {
   
   
   
+
+
+
+
+
+
+
+/*------
+THIS PART IS FOR THE 11LABS AUDIO AS IT NEEDS TO BE OUTSIDE ALL OF THE BRACKETS IN THE IF STATEMENTS!!
+  --------*/
+
+let audio = null; // global audio instance
+
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+if (isMobile) {
+  document.addEventListener(
+    "touchstart",
+    () => {
+      if (!audio) {
+        audio = new Audio();
+        audio.setAttribute("playsinline", "");
+        audio.setAttribute("webkit-playsinline", "");
+
+        audio.muted = true;
+        audio.play().catch(() => {});
+        audio.pause();
+        audio.muted = false;
+
+        console.log("🔓 Mobile audio unlocked");
+      }
+    },
+    { once: true }
+  );
+}
+
+
+
+
+
+
+
+
   
   // Get all notes from previous sessions and display them.
   
@@ -1783,64 +1841,60 @@ try {
     return response.blob();
 })
   .then(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const audio = new Audio(url);
-  
+    
+  if (!audio) {
+  audio = new Audio();
+  audio.setAttribute("playsinline", "");
+  audio.setAttribute("webkit-playsinline", "");
+}
 
-      const gptvideo = document.getElementById('mutedVideo');
-      gptvideo.style.display = 'unset';
-      gptvideo.muted = true;
-      gptvideo.play();
-
-      
-  
-      audio.onplay = () => {
-          // Stop silent video once voice starts
-          document.getElementById('inbetweenVideo').style.display = 'none';//for the video without speaking
-          silentVideo.pause();
-          silentVideo.style.display = 'none';
-  
-          // Start muted video
-          const gptvideo = document.getElementById('mutedVideo');
-          gptvideo.style.display = 'unset';
-          gptvideo.muted = true;
-          gptvideo.play();gptvideo.load();
-      };
+const url = URL.createObjectURL(blob);
+audio.src = url;
+audio.load();
 
 
+  
+  audio.onended = () => {
+    const gptvideo = document.getElementById('mutedVideo');
+    gptvideo.pause();
 
-      audio.onended = () => {
-          const gptvideo = document.getElementById('mutedVideo');
-          gptvideo.pause(); // Pause the video after the audio finishes
-          recognition.start();   
-          document.getElementById('stop-consultation-btn').style.display = 'unset'; 
-          document.getElementById('executeButton').style.display = 'unset';
-          document.getElementById('myVideo').style.display = 'unset';
-          document.getElementById('mutedVideo').style.display = 'none';
-          messagebeforeacceptingmic.style.display = 'unset';
-          document.getElementById('errormsg').style.display = 'none';
-  
-  
-          // Reset action trigger flag
-          actionTriggered = false;
-      };
-  
-      audio.play(); // Play the audio
+    recognition.start();
+    document.getElementById('stop-consultation-btn').style.display = 'unset';
+    document.getElementById('executeButton').style.display = 'unset';
+    document.getElementById('myVideo').style.display = 'unset';
+    document.getElementById('mutedVideo').style.display = 'none';
+    messagebeforeacceptingmic.style.display = 'unset';
+    document.getElementById('errormsg').style.display = 'none';
 
-      audio.onplay = () => {
-        document.getElementById('loadingcircle').style.display = 'none';
-        document.getElementById('errormsg').style.display = 'none';
+    actionTriggered = false;
+  };
 
-        inbetweenVideo.loop = false;
-        inbetweenVideo.style.display = 'none';//for the video without speaking
-         
-        const gptvideo = document.getElementById('mutedVideo');
-        gptvideo.style.display = 'unset';
-        gptvideo.muted = true;
-        gptvideo.play();gptvideo.load();
-    }
-  })
+          const gptvideo = document.getElementById('mutedVideo');//get the muted talking video loaded
+          gptvideo.muted = true;gptvideo.load();
+
+  // Attach events BEFORE play
+  audio.onplay = () => {
+    document.getElementById('loadingcircle').style.display = 'none';
+    document.getElementById('errormsg').style.display = 'none';
+
+    // Stop silent video
+    document.getElementById('inbetweenVideo').style.display = 'none';
+    silentVideo.pause();
+    silentVideo.style.display = 'none';
+
+    // Start muted talking video
+    gptvideo.style.display = 'unset';
+    gptvideo.play();
+  };
+
   
+
+  // Now play (safe for desktop + mobile)
+  audio.play().catch(err => {
+    console.error("Audio play blocked:", err);
+  });
+});
+
   
   
   
@@ -5876,3 +5930,4 @@ try {
   
   */
   
+

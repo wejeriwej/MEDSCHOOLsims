@@ -112,7 +112,7 @@ class SpecialHeader extends HTMLElement {
         
         
             <li class = "loginbtn">
-              <a href="#" >Login</a>
+              <a href="../../webpages/logins/login.html" >Login</a>
             </li>
             
             <li class = "searchbtn">
@@ -252,3 +252,17 @@ customElements.define('special-footer', SpecialFooter)
 
 
 
+
+/*
+//IS FOR THE PAGE TO REMEMBER THAT IT IS PERSON 'X' THAT IS LOGGED IN
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from "firebase/auth";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Logged in:", user.email);
+  } else {
+    console.log("Not logged in");
+  }
+});
+*/

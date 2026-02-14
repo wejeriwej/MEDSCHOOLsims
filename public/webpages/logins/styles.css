@@ -1,0 +1,120 @@
+/* ===== Global Reset ===== */
+* {
+  box-sizing: border-box;
+
+ /* font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eaf4ff, #d4dff2);
+  justify-content: center;
+  align-items: center;
+  color: #2f2f2f;
+}
+
+/* ===== Main Card ===== */
+.container {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 30px 28px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+  margin-top: 160px; margin-bottom: 160px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+/* ===== Headings ===== */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2b3a42;
+}
+
+/* ===== Inputs ===== */
+#name, #email, #password {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid #cfd8dc;
+  font-size: 15px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #6fb1ff;
+  box-shadow: 0 0 0 2px rgba(111, 177, 255, 0.2);
+}
+
+/* ===== Buttons ===== */
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #2b3a42;
+  color: #ffffff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #3e4f58;
+}
+
+/* ===== Text & Links ===== */
+p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.container a {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  text-decoration: none;
+  color: #4a90e2;
+  font-size: 14px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Profile Page ===== */
+.profile-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-info span {
+  font-weight: 600;
+  color: #2b3a42;
+}
+
+/* ===== Messages ===== */
+#msg {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #c0392b;
+}
+
+/* ===== Mobile Tweaks ===== */
+@media (max-width: 600px) {
+  .container {
+    padding: 24px 20px;
+    margin: 0 12px;
+        margin: 0 auto;
+
+      margin-top: 70px; margin-bottom: 70px;
+
+  }
+}
