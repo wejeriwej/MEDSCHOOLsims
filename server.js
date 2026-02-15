@@ -9,12 +9,6 @@ import Stripe from "stripe";
 const app = express();
 
 
-// Enable CORS for requests from your frontend (localhost:5501)
-app.use(cors({
-  origin: "http://127.0.0.1:5501",  // Allow only the frontend to connect
-  methods: "GET,POST",              // Allow only GET and POST methods
-  credentials: true,                // Allow cookies and headers if needed
-}));
 
 
 app.use(cors()); // Allow requests from your web page
