@@ -42,6 +42,12 @@ upgradeBtn.addEventListener("click", async () => {
     });
 
     const data = await res.json();
+    console.log("Stripe response:", data);
+
+if (!data.url) {
+  alert("Stripe failed: " + JSON.stringify(data));
+  return;
+}
     window.location.href = data.url;
   } catch (err) {
     console.error("Upgrade failed:", err);

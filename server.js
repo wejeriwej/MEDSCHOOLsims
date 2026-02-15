@@ -528,15 +528,21 @@ app.post("/api/create-checkout-session", verifyFirebaseUser, async (req, res) =>
           quantity: 1
         }
       ],
-      success_url: "http://127.0.0.1:5501/public/webpages/contactus.html",
-      cancel_url: "http://127.0.0.1:5501/public/webpages/aboutus.html"
+      success_url: "https://oscereal-706d4.web.app/webpages/searchbarr.html",
+      cancel_url: "https://oscereal-706d4.web.app/webpages/aboutus.html"
     });
 
     res.json({ url: session.url });
-  } catch (err) {
+  /*} catch (err) {
     console.error(err);
     res.status(500).json({ error: "Stripe error" });
-  }
+  }*/
+} catch (err) {
+  console.error("Stripe session error:", err);
+  res.status(500).json({ error: err.message });
+}
+
+
 });
 
 
