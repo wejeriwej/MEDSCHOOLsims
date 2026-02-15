@@ -93,6 +93,40 @@ app.post(
       }
     }
 
+
+
+
+if (event.type === "customer.subscription.deleted") {
+  const subscription = event.data.object;
+  const customerId = subscription.customer;
+
+  const customer = await stripe.customers.retrieve(customerId);
+  const email = customer.email;
+
+  console.log("❌ Subscription cancelled for:", email);
+
+  const snapshot = await admin
+    .firestore()
+    .collection("users")
+    .where("email", "==", email)
+    .get();
+
+  snapshot.forEach(doc => {
+    doc.ref.update({
+      plan: "free",
+      subscriptionStatus: "cancelled"
+    });
+  });
+}
+
+
+
+
+
+
+
+
+
     res.json({ received: true });
   }
 );
@@ -591,10 +625,35 @@ app.post("/api/create-checkout-session", verifyFirebaseUser, async (req, res) =>
   res.status(500).json({ error: err.message });
 }
 
-
 });
 
 
+
+
+
+
+app.post("/api/create-portal-session", verifyFirebaseUser, async (req, res) => {
+  try {
+    const customers = await stripe.customers.list({
+      email: req.email,
+      limit: 1,
+    });
+
+    if (!customers.data.length) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: customers.data[0].id,
+      return_url: "https://oscereal-706d4.web.app/webpages/logins/profile.html",
+    });
+
+    res.json({ url: portalSession.url });
+  } catch (err) {
+    console.error("Portal session error:", err);
+    res.status(500).json({ error: "Failed to create portal session" });
+  }
+});
 
 
 

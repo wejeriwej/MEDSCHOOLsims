@@ -71,6 +71,50 @@ if (!data.url) {
     alert("Upgrade failed. Check console for details.");
   }
 });
+
+
+
+
+
+
+const manageBtn = document.getElementById("manageSubBtn");
+
+if (userData.subscriptionStatus === "active") {
+  upgradeMsgEl.style.display = "block";
+  upgradeBtn.style.display = "none";
+  manageBtn.style.display = "block";
+} else {
+  upgradeMsgEl.style.display = "none";
+  upgradeBtn.style.display = "block";
+  manageBtn.style.display = "none";
+}
+
+
+manageBtn.addEventListener("click", async () => {
+  const token = await auth.currentUser.getIdToken();
+
+  const res = await fetch("https://oscesimstrial1.onrender.com/api/create-portal-session", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    }
+  });
+
+  const data = await res.json();
+  window.location.href = data.url;
+});
+
+
+
+
+
+
+
+
+
+
+
 });
 
 
