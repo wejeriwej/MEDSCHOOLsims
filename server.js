@@ -8,10 +8,33 @@ import Stripe from "stripe";
 
 const app = express();
 
+// ✅ Allowed frontend origins
+const allowedOrigins = [
+  "http://127.0.0.1:5501",
+  "http://localhost:5501",
+  "https://oscereal-706d4.web.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+app.options("*", cors());
 
 
 
-app.use(cors()); // Allow requests from your web page
+//app.use(cors()); // Allow requests from your web page
 
 /*
 app.post(

@@ -20,13 +20,39 @@ const userData = docSnap.exists ? docSnap.data() : {};//is part of showing msg i
       nameEl.innerText = docSnap.exists ? (docSnap.data().name || "Unknown User") : "Unknown User";
 const upgradeMsgEl = document.getElementById("upgradeMessage");//is part of showing msg if user is upgraded
 // Show the message if the user is Pro
-    if (userData.plan === "pro") {
-      upgradeMsgEl.style.display = "block";
-      upgradeBtn.style.display = "none"; // optional: hide upgrade button
-    } else {
-      upgradeMsgEl.style.display = "none";
-      upgradeBtn.style.display = "block"; // show button if not pro
+    
+
+const manageBtn = document.getElementById("manageSubBtn");
+
+if (userData.subscriptionStatus === "active") {
+  upgradeMsgEl.style.display = "block";
+  upgradeBtn.style.display = "none";
+  manageBtn.style.display = "block";
+} else {
+  upgradeMsgEl.style.display = "none";
+  upgradeBtn.style.display = "block";
+  manageBtn.style.display = "none";
+}
+
+manageBtn.addEventListener("click", async () => {
+  const token = await auth.currentUser.getIdToken();
+
+  const res = await fetch("https://oscesimstrial1.onrender.com/api/create-portal-session", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
     }
+  });
+
+  const data = await res.json();
+  window.location.href = data.url;
+});
+
+
+
+
+
 
     } catch (err) {
       console.error("Error fetching user data:", err);
@@ -77,33 +103,7 @@ if (!data.url) {
 
 
 
-const manageBtn = document.getElementById("manageSubBtn");
 
-if (userData.subscriptionStatus === "active") {
-  upgradeMsgEl.style.display = "block";
-  upgradeBtn.style.display = "none";
-  manageBtn.style.display = "block";
-} else {
-  upgradeMsgEl.style.display = "none";
-  upgradeBtn.style.display = "block";
-  manageBtn.style.display = "none";
-}
-
-
-manageBtn.addEventListener("click", async () => {
-  const token = await auth.currentUser.getIdToken();
-
-  const res = await fetch("https://oscesimstrial1.onrender.com/api/create-portal-session", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
-  });
-
-  const data = await res.json();
-  window.location.href = data.url;
-});
 
 
 
