@@ -15,7 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const docSnap = await db.collection("users").doc(user.uid).get();
+const userData = docSnap.exists ? docSnap.data() : {};//is part of showing msg if user is upgraded
+
       nameEl.innerText = docSnap.exists ? (docSnap.data().name || "Unknown User") : "Unknown User";
+const upgradeMsgEl = document.getElementById("upgradeMessage");//is part of showing msg if user is upgraded
+// Show the message if the user is Pro
+    if (userData.plan === "pro") {
+      upgradeMsgEl.style.display = "block";
+      upgradeBtn.style.display = "none"; // optional: hide upgrade button
+    } else {
+      upgradeMsgEl.style.display = "none";
+      upgradeBtn.style.display = "block"; // show button if not pro
+    }
+
     } catch (err) {
       console.error("Error fetching user data:", err);
       nameEl.innerText = "Unknown User";
@@ -27,6 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
     auth.signOut();
     location.href = "login.html";
   });
+
+
+  //backtocases - (for the successfulpay.html)
+    const backtocases = document.getElementById("backtocases");
+    document.getElementById("backtocases").addEventListener("click", () => {
+    location.href = "profile.html";
+  });
+
+  
 
   // Upgrade
 upgradeBtn.addEventListener("click", async () => {

@@ -528,8 +528,8 @@ app.post("/api/create-checkout-session", verifyFirebaseUser, async (req, res) =>
           quantity: 1
         }
       ],
-      success_url: "https://oscereal-706d4.web.app/webpages/searchbarr.html",
-      cancel_url: "https://oscereal-706d4.web.app/webpages/aboutus.html"
+      success_url: "https://oscereal-706d4.web.app/webpages/logins/successfulpay.html",
+      cancel_url: "https://oscereal-706d4.web.app/webpages/logins/profile.html"
     });
 
     res.json({ url: session.url });

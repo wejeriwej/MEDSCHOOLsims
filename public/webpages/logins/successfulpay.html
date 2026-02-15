@@ -15,17 +15,10 @@
       <special-header></special-header>
   
       <div class="container">
-    <h2>My Profile</h2>
-    <div style="  border: 1px solid #cfd8dc;">
-    <p>Name: <b><span style="border: 0px; font-size: large" id="name"></span></b></p>
-    <p>Email: <b><span style="border: 0px; font-size: large;"  id="email"></span></b></p>
-    <p id="upgradeMessage" style="color: green; font-weight: bold; display: none;">
-  You are in the upgraded version!
-</p>
-    </div>
+    <h2>Well done <span style="border: 0px; margin-left: -10px; margin-right: -10px; font-size:x-large" id="name"></span>! you have successfully upgraded <span style="color: rgb(86, 213, 86); font-size: xx-large;">✓</span></h2>
     
-<button id="upgradeBtn">Upgrade to Pro</button>
-    <button id="logoutBtn">Logout</button>
+    
+    <button id="backtocases">Search for cases</button>
   </div>
  <!-- 🔹 Firebase SDK scripts (must be first!) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -39,5 +32,40 @@
   <script src="profile.js"></script>
     <special-footer></special-footer>
 
+<script>
+
+  auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+
+  const nameEl = document.getElementById("name");
+  try {
+    const docSnap = await db.collection("users").doc(user.uid).get();
+    nameEl.innerText = docSnap.exists ? (docSnap.data().name || "Unknown User") : "Unknown User";
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    nameEl.innerText = "Unknown User";
+  }
+});
+
+
+
+
+
+    //backtocases - (for the successfulpay.html)
+    const backtocases = document.getElementById("backtocases");
+    document.getElementById("backtocases").addEventListener("click", () => {
+    location.href = "../searchbarr.html";
+  });
+</script>
+
+
+
 </body>
 </html>
+
+
+
+
