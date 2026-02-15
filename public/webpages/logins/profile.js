@@ -41,11 +41,7 @@ const upgradeMsgEl = document.getElementById("upgradeMessage");//is part of show
   });
 
 
-  //backtocases - (for the successfulpay.html)
-    const backtocases = document.getElementById("backtocases");
-    document.getElementById("backtocases").addEventListener("click", () => {
-    location.href = "profile.html";
-  });
+  
 
   
 
