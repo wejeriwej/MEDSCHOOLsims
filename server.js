@@ -524,7 +524,7 @@ app.post("/api/create-checkout-session", verifyFirebaseUser, async (req, res) =>
       customer_email: req.email,
       line_items: [
         {
-          price: "price_1SwpGSLCGle4gqnN7fuHPTrr", // Stripe price ID
+          price: "price_1T157PLCGle4gqnNrr23raj5", // Stripe price ID
           quantity: 1
         }
       ],
