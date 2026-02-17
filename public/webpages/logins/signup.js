@@ -5,6 +5,18 @@ const passwordInput = document.getElementById("password");
 const msg = document.getElementById("msg");
 const passwordHelp = document.getElementById("passwordHelp");
 
+// Trigger signup when "Enter" key is pressed in any input field
+function handleEnterKey(event) {
+  if (event.key === "Enter") {
+    signupBtn.click();
+  }
+}
+
+// Add event listeners for all input fields
+nameInput.addEventListener("keydown", handleEnterKey);
+emailInput.addEventListener("keydown", handleEnterKey);
+passwordInput.addEventListener("keydown", handleEnterKey);
+
 
 signupBtn.addEventListener("click", async () => {
   msg.innerText = "";  // clear previous message
@@ -30,7 +42,11 @@ signupBtn.addEventListener("click", async () => {
 
   } catch (err) {
     console.error(err);
-    msg.innerText = err.message;
+
+    // Extract the middle part of the error message
+    const cleanMessage = err.message.replace(/^Firebase: /, '').split('(')[0].trim();
+
+    msg.innerText = cleanMessage || "An error occurred. Please try again.";
   }
 });
 

@@ -37,7 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
   
 
-
+// Fire-and-forget warmup request to render to prevent cold starts
+fetch("https://oscesimstrial1.onrender.com/health", {
+  method: "GET",
+  mode: "no-cors"
+}).catch(() => {});
 
 
 /*------
@@ -335,8 +339,9 @@ if (isMobile) {
   
   
     
-    document.getElementById('myVideo').style.display = 'unset'; document.getElementById("mp4_src").src = "videos/examinations.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
-    
+      document.getElementById('myVideo').style.display = 'unset'; document.getElementById("mp4_src").src = "videos/examinations.mp4"; document.getElementById("myVideo").load();
+
+
     document.getElementById('myVideo').onended = function(e) {
       //messagebeforeacceptingmic.style.display = 'unset'; micisworking.style.display = 'unset';
     recognition_examinations.start();     document.getElementById('messagebeforeacceptingmic_examinations').style.display = 'unset';
@@ -396,7 +401,7 @@ if (isMobile) {
   
     recognition_investigations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
     document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load();
-    document.getElementById('myVideo').onended = function(e) {
+    document.getElementById('myVideo').onended = function(e) {//!!
     recognition_riskfactors.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
     document.getElementById('save-note-btn-for-riskfactors').style.display = 'unset';
     }

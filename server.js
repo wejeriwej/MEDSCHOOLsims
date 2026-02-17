@@ -682,8 +682,10 @@ app.post("/api/create-portal-session", verifyFirebaseUser, async (req, res) => {
 
 
 
-
-
+//Is to ping render when user accesses main page/index.html so that it wakes up render. Frontend JS is inside index.html btw
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 
 

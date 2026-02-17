@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const docSnap = await docRef.get();
 
       if (docSnap.exists) {
-        authStatus.innerText = `Welcome back, ${docSnap.data().name}`;
+        authStatus.innerText = `Welcome ${docSnap.data().name}`;
       } else {
         authStatus.innerText = "Hello!";
       }
@@ -56,7 +56,11 @@ let emptyif = document.getElementById('emptyif');
 
 
 
-
+// Fire-and-forget warmup request to render to prevent cold starts
+fetch("https://oscesimstrial1.onrender.com/health", {
+  method: "GET",
+  mode: "no-cors"
+}).catch(() => {});
 
 
 
@@ -163,7 +167,7 @@ function startFunction() {
 
 
   document.getElementById('myVideo').style.display = 'unset';
-  document.getElementById("webm_src").src = "videos/openinghiya.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/openinghiya.mp4"; document.getElementById("myVideo").load();
   document.getElementById('tutorial').style.display = 'none'; document.querySelector('other-cases').style.display = 'none'; document.querySelector('special-footer').style.display = 'none'; document.getElementById('difficultycolor').style.display = 'none'; document.getElementById('backgroundofstartbtn').style.display = 'none';document.getElementById('executeButton').style.display = 'none';
 
   
@@ -376,7 +380,7 @@ function movetoQuestions(){
 
 
   
-  document.getElementById('myVideo').style.display = 'unset'; document.getElementById("webm_src").src = "videos/examinations.webm"; document.getElementById("myVideo").load();
+  document.getElementById('myVideo').style.display = 'unset'; document.getElementById("mp4_src").src = "videos/examinations.mp4"; document.getElementById("myVideo").load();
   
   document.getElementById('myVideo').onended = function(e) {
     //messagebeforeacceptingmic.style.display = 'unset'; micisworking.style.display = 'unset';
@@ -399,7 +403,7 @@ function movetoQuestions_examinations(){
   document.getElementById('summary').style.display = 'unset';
 
   recognition_examinations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/summary.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/summary.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition1.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
   document.getElementById('save-note-btn-for-summary').style.display = 'unset';
@@ -412,7 +416,7 @@ function movetoQuestions_summary(){
   document.getElementById('differentials').style.display = 'unset';
 
   recognition1.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/differential.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/differential.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition_differentials.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
   document.getElementById('save-note-btn-for-differentials').style.display = 'unset';
@@ -424,7 +428,7 @@ function movetoQuestions_differentials(){
   document.getElementById('investigations').style.display = 'unset';
 
   recognition_differentials.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/investigations.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/investigations.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition_investigations.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
   document.getElementById('save-note-btn-for-investigations').style.display = 'unset';
@@ -436,7 +440,7 @@ function movetoQuestions_investigations(){
   document.getElementById('riskfactors').style.display = 'unset';
 
   recognition_investigations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/riskfactors.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition_riskfactors.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
   document.getElementById('save-note-btn-for-riskfactors').style.display = 'unset';
@@ -448,7 +452,7 @@ function movetoQuestions_riskfactors(){
   document.getElementById('treatments').style.display = 'unset';
 
   recognition_riskfactors.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/management.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/management.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition_treatments.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
   document.getElementById('save-note-btn-for-treatments').style.display = 'unset';
@@ -460,7 +464,7 @@ function movetoQuestions_treatments(){
   //document.getElementById('').style.display = 'unset';
 
   recognition_treatments.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  //document.getElementById("webm_src").src = "WIN_20230328_13_59_37_Pro.webm"; document.getElementById("myVideo").load();
+  //document.getElementById("mp4_src").src = "WIN_20230328_13_59_37_Pro.mp4"; document.getElementById("myVideo").load();
   //document.getElementById('myVideo').onended = function(e) {
   //recognition_.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
   //document.getElementById('save-note-btn-for-').style.display = 'unset';
@@ -1059,64 +1063,64 @@ var timerforsubmitting = null;
     if(nameage_repeat == 0 && (noteContent.includes("name") && noteContent.includes("age"))) {
       //readOutLoud("My name is Marc Jevner and I am 31")
       previousquestion = noteContent; nameage_repeat++;   response_question = "I'm Marc and am 31";
-      document.getElementById("webm_src").src = "videos/name+age.webm"; allifsaction();}
+      document.getElementById("mp4_src").src = "videos/name+age.mp4"; allifsaction();}
     
     else if(age_repeat == 0 && (noteContent.includes("age")||noteContent.includes("old"))){
       //readOutLoud("I'm 31 years old")
       previousquestion = noteContent; age_repeat++;   response_question = "I'm 31";
-      document.getElementById("webm_src").src = "videos/age.webm"; allifsaction();}
+      document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}
 
     else if (oktospeak_repeat == 0 && (noteContent.includes("is it ok")||noteContent.includes("would it be ok")||noteContent.includes("talk to you")
       ||noteContent.includes("chat")||noteContent.includes("speak to you")||noteContent.includes("ask you")||noteContent.includes("may i"))) {
       //readOutLoud("yes that's fine");
       previousquestion = noteContent; oktospeak_repeat++;  response_question = "yes that's fine";
-      document.getElementById("webm_src").src = "videos/yesthatsfine.webm"; allifsaction();}//consent for consultation (can i ask you a few questions)
+      document.getElementById("mp4_src").src = "videos/yesthatsfine.mp4"; allifsaction();}//consent for consultation (can i ask you a few questions)
 
     else if (name_repeat == 0 && (noteContent.includes("your name")||noteContent.includes("full name"))) {
       /////////////////////////////////////////////////////////////////////////////////////////////
       previousquestion = noteContent; name_repeat++;  response_question = "I'm Marc";
-      document.getElementById("webm_src").src = "videos/marcjevner.webm"; allifsaction();}//name
+      document.getElementById("mp4_src").src = "videos/marcjevner.mp4"; allifsaction();}//name
 
     else if (call_repeat == 0 && (noteContent.includes("call")||noteContent.includes("address"))) {
       //readOutLoud("Marc is fine");
       previousquestion = noteContent; call_repeat++;  response_question = "Marc is fine";
-      document.getElementById("webm_src").src = "videos/marcisfine.webm"; allifsaction();}//how would you like to be addressed as
+      document.getElementById("mp4_src").src = "videos/marcisfine.mp4"; allifsaction();}//how would you like to be addressed as
 
   /*  else if (noteContent.includes("age")||noteContent.includes("old")) {
       //readOutLoud("I'm 31");
       previousquestion = noteContent;   response_question = "I'm 31";
-      document.getElementById("webm_src").src = "videos/age.webm"; allifsaction();}//age
+      document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}//age
     */
     else if (dob_repeat == 0 && (noteContent.includes("date of birth")||noteContent.includes("when")&&noteContent.includes("born"))) {
       //readOutLoud("the 4th of June 1991");
       previousquestion = noteContent; dob_repeat++;  response_question = "4th of June 1991";
-      document.getElementById("webm_src").src = "videos/dob.webm"; allifsaction();}//DOB
+      document.getElementById("mp4_src").src = "videos/dob.mp4"; allifsaction();}//DOB
 
     else if (bornlocation_repeat == 0 && (noteContent.includes("where")&&noteContent.includes("born"))) {
       //readOutLoud("In London");
       previousquestion = noteContent; bornlocation_repeat++;  response_question = "London";
-      document.getElementById("webm_src").src = "videos/inlondon.webm"; allifsaction();}//Where you live
+      document.getElementById("mp4_src").src = "videos/inlondon.mp4"; allifsaction();}//Where you live
     
     else if (work_repeat == 0 &&(noteContent.includes("occupation")||noteContent.includes("job")||noteContent.includes("work"))) {
       //readOutLoud("I work as a banker");
       previousquestion = noteContent;   response_question = "I'm a banker";
       jobx = true; work_repeat ++; 
-      document.getElementById("webm_src").src = "videos/job.webm"; allifsaction();}//job
+      document.getElementById("mp4_src").src = "videos/job.mp4"; allifsaction();}//job
     
     else if (stress_repeat == 0 && (noteContent.includes("stress"))) {
       //readOutLoud("to be honest I'm quite stressed in general, I find that my work is quite stressful, but I really enjoy it");
       previousquestion = noteContent; stress_repeat++;  response_question = "I've been stressed as my work as a banker is stressful";
-      document.getElementById("webm_src").src = "videos/stress.webm"; allifsaction();}//Are you stressed at work
+      document.getElementById("mp4_src").src = "videos/stress.mp4"; allifsaction();}//Are you stressed at work
     
     else if (enjoy_repeat == 0 && (noteContent.includes("do you enjoy"))) {
       //readOutLoud("Yes, I do");
       previousquestion = noteContent; enjoy_repeat++;  response_question = "Yes I do";
-      document.getElementById("webm_src").src = "videos/yesido.webm"; allifsaction();}//do you enjoy your work?
+      document.getElementById("mp4_src").src = "videos/yesido.mp4"; allifsaction();}//do you enjoy your work?
     
     else if (howareyou_repeat == 0 && (noteContent.includes("how are you")||noteContent.includes("how are things")||noteContent.includes("what about you"))) {
       //readOutLoud("I'm not feeling the best but I am ok");
       previousquestion = noteContent; howareyou_repeat++;  response_question = "I'm not feeling the best but I am ok";
-      document.getElementById("webm_src").src = "videos/imnotfeelingthebest.webm"; allifsaction();}//how are you?
+      document.getElementById("mp4_src").src = "videos/imnotfeelingthebest.mp4"; allifsaction();}//how are you?
 
 
 
@@ -1126,25 +1130,25 @@ var timerforsubmitting = null;
       //readOutLoud("The pain is constantly always there");
       previousquestion = noteContent; alwayspain_repeat++;  response_question = "The pain's constantly always there";
       timecoursex = true;
-      document.getElementById("webm_src").src = "videos/painconstantlyalwaysthere.webm"; allifsaction();}//is the pain always there OR constant (there's another one later too)
+      document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
 
     else if (constant_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("come"))) {
       //readOutLoud("The pain is constantly always there");
       previousquestion = noteContent; constant_repeat++;  response_question = "The pain's constantly always there";
       timecoursex = true;
-      document.getElementById("webm_src").src = "videos/painconstantlyalwaysthere.webm"; allifsaction();}//is the pain always there OR constant (there's another one later too)
+      document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
 
     else if (painconstant_repeat == 0 && (noteContent.includes("always there")&&noteContent.includes("intermittent"))) {
       //readOutLoud("The pain is constantly always there");
       previousquestion = noteContent; painconstant_repeat++;  response_question = "The pain's constantly always there";
       timecoursex = true;
-      document.getElementById("webm_src").src = "videos/painconstantlyalwaysthere.webm"; allifsaction();}//is the pain always there OR constant (there's another one later too)
+      document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
 
     else if (intermittent_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("intermittent"))) {
       //readOutLoud("The pain is constantly always there");
       previousquestion = noteContent; intermittent_repeat++;  response_question = "The pain's constantly always there";
       timecoursex = true;
-      document.getElementById("webm_src").src = "videos/painconstantlyalwaysthere.webm"; allifsaction();}//is the pain always there OR constant (there's another one later too)
+      document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
 
 
 
@@ -1152,13 +1156,13 @@ var timerforsubmitting = null;
       //readOutLoud("Yes the pain is kind of always there");
       previousquestion = noteContent; alwaysthere_repeat++;  response_question = "The pain's constantly always there";
       timecoursex = true;
-      document.getElementById("webm_src").src = "videos/painconstantlyalwaysthere.webm"; allifsaction();}//is the pain constant
+      document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain constant
 
     else if (comeandgo_repeat == 0 && (noteContent.includes("intermittent")||noteContent.includes("come and go")||noteContent.includes("comes and go"))) {
       //readOutLoud("No the pain is constantly always there");
       previousquestion = noteContent; comeandgo_repeat++;  response_question = "The pain's constantly always there";
       timecoursex = true;
-      document.getElementById("webm_src").src = "videos/painconstantlyalwaysthere.webm"; allifsaction();}//is the pain intermittent
+      document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain intermittent
 
 
 
@@ -1174,7 +1178,7 @@ var timerforsubmitting = null;
       painlocationrepeat ++;  
       painlocationx = true;
       onsetx = true;
-      document.getElementById("webm_src").src = "videos/vid-whatsbroughtyouin.webm"; allifsaction();}//HOPC/whats made you come to the hospital/ why did you come to the hospital
+      document.getElementById("mp4_src").src = "videos/vid-whatsbroughtyouin.mp4"; allifsaction();}//HOPC/whats made you come to the hospital/ why did you come to the hospital
     
 
 
@@ -1183,12 +1187,12 @@ var timerforsubmitting = null;
     else if (arm_repeat == 0 && (noteContent.includes("arm")&&noteContent.includes("right"))) {
       //readOutLoud("I didn't have any pain in my right arm.");
       previousquestion = noteContent; arm_repeat++;  response_question = "I don't have any pain in my right arm";
-      document.getElementById("webm_src").src = "videos/rightarm.webm"; allifsaction();}//tell me a bit more
+      document.getElementById("mp4_src").src = "videos/rightarm.mp4"; allifsaction();}//tell me a bit more
     
     else if (warmarm_repeat == 0 && (noteContent.includes("arm")&&!noteContent.includes("warm"))) {
       //readOutLoud("The pain in my left arm just came on with the chest pain, and it was the same sort of pain as the pain in my chest.");
       previousquestion = noteContent; warmarm_repeat++;  response_question = "The pain in my left arm came on with the chest pain and is the same kind of pain";
-      document.getElementById("webm_src").src = "videos/leftarm.webm"; allifsaction();}//tell me a bit more
+      document.getElementById("mp4_src").src = "videos/leftarm.mp4"; allifsaction();}//tell me a bit more
 
 
 
@@ -1200,12 +1204,12 @@ var timerforsubmitting = null;
     else if (neck_repeat == 0 && (noteContent.includes("neck"))) {
       //readOutLoud("The pain in my neck was not as bad as the pain in my chest and my left arm, but I did notice it but it wasn't very severe.");
       previousquestion = noteContent; neck_repeat++;  response_question = "The pain in my neck isn't as bad as my chest and left arm";
-      document.getElementById("webm_src").src = "videos/neck.webm"; allifsaction();}//tell me a bit more
+      document.getElementById("mp4_src").src = "videos/neck.mp4"; allifsaction();}//tell me a bit more
 
     else if (leftshoulder_repeat == 0 && (noteContent.includes("shoulder")&&noteContent.includes("pain"))) {
       //readOutLoud("I have noticed pain in my left shoulder as well, and that's started around the same time as the chest pain and it feels like it's the same kind of pain");
       previousquestion = noteContent; leftshoulder_repeat++;  response_question = "I have pain in my left shoulder which started around the same time as the chest pain";
-      document.getElementById("webm_src").src = "videos/shoulder.webm"; allifsaction();}//shoulder pain
+      document.getElementById("mp4_src").src = "videos/shoulder.mp4"; allifsaction();}//shoulder pain
 
 
 
@@ -1219,13 +1223,13 @@ var timerforsubmitting = null;
       previousquestion = noteContent; onsetrepeat++;  response_question = "The pain came on randomly and was intense, and I was quite scared about it";
       onsetx = true;
       
-    document.getElementById("webm_src").src = "videos/bitmore.webm"; allifsaction();}//tell me a bit more
+    document.getElementById("mp4_src").src = "videos/bitmore.mp4"; allifsaction();}//tell me a bit more
 
     else if (whathappened_repeat == 0 && (noteContent.includes("how")&&(noteContent.includes("pain")||noteContent.includes("it"))&&(noteContent.includes("develop")||noteContent.includes("start")||noteContent.includes("begin")||noteContent.includes("come")||noteContent.includes("brought"))
     ||noteContent.includes("what happen"))) {
       //readOutLoud("To be honest the pain came quite quickly and randomly, I wasn't doing anything in particular I think, I was just walking to the shops");
       previousquestion = noteContent; whathappened_repeat++;  response_question = "The pain came on quickly and randomly when I was walking to the shops"; onsetx = true;
-      document.getElementById("webm_src").src = "videos/howhappen.webm"; allifsaction();}//how did you get the pain/how did it start
+      document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}//how did you get the pain/how did it start
       
     //pain
     
@@ -1235,7 +1239,7 @@ var timerforsubmitting = null;
       previousquestion = noteContent; wherepainexactly_repeat++;  response_question = "The pain's in the middle of my chest";
       painlocationx = true;
 
-      document.getElementById("webm_src").src = "videos/wherepain.webm"; allifsaction();}//where is the pain
+      document.getElementById("mp4_src").src = "videos/wherepain.mp4"; allifsaction();}//where is the pain
     
 
 
@@ -1247,20 +1251,20 @@ var timerforsubmitting = null;
       //readOutLoud("No not really, it doesn't feel like a burning pain but rather it feels like someone's punched me in the chest instead");
       previousquestion = noteContent; burn_repeat++;  response_question = "The pain feels like someone punched me in the chest rather than a burning pain";
       characterx = true;
-      document.getElementById("webm_src").src = "videos/notaburningpain.webm"; allifsaction();}//is it burning pain
+      document.getElementById("mp4_src").src = "videos/notaburningpain.mp4"; allifsaction();}//is it burning pain
 
     else if (sharp_repeat == 0 && (noteContent.includes("sharp"))) {
       //readOutLoud("No I wouldn't really say so, i feel that instead of a sharp pain that it is more that my chest feels really heavy and that someone's punched me in the chest");
       previousquestion = noteContent; sharp_repeat++;  response_question = "No, it's more of a heavy sort of feeling as if someone's punched me";
       characterx = true;
-      document.getElementById("webm_src").src = "videos/isnotasharppain.webm"; allifsaction();}//is it a sharp pain
+      document.getElementById("mp4_src").src = "videos/isnotasharppain.mp4"; allifsaction();}//is it a sharp pain
     
     else if (describepain_repeat == 0 && (noteContent.includes("describe")||noteContent.includes("it feel like")
         ||noteContent.includes("pain feel like"))) {
       //readOutLoud("It feels like a horse kicked me in my chest");
       previousquestion = noteContent; describepain_repeat++;  response_question = "It feels like a horse kicked me in my chest";
       characterx = true;
-    document.getElementById("webm_src").src = "videos/feelslikehorsekickedme.webm"; allifsaction();}//describe the pain
+    document.getElementById("mp4_src").src = "videos/feelslikehorsekickedme.mp4"; allifsaction();}//describe the pain
     
   
     
@@ -1276,7 +1280,7 @@ var timerforsubmitting = null;
       previousquestion = noteContent; radiate_repeat++;  response_question = "I have pain in my left arm and my neck as well";
       radiatex = true;
 
-      document.getElementById("webm_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.webm"; allifsaction();}//does the pain radiate/move anywhere/does the pain move to other parts of the body
+      document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//does the pain radiate/move anywhere/does the pain move to other parts of the body
     
     else if (ratethepain_repeat == 0 && (noteContent.includes("rate")&&(noteContent.includes("pain")||noteContent.includes("it")||noteContent.includes("sever"))
     ||noteContent.includes("severe")&&(noteContent.includes("pain")||noteContent.includes("it"))
@@ -1285,7 +1289,7 @@ var timerforsubmitting = null;
       //readOutLoud("Honesty I would say the pain is probably around 9/10, and I normally have quite a high pain threshold");
       previousquestion = noteContent; ratethepain_repeat++;  response_question = "The pain is 9/10 in severity";
       ratepainx = true;
-      document.getElementById("webm_src").src = "videos/painis9outof10.webm"; allifsaction();}//rate the pain
+      document.getElementById("mp4_src").src = "videos/painis9outof10.mp4"; allifsaction();}//rate the pain
     
     else if (makeitbetter_repeat == 0 && (noteContent.includes("make it better")||noteContent.includes("make the pain better")
         ||noteContent.includes("makes it better")||noteContent.includes("makes the pain better")
@@ -1293,7 +1297,7 @@ var timerforsubmitting = null;
       //readOutLoud("Honestly, nothing makes it better, not even paracetamol does anything");
       previousquestion = noteContent; makeitbetter_repeat++;  response_question = "Nothing makes the pain better, including paracetamol";
       makeitbetterx = true;
-      document.getElementById("webm_src").src = "videos/nothingmakesitbetter.webm"; allifsaction();}//anything make it better/anything ease the pain
+      document.getElementById("mp4_src").src = "videos/nothingmakesitbetter.mp4"; allifsaction();}//anything make it better/anything ease the pain
     
     else if (makeitworse_repeat == 0 && (noteContent.includes("make it worse")||noteContent.includes("exacerbate")
         ||noteContent.includes("make the pain worse")||noteContent.includes("makes the pain worse")
@@ -1302,54 +1306,54 @@ var timerforsubmitting = null;
       previousquestion = noteContent; makeitworse_repeat++;  response_question = "Any sort of movement makes the pain worse, and so I try not to move to make the pain bearable";
       makeitworsex = true;
     
-      document.getElementById("webm_src").src = "videos/anymovementmakesitworse.webm"; allifsaction();}//anything make it worse
+      document.getElementById("mp4_src").src = "videos/anymovementmakesitworse.mp4"; allifsaction();}//anything make it worse
     
     else if (worsewhen_repeat == 0 && (noteContent.includes("worse when"))) {
       //readOutLoud("I don't think so");
       previousquestion = noteContent; worsewhen_repeat++;  response_question = "I don't think so";
       makeitworsex = true;
-      document.getElementById("webm_src").src = "videos/idontthinkso.webm"; allifsaction();}//Is it worse when walking/going up the stairs etc/do you find it gets better when
+      document.getElementById("mp4_src").src = "videos/idontthinkso.mp4"; allifsaction();}//Is it worse when walking/going up the stairs etc/do you find it gets better when
     
     else if (betterwhen_repeat == 0 && (noteContent.includes("better when"))) {
       //readOutLoud("Not really");
       previousquestion = noteContent; betterwhen_repeat++;  response_question = "Not really";
       makeitbetterx = true;
-      document.getElementById("webm_src").src = "videos/idontthinkso.webm"; allifsaction();}//Is it worse when walking/going up the stairs etc/do you find it gets better when
+      document.getElementById("mp4_src").src = "videos/idontthinkso.mp4"; allifsaction();}//Is it worse when walking/going up the stairs etc/do you find it gets better when
     
     else if (whenstarted_repeat == 0 && ((noteContent.includes("how long")||noteContent.includes("start"))&&!noteContent.includes("smok")&&!noteContent.includes("alcohol")&&!noteContent.includes("drink"))) {
       //readOutLoud("This pain only started this morning, I would say it was around 8AM");
       previousquestion = noteContent; whenstarted_repeat++;  response_question = "The pain only started this morning around 8AM";
-      document.getElementById("webm_src").src = "videos/startedthismorning.webm"; allifsaction();}//How long have you had the pain for/when did the pain start
+      document.getElementById("mp4_src").src = "videos/startedthismorning.mp4"; allifsaction();}//How long have you had the pain for/when did the pain start
     
     else if (gottenworsethroughtime_repeat == 0 && (noteContent.includes("got worse")||noteContent.includes("gotten worse")
         ||noteContent.includes("gotten better")||noteContent.includes("got better")||noteContent.includes("sudden"))) {
       //readOutLoud("The pain has definitely gotten worse as the day has gone on");
       previousquestion = noteContent; gottenworsethroughtime_repeat++;  response_question = "The pain's definitely gotten worse as the day has gone on";
-      document.getElementById("webm_src").src = "videos/painisgottenworseovertheday.webm"; allifsaction();}//Has the pain gradually gotten worse/better
+      document.getElementById("mp4_src").src = "videos/painisgottenworseovertheday.mp4"; allifsaction();}//Has the pain gradually gotten worse/better
     
     else if (tender_repeat == 0 && (noteContent.includes("tender")||noteContent.includes("painful to touch")||noteContent.includes("painful when touch"))) {
       //readOutLoud("Yes it does, especially when you touch the middle of my chest");
       previousquestion = noteContent; tender_repeat++;  response_question = "Yes it does, especially when you touch the middle of my chest";
-      document.getElementById("webm_src").src = "videos/yesitdoesespeciallywhenyoutouchmiddlechest.webm"; allifsaction();}//tenderness
+      document.getElementById("mp4_src").src = "videos/yesitdoesespeciallywhenyoutouchmiddlechest.mp4"; allifsaction();}//tenderness
     
     else if (pastheart_repeat == 0 && (noteContent.includes("heart")&& noteContent.includes("past")||noteContent.includes("prev"))) {
       //readOutLoud("No I haven't had a heart attack in the past");
       previousquestion = noteContent; pastheart_repeat++;  response_question = "No I haven't had a heart attack in the past";
       heartattacksx = true;
-      document.getElementById("webm_src").src = "videos/noheartattacksinthepast.webm"; allifsaction();}
+      document.getElementById("mp4_src").src = "videos/noheartattacksinthepast.mp4"; allifsaction();}
 
     else if(firstheartattack_repeat == 0 && (noteContent.includes("heart attack")&& noteContent.includes("first"))){
       //readOutLoud("Yes this is my first heart attack");
       previousquestion = noteContent; firstheartattack_repeat++;  response_question = "Yes this is my 1st heart attack";
       heartattacksx = true;
-      document.getElementById("webm_src").src = "videos/firstheartattack.webm"; allifsaction();}
+      document.getElementById("mp4_src").src = "videos/firstheartattack.mp4"; allifsaction();}
 
     else if(happenbefore_repeat == 0 && ((noteContent.includes("happen")||noteContent.includes("felt"))&& noteContent.includes("before"))){
       //readOutLoud("No, this has never happened before");
       previousquestion = noteContent; happenbefore_repeat++;  response_question = "No this has never happened before";
       heartattacksx = true;
       happenbeforex = true;
-      document.getElementById("webm_src").src = "videos/nothatsneverhappenedbefore.webm"; allifsaction();}
+      document.getElementById("mp4_src").src = "videos/nothatsneverhappenedbefore.mp4"; allifsaction();}
 
 
 
@@ -1363,7 +1367,7 @@ var timerforsubmitting = null;
       //readOutLoud("but I have also noticed pain in my left shoulder and in my neck but I don't think I've noticed any other pains anywhere else");
       previousquestion = noteContent; painin_repeat++;  response_question = "I've mainly got pain in my chest but also noticed in my left houlder and my neck";
       radiatex = true;
-    document.getElementById("webm_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.webm"; allifsaction();}//any pain in X (eg in the shoulders, in the side etc)
+    document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//any pain in X (eg in the shoulders, in the side etc)
     
     //other symptoms    
     else if (othersymptoms_repeat == 0 && (noteContent.includes("symptoms")||noteContent.includes("come along with")
@@ -1372,7 +1376,7 @@ var timerforsubmitting = null;
       //readOutLoud("but I think that's just because of the pain");
       previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I've also noticed that I get short of breath but I think it's because of the pain";
       associatedsymptomsx = true;
-      document.getElementById("webm_src").src = "videos/sobbutcozofthepain.webm"; allifsaction();}//any other Sx/does anything else come along with the pain
+      document.getElementById("mp4_src").src = "videos/sobbutcozofthepain.mp4"; allifsaction();}//any other Sx/does anything else come along with the pain
     
     else if (fever_repeat == 0 && (noteContent.includes("fever")||noteContent.includes("felt off")||noteContent.includes("felt yourself")
         ||noteContent.includes("feel")&&noteContent.includes("off")||noteContent.includes("a cold")||noteContent.includes("under the weather")
@@ -1381,47 +1385,47 @@ var timerforsubmitting = null;
       previousquestion = noteContent; fever_repeat++;  response_question = "No";
       associatedsymptomsx = true;
       feverx = true;
-      document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//fever
+      document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//fever
     
     else if (tired_repeat == 0 && ((noteContent.includes("tired")&&!noteContent.includes("of"))
     ||noteContent.includes("sore throat")||noteContent.includes("soar throat")||noteContent.includes("chills"))) {
   //readOutLoud("No");
   previousquestion = noteContent; tired_repeat++;  response_question = "No";
   associatedsymptomsx = true;
-  document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//do you feel tired all the time/any chills (it eliminates if you say 'do you feel tired of X')
+  document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you feel tired all the time/any chills (it eliminates if you say 'do you feel tired of X')
 
     else if (nausea_repeat == 0 && (noteContent.includes("naus")||noteContent.includes("vomit"))) {
       //readOutLoud("No");
       previousquestion = noteContent; nausea_repeat++;  response_question = "No";
       associatedsymptomsx = true;
-      document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//any vomiting/nausea/nauseous
+      document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any vomiting/nausea/nauseous
     
     else if (dizzy_repeat == 0 && (noteContent.includes("dizz")||noteContent.includes("faint")||(noteContent.includes("light")&&noteContent.includes("head")))) {
       //readOutLoud("No");
       previousquestion = noteContent; dizzy_repeat++;  response_question = "No";
       associatedsymptomsx = true;
       dizzinessx = true;
-      document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//any dizziness/fainting/lightheadedness
+      document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any dizziness/fainting/lightheadedness
 
     else if (palpitations_repeat == 0 && (noteContent.includes("palpitation")||(noteContent.includes("beat")||noteContent.includes("pound")||noteContent.includes("rac"))&&(noteContent.includes("chest")||noteContent.includes("heart")))) {
       //readOutLoud("Ye, sometimes I do feel like my chest is racing");
       previousquestion = noteContent; palpitations_repeat++;  response_question = "Yeah, sometimes I do feel like my chest is racing";
       associatedsymptomsx = true;
       palpitationsx = true;
-      document.getElementById("webm_src").src = "videos/palpitations.webm"; allifsaction();}//palpitations/heart beating/racing/pounding
+      document.getElementById("mp4_src").src = "videos/palpitations.mp4"; allifsaction();}//palpitations/heart beating/racing/pounding
 
     else if (sweat_repeat == 0 && (noteContent.includes("clam")||noteContent.includes("sweat"))) {
       //readOutLoud("No");
       previousquestion = noteContent; sweat_repeat++;  response_question = "No";
       associatedsymptomsx = true;
-      document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//any sweating/clammy
+      document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any sweating/clammy
 
     else if (cough_repeat == 0 && (noteContent.includes("cough")&&!noteContent.includes("colour")&&!noteContent.includes("texture")&&!noteContent.includes("consistency"))) {
       //readOutLoud("No");
       previousquestion = noteContent; cough_repeat++;  response_question = "No";
       associatedsymptomsx = true;
       coughx = true;
-      document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//cough
+      document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//cough
     
     else if (sputum_repeat == 0 && (noteContent.includes("bring up any")||noteContent.includes("sputum")||noteContent.includes("phlegm")
     ||noteContent.includes("cough")&&(noteContent.includes("bring up")||noteContent.includes("come")))) {
@@ -1429,24 +1433,24 @@ var timerforsubmitting = null;
       previousquestion = noteContent; sputum_repeat++;  response_question = "No";
       associatedsymptomsx = true;
       coughx = true;
-      document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//do you bring up anything when you cough/vomit/ anything come out?
+      document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you bring up anything when you cough/vomit/ anything come out?
     
     else if (colour_repeat == 0 && (noteContent.includes("colour")||noteContent.includes("texture")||noteContent.includes("consistency"))) {
       //readOutLoud("I don't know");
       previousquestion = noteContent; colour_repeat++;  response_question = "I don't know";
-      document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//colour of cough/vomit
+      document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//colour of cough/vomit
     
     else if (volume_repeat == 0 && ((noteContent.includes("how much")||noteContent.includes("volume")||noteContent.includes("quanitity"))&&(noteContent.includes("bring up")||noteContent.includes("vomit")||noteContent.includes("phlegm")||noteContent.includes("sputum")||noteContent.includes("cough up")))) {
       //readOutLoud("I dno't know");
       previousquestion = noteContent; volume_repeat++;  response_question = "I don't know";
-      document.getElementById("webm_src").src = "videos/idontknow.webm"; allifsaction();}//how much phlegm do you bring up
+      document.getElementById("mp4_src").src = "videos/idontknow.mp4"; allifsaction();}//how much phlegm do you bring up
     
     //SOB   
     else if (breathlessness_repeat == 0 && (noteContent.includes("short")||noteContent.includes("breathless")||noteContent.includes("breath")||noteContent.includes("dysp"))) {
       //readOutLoud("I have felt short of breath since this morning too, but I think it's because of the pain");
       previousquestion = noteContent; breathlessness_repeat++;  response_question = "I've felt short of breath since this morning, but I think it's because of the pain";
       dyspnoeax = true;
-      document.getElementById("webm_src").src = "videos/ihavefeltsob.webm"; allifsaction();}//SOB/dyspnoea
+      document.getElementById("mp4_src").src = "videos/ihavefeltsob.mp4"; allifsaction();}//SOB/dyspnoea
     
 
 
@@ -1457,7 +1461,7 @@ var timerforsubmitting = null;
       //readOutLoud("I can walk about 50 metres, but then I can't anymore because of the shortness of breath");
       previousquestion = noteContent; walkdistance_repeat++;  response_question = "I can walk about 50 metres";
       walkdistancex = true;
-      document.getElementById("webm_src").src = "videos/icanwalk.webm"; allifsaction();}//how far can you walk/when do you feel short of breath/ dyu get SOB whilst walking/when walking
+      document.getElementById("mp4_src").src = "videos/icanwalk.mp4"; allifsaction();}//how far can you walk/when do you feel short of breath/ dyu get SOB whilst walking/when walking
     
     else if (sleeppillows_repeat == 0 && ((noteContent.includes("when sleep")||noteContent.includes("during sleep"))&&(noteContent.includes("short")||noteContent.includes("breath"))||noteContent.includes("pillow")||noteContent.includes("upright")
     ||noteContent.includes("sit")&&(noteContent.includes("up")||noteContent.includes("on"))
@@ -1465,32 +1469,32 @@ var timerforsubmitting = null;
       //readOutLoud("I normally sleep with 3-4 pillows at night acctually, and that's because I feel short of breath");
       previousquestion = noteContent; sleeppillows_repeat++;  response_question = "I normally sleep with 3-4 pillows at night, and that's because I feel short of breath";
       orthopnoeax = true;
-    document.getElementById("webm_src").src = "videos/3or4pillows.webm"; allifsaction();}//SOB when sleeping/orthopnoea SOB/breathless when laying down/laying flat/////////////////////////is still shoulder!!!!
+    document.getElementById("mp4_src").src = "videos/3or4pillows.mp4"; allifsaction();}//SOB when sleeping/orthopnoea SOB/breathless when laying down/laying flat/////////////////////////is still shoulder!!!!
     
     else if (wakeup_repeat == 0 && (noteContent.includes("wak")&&noteContent.includes("up"))) {
       //readOutLoud("I do wake up short of breath at times");
       previousquestion = noteContent; wakeup_repeat++;  response_question = "I do wake up short of breath at times";
       pndx = true;
-    document.getElementById("webm_src").src = "videos/wakeupsob.webm"; allifsaction();}//SOB Paroxysmal Nocturnal dyspnoea (PND) waking up, wake up, wake you up etc
+    document.getElementById("mp4_src").src = "videos/wakeupsob.mp4"; allifsaction();}//SOB Paroxysmal Nocturnal dyspnoea (PND) waking up, wake up, wake you up etc
     
     else if (howwakeup_repeat == 0 && (noteContent.includes("how")&&noteContent.includes("wak"))) {
       //readOutLoud("I wake up probably around 5-6 times a night");
       previousquestion = noteContent; howwakeup_repeat++;  response_question = "I wake up 5-6 times a night";
       pndx = true;
-    document.getElementById("webm_src").src = "videos/wakeup5to6times.webm"; allifsaction();}//how often do you wake up SOB
+    document.getElementById("mp4_src").src = "videos/wakeup5to6times.mp4"; allifsaction();}//how often do you wake up SOB
 
     //Gastro
     else if (bloating_repeat == 0 && (noteContent.includes("bloat"))) {
       //readOutLoud("I haven't noticed any bloating");
       previousquestion = noteContent; bloating_repeat++;  response_question = "I haven't noticed any bloating";
       associatedsymptomsx = true;
-      document.getElementById("webm_src").src = "videos/bloating.webm"; allifsaction();}//bloating
+      document.getElementById("mp4_src").src = "videos/bloating.mp4"; allifsaction();}//bloating
     
     else if (yellow_repeat == 0 && (noteContent.includes("yellow")||noteContent.includes("jaundice"))) {
       //readOutLoud("I've not noticed any yellowing of the skin or of my eyes");
       previousquestion = noteContent; yellow_repeat++;  response_question = "I've not noticed any yellowing of the skin or of my eyes'";
       associatedsymptomsx = true;
-      document.getElementById("webm_src").src = "videos/yellowingofskin.webm"; allifsaction();}//jaundice
+      document.getElementById("mp4_src").src = "videos/yellowingofskin.mp4"; allifsaction();}//jaundice
 
 
 
@@ -1499,57 +1503,57 @@ else if (oedema_repeat == 0 && (noteContent.includes("swell")&&(noteContent.incl
     //readOutLoud("I've not noticed any");
     previousquestion = noteContent; oedema_repeat++;  response_question = "I've not noticed any";
     oedemax = true;
-    document.getElementById("webm_src").src = "videos/ivenotnoticedany.webm"; allifsaction();}//peripheral oedema
+    document.getElementById("mp4_src").src = "videos/ivenotnoticedany.mp4"; allifsaction();}//peripheral oedema
 
 
 
 else if (lumps_repeat == 0 && (noteContent.includes("lump")||noteContent.includes("lymph")||noteContent.includes("swelling"))) {
   //readOutLoud("I've not noticed any");
   previousquestion = noteContent; lumps_repeat++;  response_question = "I've not noticed any";
-  document.getElementById("webm_src").src = "videos/ivenotnoticedany.webm"; allifsaction();}//lymph nodes - query "swelling" coz could be of the knee for example
+  document.getElementById("mp4_src").src = "videos/ivenotnoticedany.mp4"; allifsaction();}//lymph nodes - query "swelling" coz could be of the knee for example
 
 else if (confusion_repeat == 0 && (noteContent.includes("confus"))) {
   //readOutLoud("I've not felt confused recently");
   previousquestion = noteContent; confusion_repeat++;  response_question = "I've not felt confused recently";
   associatedsymptomsx = true;
-  document.getElementById("webm_src").src = "videos/confused.webm"; allifsaction();}//confused/confusion
+  document.getElementById("mp4_src").src = "videos/confused.mp4"; allifsaction();}//confused/confusion
 
 else if (cholesterol_repeat == 0 && (noteContent.includes("cholesterol"))) {
   //readOutLoud("I have high cholesterol levels");
   previousquestion = noteContent; cholesterol_repeat++;  response_question = "I have high cholesterol";
-  document.getElementById("webm_src").src = "videos/cholesterol.webm"; allifsaction();}//cholesterol
+  document.getElementById("mp4_src").src = "videos/cholesterol.mp4"; allifsaction();}//cholesterol
 
 //rheumatology
 else if (muscle_repeat == 0 && ((noteContent.includes("muscle")||noteContent.includes("joint"))&&(noteContent.includes("ach")||noteContent.includes("problem")||noteContent.includes("wrong")))) {
   //readOutLoud("No, I don't think so");
   previousquestion = noteContent; muscle_repeat++;  response_question = "No, I don't think so";
-  document.getElementById("webm_src").src = "videos/noidontthinkso.webm"; allifsaction();}//muscle aches/aching joints etc, anything wrong with your muscles/joints
+  document.getElementById("mp4_src").src = "videos/noidontthinkso.mp4"; allifsaction();}//muscle aches/aching joints etc, anything wrong with your muscles/joints
 
 else if (howmuscle_repeat == 0 && ((noteContent.includes("muscle")||noteContent.includes("joint"))&&(noteContent.includes("how")))) {
   //readOutLoud("They're fine");
   previousquestion = noteContent; howmuscle_repeat++;  response_question = "They're fine";
-  document.getElementById("webm_src").src = "videos/notheyrefine.webm"; allifsaction();}//How are your muscles/joints
+  document.getElementById("mp4_src").src = "videos/notheyrefine.mp4"; allifsaction();}//How are your muscles/joints
 
 //ENT
 else if (headaches_repeat == 0 && (noteContent.includes("headache"))) {
   //readOutLoud("I've not been having any headaches");
   previousquestion = noteContent; headaches_repeat++;  response_question = "I've not noticed any headaches";
   associatedsymptomsx = true;
-  document.getElementById("webm_src").src = "videos/headaches.webm"; allifsaction();}//headache
+  document.getElementById("mp4_src").src = "videos/headaches.mp4"; allifsaction();}//headache
 
 //opthalmology    
 else if (vision_repeat == 0 && (noteContent.includes("vision")||noteContent.includes("eye sight")||noteContent.includes("eye-sight")||noteContent.includes("changes in your eyes"))) {
   //readOutLoud("I've not noticed any changes in my vision");
   previousquestion = noteContent; vision_repeat++;  response_question = "I've not noticed any changes in my vision";
   associatedsymptomsx = true;
-  document.getElementById("webm_src").src = "videos/changesinvision.webm"; allifsaction();}//vision
+  document.getElementById("mp4_src").src = "videos/changesinvision.mp4"; allifsaction();}//vision
 
 //derm
 else if (skin_repeat == 0 && (noteContent.includes("skin"))) {
   //readOutLoud("I've not noticed any changes in my skin");
   previousquestion = noteContent; skin_repeat++;  response_question = "I've not noticed any changes in my skin";
   associatedsymptomsx = true;
-  document.getElementById("webm_src").src = "videos/changesinskin.webm"; allifsaction();}//skin changes
+  document.getElementById("mp4_src").src = "videos/changesinskin.mp4"; allifsaction();}//skin changes
 
 
 
@@ -1559,31 +1563,31 @@ else if (skin_repeat == 0 && (noteContent.includes("skin"))) {
     ||noteContent.includes("constipation")||noteContent.includes("diarrhoea")||noteContent.includes("runny"))) {
   //readOutLoud("I've not noticed any changes");
   previousquestion = noteContent; bowels_repeat++;  response_question = "I've not noticed any changes";
-  document.getElementById("webm_src").src = "videos/changesinstools.webm"; allifsaction();}//bowels
+  document.getElementById("mp4_src").src = "videos/changesinstools.mp4"; allifsaction();}//bowels
 
 else if (urine_repeat == 0 && (noteContent.includes("urin")||noteContent.includes("pee")
     ||noteContent.includes("piss")||noteContent.includes("toilet")
     ||noteContent.includes("bladder")||noteContent.includes("void"))) {
   //readOutLoud("I've not noticed any changes in my urine");
   previousquestion = noteContent; urine_repeat++;  response_question = "I've not noticed any changes in my urine";
-  document.getElementById("webm_src").src = "videos/changesinurine.webm"; allifsaction();}//urine/voiding
+  document.getElementById("mp4_src").src = "videos/changesinurine.mp4"; allifsaction();}//urine/voiding
 
 //red flags   
 else if (weight_repeat == 0 && (noteContent.includes("weigh"))) {
   //readOutLoud("I've not noticed any weight loss to be honest");
   previousquestion = noteContent; weight_repeat++;  response_question = "I've not noticed any weight loss";
   weightx = true;
-  document.getElementById("webm_src").src = "videos/wtlossgain.webm"; allifsaction();}//weight loss
+  document.getElementById("mp4_src").src = "videos/wtlossgain.mp4"; allifsaction();}//weight loss
 
 else if (blood_repeat == 0 && (noteContent.includes("blood"))) {
   //readOutLoud("I've not noticed any blood loss from anywhere");
   previousquestion = noteContent; blood_repeat++;  response_question = "I've not noticed any blood loss from anywhere";
-  document.getElementById("webm_src").src = "videos/bloodloss.webm"; allifsaction();}//blood loss
+  document.getElementById("mp4_src").src = "videos/bloodloss.mp4"; allifsaction();}//blood loss
 
 else if (appetite_repeat == 0 && (noteContent.includes("appetite")||noteContent.includes("eating"))) {
   //readOutLoud("I've not noticed any changes in my appetite");
   previousquestion = noteContent; appetite_repeat++;  response_question = "I've not noticed any changes in my appetite";
-  document.getElementById("webm_src").src = "videos/changesinappetite.webm"; allifsaction();}//changes in appetite
+  document.getElementById("mp4_src").src = "videos/changesinappetite.mp4"; allifsaction();}//changes in appetite
 
 
   //ICE
@@ -1592,20 +1596,20 @@ else if (appetite_repeat == 0 && (noteContent.includes("appetite")||noteContent.
   //readOutLoud("I think I might be having a heart attack, but I'm not too sure");
   previousquestion = noteContent; idea_repeat++;  response_question = "I think I might be having a heart attack, but I'm not too sure";
   ideasx = true;
-  document.getElementById("webm_src").src = "videos/ideas.webm"; allifsaction();}//Ideas/what's your ideas of what's happening/what dyu think's happening/do you think it's cancer
+  document.getElementById("mp4_src").src = "videos/ideas.mp4"; allifsaction();}//Ideas/what's your ideas of what's happening/what dyu think's happening/do you think it's cancer
 
 else if (concerns_repeat == 0 && (noteContent.includes("concern")||noteContent.includes("worr")||noteContent.includes("worry")||noteContent.includes("scar"))) {
   //readOutLoud("I'm really worried that it is acctually a heart attack, and I know that you can die from a heart attack");
   previousquestion = noteContent; concerns_repeat++;  response_question = "I'm worried it's a heart attack as I know you can die from that";
   concernsx = true;
-  document.getElementById("webm_src").src = "videos/concerns.webm"; allifsaction();}//Concerns/anything scaring you
+  document.getElementById("mp4_src").src = "videos/concerns.mp4"; allifsaction();}//Concerns/anything scaring you
 
 else if (expectations_repeat == 0 && (noteContent.includes("expect")||noteContent.includes("get out of")||noteContent.includes("like from us")||noteContent.includes("hoping")||noteContent.includes("hope")
 ||noteContent.includes("can we help")||noteContent.includes("what can we do for you")||noteContent.includes("what can i do for you"))) {
   //readOutLoud("I would like to figure out what is going on with me if that's possible, and maybe run a few tests?");
   previousquestion = noteContent; expectations_repeat++;  response_question = "I want to figure out what's going on with me, and maybe run a few tests?";
   expectationsx = true;
-  document.getElementById("webm_src").src = "videos/expectations.webm"; allifsaction();}//Expectations/what would you like from us
+  document.getElementById("mp4_src").src = "videos/expectations.mp4"; allifsaction();}//Expectations/what would you like from us
 
 
 
@@ -1616,13 +1620,13 @@ else if (FH_repeat == 0 && (noteContent.includes("family")&&(noteContent.include
   previousquestion = noteContent; FH_repeat++;  response_question = "My auntie died of a heart attack when she was 67 and my father had a mini stroke when he was 72, but he's recovered now though";
   familyhistoryx = true;
   FHheartconditionsx = true;
-  document.getElementById("webm_src").src = "videos/cardiacfamilyhistory.webm"; allifsaction();}//heart problems in the family
+  document.getElementById("mp4_src").src = "videos/cardiacfamilyhistory.mp4"; allifsaction();}//heart problems in the family
 
 else if (familydiabetes_repeat == 0 && (noteContent.includes("family")&&(noteContent.includes("diabete")))) {
   //readOutLoud("I know my dad has type 2 diabetes, but I don't think any one else has it.");
   previousquestion = noteContent; familydiabetes_repeat++;  response_question = "My dad had type 2 diabetes, but no one else has it";
   familyhistoryx = true;
-  document.getElementById("webm_src").src = "videos/diabetesfamilyhistory.webm"; allifsaction();}//diabetes problems in the family
+  document.getElementById("mp4_src").src = "videos/diabetesfamilyhistory.mp4"; allifsaction();}//diabetes problems in the family
 
 else if (familyheart_repeat == 0 && ((noteContent.includes("family")||noteContent.includes("run in the"))
 &&!noteContent.includes("cardi")&&!noteContent.includes("gastr")&&!noteContent.includes("neur")&&!noteContent.includes("resp")
@@ -1630,7 +1634,7 @@ else if (familyheart_repeat == 0 && ((noteContent.includes("family")||noteConten
   //readOutLoud("My grandma had a problem with her thyroid when she was younger, and I think my dad used to have prostate cancer");
   previousquestion = noteContent; familyheart_repeat++;  response_question = "My grandma had a thyroid problem when she was younger, and my dad used to have prostate cancer";
   familyhistoryx = true;
-  document.getElementById("webm_src").src = "videos/familyhistory.webm"; allifsaction();}//FHx
+  document.getElementById("mp4_src").src = "videos/familyhistory.mp4"; allifsaction();}//FHx
 
 
 
@@ -1639,19 +1643,19 @@ else if (pmhx_repeat == 0 && (!noteContent.includes("famil")&&!noteContent.inclu
   //readOutLoud("I have high blood pressure and I had a stroke a few years ago that I successfuly recovered from a couple years ago.");
   previousquestion = noteContent; pmhx_repeat++;  response_question = "I have high blood pressure and a stroke a few years ago that I successfully recovered from a few years ago";
   pmhx = true;
-  document.getElementById("webm_src").src = "videos/pmhx.webm"; allifsaction();}//PMHx / suffere from anything else (you also want to rule out is there anything else you want to ask me)
+  document.getElementById("mp4_src").src = "videos/pmhx.mp4"; allifsaction();}//PMHx / suffere from anything else (you also want to rule out is there anything else you want to ask me)
 
     else if (strokepast_repeat == 0 && (noteContent.includes("stroke")&&noteContent.includes("past"))) {
       //readOutLoud("I had a stroke a few years ago that I successfuly recovered from a couple years ago.");
       previousquestion = noteContent; strokepast_repeat++;  response_question = "I had a stroke a few years ago that I recovered from";
       pmhx = true;
-      document.getElementById("webm_src").src = "videos/ihadastrokeafewyearsago.webm"; allifsaction();}//PMHx
+      document.getElementById("mp4_src").src = "videos/ihadastrokeafewyearsago.mp4"; allifsaction();}//PMHx
 
 else if (otherhistory_repeat == 0 && (noteContent.includes("diabet")&&!noteContent.includes("family"))) {
   //readOutLoud("I've recently been diagnosed with type 2 diabetes acctually, but I've been compliant with my medications and have regularly gone to the Doctors for my diabetes check ups.");
   previousquestion = noteContent; otherhistory_repeat++;  response_question = "I've recently gotdiagnosed with type 2 diabetes and been taking all my medications for it";
   diabetesx = true;
-  document.getElementById("webm_src").src = "videos/recentlydxoftype2diabetes.webm"; allifsaction();}//PMHx diabetes. not family
+  document.getElementById("mp4_src").src = "videos/recentlydxoftype2diabetes.mp4"; allifsaction();}//PMHx diabetes. not family
 
 
 
@@ -1660,45 +1664,45 @@ else if (bpfamily_repeat == 0 && (noteContent.includes("blood pressure")&&!noteC
   //readOutLoud("I think my blood pressure was slightly high when I came in last time to the GP around a month ago, but they didn't give me anything for it.");
   previousquestion = noteContent; bpfamily_repeat++;  response_question = "My blood pressure was high last time I went to GP a month ago but I didn't give me anything for it";
   hypertensionx = true;
-  document.getElementById("webm_src").src = "videos/bloodpressurequitehighbutnomeds.webm"; allifsaction();}//PMHx hypertension. not family
+  document.getElementById("mp4_src").src = "videos/bloodpressurequitehighbutnomeds.mp4"; allifsaction();}//PMHx hypertension. not family
 
 else if (legpain_repeat == 0 && (noteContent.includes("artery disease")||(noteContent.includes("leg")||noteContent.includes("foot")||noteContent.includes("feet"))&&(noteContent.includes("pain")||noteContent.includes("problem")))) {
   //readOutLoud("I have peripheral artery disease, so I get do get pains in my legs when I walk, but that's because I have peripheral artery disease");
   previousquestion = noteContent; legpain_repeat++;  response_question = "I get pain in my legs because I have peripheral artery disease";
   padx = true;
-  document.getElementById("webm_src").src = "videos/peripheralarterydisease.webm"; allifsaction();}//peripheral artery disease
+  document.getElementById("mp4_src").src = "videos/peripheralarterydisease.mp4"; allifsaction();}//peripheral artery disease
 
 else if (sleepapnoea_repeat == 0 && (noteContent.includes("sleep apnoea")||noteContent.includes("snor")||(noteContent.includes("problem")||noteContent.includes("breath")||noteContent.includes("loud"))&&(noteContent.includes("sleep")||noteContent.includes("night")||noteContent.includes("heav")))) {
   //readOutLoud("I have sleep apnoea, so I snore quite loudly at night");
   previousquestion = noteContent; sleepapnoea_repeat++;  response_question = "I havesleep apnoea so I snore loudly";
   sleepapnoeax = true;
-  document.getElementById("webm_src").src = "videos/sleepapnoea.webm"; allifsaction();}//sleep apnoea/snoring/breath heavily/heavy
+  document.getElementById("mp4_src").src = "videos/sleepapnoea.mp4"; allifsaction();}//sleep apnoea/snoring/breath heavily/heavy
 
 
 else if (surgery_repeat == 0 && (noteContent.includes("surger")||noteContent.includes("operat"))) {
   //readOutLoud("I've not had any surgeries");
   previousquestion = noteContent; surgery_repeat++;  response_question = "I've not had any surgeries";
   surgeriesx = true;
-  document.getElementById("webm_src").src = "videos/surgeries.webm"; allifsaction();}//Any surgeries
+  document.getElementById("mp4_src").src = "videos/surgeries.mp4"; allifsaction();}//Any surgeries
 
 
 else if (allergy_repeat == 0 && (noteContent.includes("allerg"))) {
   //readOutLoud("no");
   previousquestion = noteContent; allergy_repeat++;  response_question = "no";
   allergiesx = true;
-  document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//FHx
+  document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//FHx
 
 else if (takeforpain_repeat == 0 && (noteContent.includes("do you take anything for")||noteContent.includes("paracetamol")||noteContent.includes("pain relief")||noteContent.includes("relie")&&noteContent.includes("pain"))) {
   //readOutLoud("I take paracetamol, but it doesn't work");
   previousquestion = noteContent; takeforpain_repeat++;  response_question = "I take paracetomol but it doesn't work";
   medstestx = true;
-  document.getElementById("webm_src").src = "videos/itakeparacetamolbutdoesntwork.webm"; allifsaction();}//Do you take anything for the pain? + does it work
+  document.getElementById("mp4_src").src = "videos/itakeparacetamolbutdoesntwork.mp4"; allifsaction();}//Do you take anything for the pain? + does it work
 
 else if (illicitdrugs_repeat == 0 && (noteContent.includes("meds")||noteContent.includes("medication")||noteContent.includes("drugs")&&!noteContent.includes("illicit")&&!noteContent.includes("illegal"))) {
   //readOutLoud("I take aspirin 300mg, I'm also on a Beta blocker called bisoprolol and I'm on a statin too.");
   previousquestion = noteContent; illicitdrugs_repeat++;  response_question = "I take aspirin, bisoprolol and a statin";
   medstestx = true;
-  document.getElementById("webm_src").src = "videos/medicationsaspirin.webm"; allifsaction();}//meds
+  document.getElementById("mp4_src").src = "videos/medicationsaspirin.mp4"; allifsaction();}//meds
 
 
 //social Hx
@@ -1707,74 +1711,74 @@ else if (howlongsmoke_repeat == 0 && (noteContent.includes("how long")&&noteCont
   //readOutLoud("I started smoking when I was 15");
   previousquestion = noteContent; howlongsmoke_repeat++;  response_question = "i started smoking when 15";
   smokingx = true;
-  document.getElementById("webm_src").src = "videos/startedsmoking.webm"; allifsaction();}//smoking
+  document.getElementById("mp4_src").src = "videos/startedsmoking.mp4"; allifsaction();}//smoking
 
 else if (startsmoke_repeat == 0 && (noteContent.includes("start")&&noteContent.includes("smoke"))) {
   //readOutLoud("I started smoking when I was 15");
   previousquestion = noteContent; startsmoke_repeat++;  response_question = "i started smoking when 15";
   smokingx = true;
-  document.getElementById("webm_src").src = "videos/startedsmoking.webm"; allifsaction();}//smoking
+  document.getElementById("mp4_src").src = "videos/startedsmoking.mp4"; allifsaction();}//smoking
 
 else if (howmuchsmoke_repeat == 0 && (noteContent.includes("smok")||noteContent.includes("how much do you smoke"))) {
   //readOutLoud("I smoke 30 cigarettes every day");
   previousquestion = noteContent; howmuchsmoke_repeat++;  response_question = "i smoke 30 cigarettes a day";
   smokingx = true;
-  document.getElementById("webm_src").src = "videos/ismoke30aday.webm"; allifsaction();}//smoking
+  document.getElementById("mp4_src").src = "videos/ismoke30aday.mp4"; allifsaction();}//smoking
 
 else if (usedtosmoke_repeat == 0 && (noteContent.includes("used to smoke")||noteContent.includes("did you smoke"))) {
   //readOutLoud("I used to smoke 10 cigarettes a day when I was a teenager, and I started when I was 15");
   previousquestion = noteContent; usedtosmoke_repeat++;  response_question = "I used to smoke 10 a day as a teen";
   smokingx = true;
-  document.getElementById("webm_src").src = "videos/iusedtosmoke.webm"; allifsaction();}//past smoking
+  document.getElementById("mp4_src").src = "videos/iusedtosmoke.mp4"; allifsaction();}//past smoking
 
 else if (drinking_repeat == 0 && (noteContent.includes("how long")&&noteContent.includes("drink"))) {
   //readOutLoud("I started drinking when I was 13");
   previousquestion = noteContent; drinking_repeat++;  response_question = "i started drinking when 13";
   smokingx = true;
-  document.getElementById("webm_src").src = "videos/starteddrinkingwheniwas13.webm"; allifsaction();}//smoking
+  document.getElementById("mp4_src").src = "videos/starteddrinkingwheniwas13.mp4"; allifsaction();}//smoking
 
 else if (startdrinking_repeat == 0 && (noteContent.includes("start")&&noteContent.includes("drink"))) {
   //readOutLoud("I started drinking when I was 13");
   previousquestion = noteContent; startdrinking_repeat++;  response_question = "i started drinking when 13";
   smokingx = true;
-  document.getElementById("webm_src").src = "videos/starteddrinkingwheniwas13.webm"; allifsaction();}//smoking
+  document.getElementById("mp4_src").src = "videos/starteddrinkingwheniwas13.mp4"; allifsaction();}//smoking
 
 
 else if(drinkingalcohol_repeat == 0 && (noteContent.includes("drink")||noteContent.includes("alcohol")||noteContent.includes("how much do you drink"))){
   //readOutLoud("I drink about half a bottles of wine every day");
   previousquestion = noteContent; drinkingalcohol_repeat++;  response_question = "i drink about half a bottle of wine per day";
   alcoholx = true;
-  document.getElementById("webm_src").src = "videos/drinkabouthalfabottleaday.webm"; allifsaction();}//alcohol
+  document.getElementById("mp4_src").src = "videos/drinkabouthalfabottleaday.mp4"; allifsaction();}//alcohol
 
 else if (usedtodrink_repeat == 0 && (noteContent.includes("used to drink")||noteContent.includes("did you drink"))) {
   //readOutLoud("I used to binge drink as a teenager, but have decreased since then");
   previousquestion = noteContent; usedtodrink_repeat++;  response_question = "i used to binge drink as a teen, but have decreased since";
   alcoholx = true;
-  document.getElementById("webm_src").src = "videos/usedtobingedrinkwhenyounger.webm"; allifsaction();}//past alcohol
+  document.getElementById("mp4_src").src = "videos/usedtobingedrinkwhenyounger.mp4"; allifsaction();}//past alcohol
 
 else if (illegaldrugs_repeat == 0 && (noteContent.includes("illicit")||noteContent.includes("illegal drug"))){
   //readOutLoud("No I don't");
   previousquestion = noteContent; illegaldrugs_repeat++;  response_question = "no i don't";
-  document.getElementById("webm_src").src = "videos/noidont.webm"; allifsaction();}//illicit drugs
+  document.getElementById("mp4_src").src = "videos/noidont.mp4"; allifsaction();}//illicit drugs
 
 else if (overthecounter_repeat == 0 && (noteContent.includes("over the counter")||noteContent.includes("not prescribed")||noteContent.includes("not given"))){
   //readOutLoud("No");
   previousquestion = noteContent; overthecounter_repeat++;  response_question = "no";
-  document.getElementById("webm_src").src = "videos/no.webm"; allifsaction();}//OTC drugs/have you been taking any drugs not given by the Dr
+  document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//OTC drugs/have you been taking any drugs not given by the Dr
 
 else if (exercise_repeat == 0 && (noteContent.includes("exercise")||noteContent.includes("go on walk")||noteContent.includes("active")
 ||noteContent.includes("sport")||noteContent.includes("physical"))){
   //readOutLoud("I don't really, especially because I get short of breath, so I avoid it. But I do sometimes walk to the shops though when I can");
   previousquestion = noteContent; exercise_repeat++;  response_question = "i don't exercise because I get short of breath so i avoid it. but i do wak to shops when i can";
   physicalactivityx = true;
-  document.getElementById("webm_src").src = "videos/idontreallyespeciallycozigetsobsoavoidwalking.webm"; allifsaction();}//exercise/do you keep active
+  document.getElementById("mp4_src").src = "videos/idontreallyespeciallycozigetsobsoavoidwalking.mp4"; allifsaction();}//exercise/do you keep active
 
 ////
 
 else if (diet_repeat == 0 && (noteContent.includes("diet")||noteContent.includes("do you eat")||noteContent.includes("what you eat"))){
   //readOutLoud("I've been told I eat too much, but I would say I eat alright, I only eat fast food 2 or 3 times a week, but I try to get my 5 a day");
   previousquestion = noteContent; diet_repeat++;  response_question = "i eat too much. I eat fast food 3 times/week, i try to eat my 5 a day";
-  document.getElementById("webm_src").src = "videos/ieattoomuch.webm"; allifsaction();}//how's your diet/what sorts of things do you eat/describe what you eat
+  document.getElementById("mp4_src").src = "videos/ieattoomuch.mp4"; allifsaction();}//how's your diet/what sorts of things do you eat/describe what you eat
 
 
 
@@ -1784,66 +1788,66 @@ else if (livewithathome_repeat == 0 && (noteContent.includes("at home")||noteCon
   //readOutLoud("I live with my wife at home");
   previousquestion = noteContent; livewithathome_repeat++;  response_question = "i live with wife at home";
   homesituationx = true;
-  document.getElementById("webm_src").src = "videos/ilivewithmywife.webm"; allifsaction();}//who's at home/who lives at home/who dyu live with
+  document.getElementById("mp4_src").src = "videos/ilivewithmywife.mp4"; allifsaction();}//who's at home/who lives at home/who dyu live with
 
 else if (bungalo_repeat == 0 && (noteContent.includes("bungalo")||noteContent.includes("house")||noteContent.includes("appartment")
     ||noteContent.includes("live in")||noteContent.includes("you live")||noteContent.includes("living situation")||noteContent.includes("housing situation"))){
   //readOutLoud("I live in a little flat in the city");
   previousquestion = noteContent; bungalo_repeat++;  response_question = "i live in little flat in the city";
   homesituationx = true;
-  document.getElementById("webm_src").src = "videos/iliveinaflatinthecity.webm"; allifsaction();}//where dyu live/dyu live in a flat etc
+  document.getElementById("mp4_src").src = "videos/iliveinaflatinthecity.mp4"; allifsaction();}//where dyu live/dyu live in a flat etc
 
 else if (howiswife_repeat == 0 && (noteContent.includes("how")&&noteContent.includes("wife"))){
   //readOutLoud("She is fine thank you");
   previousquestion = noteContent; howiswife_repeat++;  response_question = "she's fine";
   homesituationx = true;
-  document.getElementById("webm_src").src = "videos/shesfinethankyou.webm"; allifsaction();}//how's your wife
+  document.getElementById("mp4_src").src = "videos/shesfinethankyou.mp4"; allifsaction();}//how's your wife
 
 else if (havewife_repeat == 0 && ((noteContent.includes("wife")||noteContent.includes("husband")||noteContent.includes("girlfriend")||noteContent.includes("boyfriend"))&&(noteContent.includes("have")||noteContent.includes("any"))||noteContent.includes("single")&&noteContent.includes("you"))){
   //readOutLoud("I have a wife");
   previousquestion = noteContent; havewife_repeat++;  response_question = "i have a wife";
   homesituationx = true;
-  document.getElementById("webm_src").src = "videos/ihaveawife.webm"; allifsaction();}//children?
+  document.getElementById("mp4_src").src = "videos/ihaveawife.mp4"; allifsaction();}//children?
 
 else if (children_repeat == 0 && ((noteContent.includes("children")||noteContent.includes("kids"))&&(noteContent.includes("have")||noteContent.includes("any")))){
   //readOutLoud("I don't have any children");
   previousquestion = noteContent; children_repeat++;  response_question = "i don't have children";
   homesituationx = true;
-  document.getElementById("webm_src").src = "videos/idonthaveanychildren.webm"; allifsaction();}//children?
+  document.getElementById("mp4_src").src = "videos/idonthaveanychildren.mp4"; allifsaction();}//children?
 
 else if (hithere_repeat == 0 && ((noteContent.includes("hello")||noteContent.toLowerCase() === "hi."||noteContent.toLowerCase() === "hi"||noteContent.toLowerCase() === "hey"
 ||noteContent.toLowerCase() === "hey."||noteContent.includes("greeting")
 ||noteContent.includes("hey there")||noteContent.includes("hi there")||noteContent.includes("hiya"))&&!noteContent.includes("children"))){
   //readOutLoud("Hiya there");
   previousquestion = noteContent; hithere_repeat++;  response_question = "hiya there";
-  document.getElementById("webm_src").src = "videos/hiyathere.webm"; allifsaction();}
+  document.getElementById("mp4_src").src = "videos/hiyathere.mp4"; allifsaction();}
 
 
 else if (isthatcorrect_repeat == 0 && (noteContent.includes("is that correct")||noteContent.includes("is that right")||noteContent.includes("am i right"))){
   //readOutLoud("yes that's correct");
   previousquestion = noteContent; isthatcorrect_repeat++;  response_question = "yes that's correct";
-  document.getElementById("webm_src").src = "videos/thatscorrect.webm"; allifsaction();}
+  document.getElementById("mp4_src").src = "videos/thatscorrect.mp4"; allifsaction();}
 
 else if (missedanything_repeat == 0 && (noteContent.includes("miss"))){
   //readOutLoud("You haven't missed anything");
   previousquestion = noteContent; missedanything_repeat++;  response_question = "you haven't missed anything";
-  document.getElementById("webm_src").src = "videos/youhaventmissedanything.webm"; allifsaction();}//have I missed/missing anything out in the summary or in the consultation?
+  document.getElementById("mp4_src").src = "videos/youhaventmissedanything.mp4"; allifsaction();}//have I missed/missing anything out in the summary or in the consultation?
 
 else if (canrepeat_repeat == 0 && (noteContent.includes("can")&&(noteContent.includes("repeat")||noteContent.includes("what did you say")))){
   //readOutLoud("Hmmmmmmm, I forgot the question you asked actually, can you ask it again please");
   previousquestion = noteContent; canrepeat_repeat++;  response_question = "i forgot the question you asked, can you ask it again please";
-  document.getElementById("webm_src").src = "videos/hmmiforgotthequestionyouaskedcanyourepeat.webm"; allifsaction();}//can you repeat what you said
+  document.getElementById("mp4_src").src = "videos/hmmiforgotthequestionyouaskedcanyourepeat.mp4"; allifsaction();}//can you repeat what you said
 
 else if (sorryfor_repeat == 0 && (noteContent.includes("sorry")&&(noteContent.includes("feel")))) {
   //readOutLoud("thank you for understanding");
   previousquestion = noteContent; sorryfor_repeat++;  response_question = "thank you for understanding";
-  document.getElementById("webm_src").src = "videos/thankyouforunderstanding.webm"; allifsaction();}//Sorry to here about that
+  document.getElementById("mp4_src").src = "videos/thankyouforunderstanding.mp4"; allifsaction();}//Sorry to here about that
 
 /*
     else if ((noteContent.includes("good")||noteContent.includes("ok")||noteContent.includes("alright"))&&(noteContent.includes("i'm")||noteContent.includes("i am"))) {
       //readOutLoud("good");
       previousquestion = noteContent;   response_question = "good";
-      document.getElementById("webm_src").src = "videos/good.webm"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
+      document.getElementById("mp4_src").src = "videos/good.mp4"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
         recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
         }}//I'm good thank you (in response to how are you)
 */
@@ -1851,7 +1855,7 @@ else if (sorryfor_repeat == 0 && (noteContent.includes("sorry")&&(noteContent.in
 else if (hardforyou_repeat == 0 && (noteContent.includes("hard for you"))) {
   //readOutLoud("Yes it was quite hard for me, thank you for asking");
   previousquestion = noteContent; hardforyou_repeat++;  response_question = "yes it was quite hard for me, thank you";
-  document.getElementById("webm_src").src = "videos/yesitwasquitehardforme.webm"; allifsaction();}//Sorry to here about that
+  document.getElementById("mp4_src").src = "videos/yesitwasquitehardforme.mp4"; allifsaction();}//Sorry to here about that
 
 
 
@@ -2101,7 +2105,7 @@ const handleUserInput = async (noteContent) => {
           readOutLoud(response);
 
 
-          document.getElementById("webm_src").src = "WIN_20230328_13_59_49_Pro.webm"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
+          document.getElementById("mp4_src").src = "WIN_20230328_13_59_49_Pro.mp4"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
             recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
           }      
     }
@@ -2117,7 +2121,7 @@ const handleUserInput = async (noteContent) => {
       gptvideo.play();
       resolve();
     };
-    document.getElementById("webm_src").src = "vid-whatsbroughtyouin.webm";
+    document.getElementById("mp4_src").src = "vid-whatsbroughtyouin.mp4";
     gptvideo.load();
   });
   await Promise.all([responsePromise, videoPromise]);
@@ -2156,7 +2160,7 @@ inbetweenVideo.onloadedmetadata = () => {
   inbetweenVideo.muted = true;
   inbetweenVideo.play();
 }
-document.getElementById("inbetweenwebm_src").src = "videos/silentvideo.webm";
+document.getElementById("inbetweenmp4_src").src = "videos/silentvideo.mp4";
 
 
 
@@ -2181,7 +2185,7 @@ const handleUserInput = async (noteContent) => {
     document.getElementById('loadingcircle').style.display = 'unset';
     document.getElementById('errormsg').style.display = 'unset';
 
-    document.getElementById("mutedwebm_src").src = "videos/bitmore.webm";
+    document.getElementById("mutedmp4_src").src = "videos/bitmore.mp4";
     
     
    
@@ -3884,7 +3888,7 @@ document.getElementById('examinations').style.display = 'none';
   document.getElementById('summary').style.display = 'unset';
 
   recognition_examinations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/summary.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/summary.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition1.start();     document.getElementById('messagebeforeacceptingmic_summary').style.display = 'unset'; 
   document.getElementById('save-note-btn-for-summary').style.display = 'unset';     
@@ -4117,7 +4121,7 @@ document.getElementById('summary').style.display = 'none';
   document.getElementById('differentials').style.display = 'unset';
 
   recognition1.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-   document.getElementById("webm_src").src = "videos/differential.webm"; document.getElementById("myVideo").load();
+   document.getElementById("mp4_src").src = "videos/differential.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
     recognition_differentials.start();     document.getElementById('messagebeforeacceptingmic_differentials').style.display = 'unset';
   document.getElementById('save-note-btn-for-differentials').style.display = 'unset'; 
@@ -4360,7 +4364,7 @@ function greenstyles_aboveline(element){
   document.getElementById('investigations').style.display = 'unset';
 
   recognition_differentials.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/investigations.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/investigations.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition_investigations.start();     document.getElementById('messagebeforeacceptingmic_investigations').style.display = 'unset';
   document.getElementById('save-note-btn-for-investigations').style.display = 'unset';
@@ -4630,7 +4634,7 @@ function greenstyles_aboveline(element){
   document.getElementById('riskfactors').style.display = 'unset';
 
   recognition_investigations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/riskfactors.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition_riskfactors.start();     document.getElementById('messagebeforeacceptingmic_riskfactors').style.display = 'unset';
   document.getElementById('save-note-btn-for-riskfactors').style.display = 'unset';
@@ -4918,7 +4922,7 @@ function greenstyles_aboveline(element){
   document.getElementById('treatments').style.display = 'unset';
 
   recognition_riskfactors.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-  document.getElementById("webm_src").src = "videos/management.webm"; document.getElementById("myVideo").load();
+  document.getElementById("mp4_src").src = "videos/management.mp4"; document.getElementById("myVideo").load();
   document.getElementById('myVideo').onended = function(e) {
   recognition_treatments.start();     document.getElementById('messagebeforeacceptingmic_treatments').style.display = 'unset';
   document.getElementById('save-note-btn-for-treatments').style.display = 'unset';

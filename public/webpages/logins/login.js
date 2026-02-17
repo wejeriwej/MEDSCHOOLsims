@@ -13,7 +13,26 @@ loginBtn.addEventListener("click", async () => {
     setTimeout(() => location.href = "profile.html", 800);
   } catch (err) {
     console.error(err);
-    msg.innerText = err.message;
+          //msg.innerText = err.message;
+    // Check if error is related to wrong credentials
+    if (err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
+      msg.innerText = "Invalid email or password. Please try again.";
+    } else {
+      msg.innerText = "Invalid email or password. Please try again.";
+    }
+  }
+});
+
+// Trigger login when "Enter" key is pressed
+emailInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    loginBtn.click();
+  }
+});
+
+passwordInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    loginBtn.click();
   }
 });
 

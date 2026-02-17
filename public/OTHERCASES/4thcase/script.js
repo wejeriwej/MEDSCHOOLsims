@@ -42,7 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
+// Fire-and-forget warmup request to render to prevent cold starts
+fetch("https://oscesimstrial1.onrender.com/health", {
+  method: "GET",
+  mode: "no-cors"
+}).catch(() => {});
 
 
 

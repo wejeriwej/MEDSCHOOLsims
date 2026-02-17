@@ -280,6 +280,78 @@ padding: 2px;}
         button:hover {
             background-color: rgb(201, 188, 70);
         }*/
+ .box {
+    position: relative;
+    margin: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.box:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+
+.img-box { position: relative; }
+
+.locked img {
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: 0.3s;
+
+}
+
+/* Lock overlay */
+.lock-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+
+}
+
+.box.locked:hover .lock-overlay {
+    opacity: 1;
+}
+
+.lock-overlay i {
+    font-size: 32px;
+    color: rgb(0, 0, 0);
+    display: block;
+    margin-bottom: 5px;
+    animation: pulse 2s infinite;
+    backdrop-filter: blur(1px);
+
+}
+
+/* Tooltip */
+.lock-overlay .tooltip {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    background: rgba(0,0,0,0.7);
+    color: gold;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.box.locked:hover .lock-overlay .tooltip {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Pulse animation for luxury gold */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
     </style>
 </head>
 
@@ -287,8 +359,26 @@ padding: 2px;}
 
     <special-header></special-header>
     
-<div id="authStatus"></div>
-    <br><br>
+<div style="text-align: center; margin: 20px 0;">
+  <p id="upgradeStatus" style="display: none; margin: 0;">
+    <span style="
+        background-color: gold; 
+        color: black; 
+        font-weight: bold; 
+        padding: 3px 8px; 
+        border-radius: 5px;
+        font-size: 14px;
+    ">PRO MEMBER</span>
+  </p>
+
+
+  <div id="authStatus" style="margin: 5px 0 0 0; font-size: smaller;"></div>
+</div>
+
+
+
+
+
     <div class="container">
         <div class="sidebar">
             <div class="sidehead">
@@ -354,6 +444,8 @@ padding: 2px;}
     </div>
 
     <script>
+        let isProUser = false;
+
         const product = [
             {
                 id: 0,
@@ -382,25 +474,36 @@ padding: 2px;}
             displayItem(filteredData)
         });
 
-        const displayItem = (items) => {
-            document.getElementById('root').innerHTML = items.map((item) => {
-                var { image, title, topic, difficulty, link } = item;
-                return (
-                    `<div class='box' onclick="navigateToPage('${link}')">
-                        <div class='img-box'>
-                            <img class='images' src=${image}></img>
-                        </div> 
-                        <div class='bottom'>
-                            <h3>${title}</h3>
-                            <h2>${topic}</h2>
-                            <p>${difficulty}</p>
+         const displayItem = (items) => {
+    document.getElementById('root').innerHTML = items.map(item => {
+        const { image, title, topic, difficulty, link, proOnly } = item;
+        const locked = proOnly && !isProUser;
 
-                       <!-- <button>Start</button> -->
-                        </div>
-                    </div>`
-                )
-            }).join('')
-        };
+        return `
+        <div class="box ${locked ? "locked" : ""}" 
+             onclick="${locked ? 'redirectToLogin()' : `navigateToPage('${link}')`}">
+            <div class="img-box">
+                <img class="images" src="${image}">
+                
+                ${locked ? `
+                <div class="lock-overlay">
+                    <i class="fa-solid fa-lock"></i>
+                    <span class="tooltip">Upgrade to Unlock</span>
+                </div>` : ''}
+            </div>
+            <div class="bottom">
+                <h3>${title}</h3>
+                <h2>${topic}</h2>
+                <p>${difficulty}</p>
+            </div>
+        </div>
+        `;
+    }).join('');
+};
+
+function navigateToPage(link) { window.location.href = link; }
+function redirectToLogin() { window.location.href = "../webpages/logins/login.html"; }
+
         displayItem(categories);
 
         function navigateToPage(link) {
@@ -417,22 +520,52 @@ padding: 2px;}
 
 
 
-//THIS IS ACTIONED FOR THOSE THAT ARE LOGGED IN!!!!
 document.addEventListener("DOMContentLoaded", () => {
   const authStatus = document.getElementById("authStatus");
+  const upgradeStatus = document.getElementById("upgradeStatus");
 
-  if (!authStatus) return; // page doesn't need it
+  auth.onAuthStateChanged(async (user) => {
 
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      authStatus.innerText = `Hello, ${user.email}`;
-    } else {
+    // ---------- AUTH SECTION ----------
+    if (!user) {
       authStatus.innerText = "Not logged in";
+      upgradeStatus.style.display = "none";
+      isProUser = false;
+      displayItem(categories);
+      return;
     }
+
+    authStatus.innerText = `Logged in as: ${user.email}`;
+
+    // ---------- SUBSCRIPTION SECTION ----------
+    try {
+      const docSnap = await db.collection("users").doc(user.uid).get();
+
+      if (!docSnap.exists) {
+        upgradeStatus.style.display = "none";
+        return;
+      }
+
+      const userData = docSnap.data();
+
+      if (userData.plan === "pro" && userData.subscriptionStatus === "active") {
+    upgradeStatus.style.display = "block";
+    isProUser = true;
+    authStatus.style.display = "none";
+} else {
+    upgradeStatus.style.display = "none";
+    isProUser = false;
+}
+
+displayItem(categories); // 👈 re-render cases after we know status
+
+    } catch (err) {
+      console.error("Subscription check failed:", err);
+      upgradeStatus.style.display = "none";
+    }
+
   });
 });
-
-
 
 
 

@@ -21,6 +21,13 @@ emailInput.addEventListener("input", () => {
   }
 });
 
+// Trigger reset when "Enter" key is pressed
+emailInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    resetBtn.click();
+  }
+});
+
 // Send reset email
 resetBtn.addEventListener("click", async () => {
   msg.innerText = "";

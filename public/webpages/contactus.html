@@ -145,6 +145,7 @@
     <special-header></special-header>
 
 <div id="authStatus"></div>
+<p id="upgradeStatus" style="color: green; font-weight: bold; display: none;">  You are upgraded 🎉</p>
     <div class="container">
         <h2>Contact Us</h2>
         <div class="contact-info">
@@ -186,27 +187,41 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const authStatus = document.getElementById("authStatus");
-  if (!authStatus) return;
+  const upgradeStatus = document.getElementById("upgradeStatus");
 
   auth.onAuthStateChanged(async (user) => {
+
+    // ---------- AUTH SECTION ----------
     if (!user) {
       authStatus.innerText = "Not logged in";
+      upgradeStatus.style.display = "none";
       return;
     }
 
-    try {
-      const docRef = db.collection("users").doc(user.uid);
-      const docSnap = await docRef.get();
+    authStatus.innerText = `Logged in as: ${user.email}`;
 
-      if (docSnap.exists) {
-        authStatus.innerText = `Welcome back, ${docSnap.data().name}`;
-      } else {
-        authStatus.innerText = "Hello!";
+    // ---------- SUBSCRIPTION SECTION ----------
+    try {
+      const docSnap = await db.collection("users").doc(user.uid).get();
+
+      if (!docSnap.exists) {
+        upgradeStatus.style.display = "none";
+        return;
       }
+
+      const userData = docSnap.data();
+
+      if (userData.plan === "pro" && userData.subscriptionStatus === "active") {
+        upgradeStatus.style.display = "block";
+      } else {
+        upgradeStatus.style.display = "none";
+      }
+
     } catch (err) {
-      console.error(err);
-      authStatus.innerText = "Hello!";
+      console.error("Subscription check failed:", err);
+      upgradeStatus.style.display = "none";
     }
+
   });
 });
 </script>
