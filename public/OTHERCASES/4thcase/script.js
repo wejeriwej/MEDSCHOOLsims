@@ -224,7 +224,27 @@ if (isMobile) {
     document.getElementById('logoduringconsultation').style.display = 'none';
     document.getElementById('myVideo').style.display = 'none';
   
-  
+  //FOR THE YELLOW WARNING FADE IN AND OUT:
+  const message = document.getElementById('audio-warning');
+  message.style.display = 'block';
+
+  // Trigger fade-in (1 second)
+  setTimeout(() => {
+    message.style.opacity = 1;
+  }, 10); // small timeout to ensure CSS is applied
+
+  // After 1s fade-in + 3s visible = 4s, start fade-out (2 seconds)
+  setTimeout(() => {
+    message.style.transition = 'opacity 2s ease'; // change fade-out duration
+    message.style.opacity = 0;
+  }, 6000);
+
+  // After total duration (1+3+2=6s), hide the element
+  setTimeout(() => {
+    message.style.display = 'none';
+  }, 10000);
+
+
   
   /*------
   THIS NEXT PART IS JUST TO MAKE THE ENDCONSULTATION BUTTON STILL SUBMIT THE ANSWER
@@ -1266,7 +1286,7 @@ if (isMobile) {
       
       //other symptoms    
       else if (othersymptoms_repeat == 0 && (noteContent.includes("symptoms")||noteContent.includes("come along with")
-          ||noteContent.includes("experience anything else")||noteContent.includes("come with"))) {
+          ||noteContent.includes("anything else")||noteContent.includes("come with"))) {
         //readOutLoud("Other people at work have told me that my speech is becoming more and more slurred ever since this arm weakness started");
         previousquestion = noteContent; othersymptoms_repeat++;  response_question = "Other people at work told me I've been slurring my speech";
         associatedsymptomsx = true;

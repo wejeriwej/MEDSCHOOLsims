@@ -49,13 +49,14 @@
             
 
             <video id="myVideo" autoplay playsinline webkit-playsinline><!--if you add the 'controls' before autoplay then you can pause and mute etc -->
-              <source id="mp4_src" src="WIN_20230328_13_59_37_Pro.webm" type="video/mp4">
+              <source id="mp4_src" src="WIN_20230328_13_59_37_Pro.mp4" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>
-            
-                          <script>// Check if in fullscreen
-                            document.getElementById('myVideo').addEventListener('ended', () => {if (document.fullscreenElement) {document.exitFullscreen();}});
-                          </script>
+
+                            <script>// Check if in fullscreen
+                              document.getElementById('myVideo').addEventListener('ended', () => {if (document.fullscreenElement) {document.exitFullscreen();}});
+                            </script>
+
 
             <video id="mutedVideo" autoplay muted loop      playsinline webkit-playsinline><!--LAST 2 THINGS IS FOR IT TO NOT GO FULL SCREEN ON PHONE. if you add the 'controls' before autoplay then you can pause and mute etc -->
               <source id="mutedmp4_src" src="vid-whatsbroughtyouin.mp4" type="video/mp4">
@@ -80,7 +81,7 @@
                <!--IS FOR THE ELEVENLABS:
                <button onclick="speak()">Speak</button>-->
 
-               <center><b><h2 id="casenameformobile"style="font-family: LTSoul;">Jason Miller</h2></b></center>
+               <center><b><h2 id="casenameformobile"style="font-family: LTSoul;">Daniel Carter</h2></b></center>
 <br id="extraspacemobile">
                   
                 <!--<img class = "mainimage" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Lesliejordan.jpg/220px-Lesliejordan.jpg" alt="Male for case 1">  -->
@@ -92,10 +93,10 @@
 
                 
                 <div class="vidthatsfake">
-                  <img id="fakeVideo" src="../../pics/2ndcase.webp"  style="width:100%"></img>
+                  <img id="fakeVideo" src="../../pics/3rdcase.webp"  style="width:100%"></img>
                   <div class="groupedvid">
-                    <h4 style="font-family: LTSoul;"><b>Jason Miller</b></h4> 
-                    <p>31 y/o Male</p> 
+                    <h4 style="font-family: LTSoul;"><b>Daniel Carter</b></h4> 
+                    <p>33 y/o Male</p> 
                   </div>
                 </div>
 
@@ -103,7 +104,7 @@
               
 
               
-              <center><b><h2 id="casename"style="font-family: LTSoul;">Jason Miller</h2></b></center>
+              <center><b><h2 id="casename"style="font-family: LTSoul;">Daniel Carter</h2></b></center>
               
 
 
@@ -200,7 +201,7 @@
 
 <div id="placementofpage">
 
-                <br><h4 id="introstatement" style="margin-bottom: -10px; font-family: LTSoul;"><b>You are a Junior Doctor in a GP, and your next patient is a 31 year old male that is complaining of abdominal pain. Please take a full history.</b></h4>
+                <br><h4 id="introstatement" style="margin-bottom: -10px; font-family: LTSoul;"><b>You are a Junior Doctor in a GP, and your next patient is a 33 year old male that is complaining of a cough. Please take a full history.</b></h4>
 
 <br id="linebreakremove" class="linebreakremove">
 
@@ -264,7 +265,7 @@
 
   <!-- Modal Content (The Video) -->
   <video class="modal-content" id="img01" controls>
-    <source src="videos/tutorial.webm" type="video/mp4">    Your browser does not support the video tag.
+    <source src="videos/3or4pillows.mp4" type="video/mp4">    Your browser does not support the video tag.
   </video>
 
   <!-- Modal Caption (Image Text)--> 
@@ -310,7 +311,7 @@
 
 
                 <br>
-               <!-- <p style="float: right; margin-top: -170px;">Jason Miller, 31 y/o M</p>-->
+               <!-- <p style="float: right; margin-top: -170px;">Marc Jevner, 31 y/o M</p>-->
 
                 <div id="formatstartbtn">
 
@@ -660,12 +661,11 @@
 
   <br>
 
-
 <!--Is for the yellow warning to say quality of recording effects results -->
 <div id="audio-warning" class="auto-fade-message" style="display: none; padding: 10px 20px; background-color: #ffcc00; color: #333; border-left: 5px solid #ff9900; font-weight: bold; font-style: italic; border-radius: 4px; position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000;
     opacity: 0; transition: opacity 3s ease; /* initial fade-in duration */">  ⚠️ Results may vary depending on recording quality. The mark scheme is based on what we could hear, so it might not perfectly reflect your actual answers.</div>
 
-<div id="chatgpt-response" style="z-index: 123456789;">chatgpt response</div>
+
 
 
 <!--Slideshow for review section-->
@@ -955,141 +955,88 @@
                 <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
               </tr>
           
-              
+
               
               <tr id="dizzinessreal">
                 <td></td>
-                <td id="dizzinessreal1"><ul><li>Dizziness/fainting/lightheadedness/lethargy</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">May suggest severe infection and possible sepsis</li></ul></td>
-                <td id="dizzinessreal2"><ul><li><b style="font-weight: 900;">Dizziness/fainting/lightheadedness/lethargy</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">May suggest severe infection and possible sepsis</li></ul></td>
-              </tr>
+                <td id="dizzinessreal1"><ul><li>Rule out subarachnoid haemorrage</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Very important to rule out as would be an emergency:</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Did the headache come on suddenly?</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Is the headache the worst headache of your life?</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Did it reach <u><b>maximum intensity</b></u> within seconds or minutes of symptom onset?</li></ul>
+                </td>
+                <td id="dizzinessreal2"><ul><li><b style="font-weight: 900;">Rule out subarachnoid haemorrage</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Very important to rule out as would be an emergency:</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Did the headache come on suddenly?</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Is the headache the worst headache of your life?</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Did it reach <u><b>maximum intensity</b></u> within seconds or minutes of symptom onset?</li></ul>
+                </td>
+            </tr>
 
               <tr id="feverreal">
                 <td></td>
-                <td id="feverreal1"><ul><li>Fever/chills</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">To screen for infection, such as cholecystitis or cholangitis</li></ul></td>
-                <td id="feverreal2"><ul><li><b style="font-weight: 900;">Fever/chills</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">To screen for infection, such as cholecystitis or cholangitis</li></ul></td>
+                <td id="feverreal1"><ul><li>Red flags for cancer</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Ask for unintenional weight loss, reduced appetite etc</li></ul>
+                </td>
+                <td id="feverreal2"><ul><li><b style="font-weight: 900;">Red flags for cancer</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">- Ask for unintenional weight loss, reduced appetite etc</li></ul>
+                </td>
               </tr>
 
               <tr id="weightreal">
                 <td></td>
-                <td id="weightreal1"><ul><li>Changes in weight</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Unintented weight loss is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-                <td id="weightreal2"><ul><li><b style="font-weight: 900;">Changes in weight</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Unintented weight loss is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-              </tr>
+                <td id="weightreal1"><ul><li>Photophobia</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Light sensitivity is a common symptom with migraines</li></ul>#
+                </td>
+                <td id="weightreal2"><ul><li><b style="font-weight: 900;">Photophobia</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Light sensitivity is a common symptom with migraines</li></ul>#
+                </td>
+            </tr>
 
               <tr id="appetitereal">
                 <td></td>
-                <td id="appetitereal1"><ul><li>Loss of appetite</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Loss of appetite is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-                <td id="appetitereal2"><ul><li><b style="font-weight: 900;">Loss of appetite</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Loss of appetite is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-              </tr>
+                <td id="appetitereal1"><ul><li>Phonophobia</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Sound sensitivity is a common symptom with migraines</li></ul>
+                </td>
+                <td id="appetitereal2"><ul><li><b style="font-weight: 900;">Phonophobia</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Sound sensitivity is a common symptom with migraines</li></ul>
+                </td>
+            </tr>
 
-
-
-
-              <tr id="jaundicereal">
+            <tr id="asbestosreal">
                 <td></td>
-                <td id="jaundicereal1"><ul><li>Jaundice of skin/eyes</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Points towards pathologies that impair bile flow or liver pathologies</li></ul></td>
-                <td id="jaundicereal2"><ul><li><b style="font-weight: 900;">Changes in weight/loss of appetite</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Points towards pathologies that impair bile flow or liver pathologies</li></ul></td>
-              </tr>
+                <td id="asbestosreal1"><ul><li>Nausea</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Common in migraines</li></ul>
+                </td>
+                <td id="weightreal2"><ul><li><b style="font-weight: 900;">Nausea</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Common in migraines</li></ul>
+                </td>
+            </tr>
 
-              <tr id="darkurinereal">
+              <tr id="travelreal">
                 <td></td>
-                <td id="darkurinereal1"><ul><li>Dark urine/pale stools</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Another sign of jaundice - Indicates bile flow obstruction</li></ul></td>
-                <td id="darkurinereal2"><ul><li><b style="font-weight: 900;">Dark urine/pale stools</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Another sign of jaundice - Indicates bile flow obstruction</li></ul></td>
-              </tr>
-
-              <tr id="nauseareal">
-                <td></td>
-                <td id="nauseareal1"><ul><li>Nausea/vomiting</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Is common symptom in cholecystitis due to inflammation and irritation of gallbladder. Also present in acute pancreatitis</li></ul></td>
-                <td id="nauseareal2"><ul><li><b style="font-weight: 900;">Nausea/vomiting</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Is common symptom in cholecystitis due to inflammation and irritation of gallbladder. Also present in acute pancreatitis</li></ul></td>
-              </tr>
-
-              <tr id="backpainreal">
-                <td></td>
-                <td id="backpainreal1"><ul><li>Back pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Radiation to the back is common in acute pancreatitis</li></ul></td>
-                <td id="backpainreal2"><ul><li><b style="font-weight: 900;">Back pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Radiation to the back is common in acute pancreatitis</li></ul></td>
-              </tr>
-
-              <tr id="shouldertipreal">
-                <td></td>
-                <td id="shouldertipreal1"><ul><li>Shoulder-tip pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">There can often be radiation to the right shoulder-tip in acute cholecystitis due to irritation of the diaphragm causing reffered pain through the phrenic nerve</li></ul></td>
-                <td id="shouldertipreal2"><ul><li><b style="font-weight: 900;">Shoulder-tip pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">There can often be radiation to the right shoulder-tip in acute cholecystitis due to irritation of the diaphragm causing reffered pain through the phrenic nerve</li></ul></td>
-              </tr>
-
-              <tr id="steatorrhoeareal">
-                <td></td>
-                <td id="steatorrhoeareal1"><ul><li>Steatorrhoea/greasy stools</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">'Difficult to flush', 'oily/greasy in appearance', 'malodorous or smelly stools'.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Caused by impaired fat production. Causes:</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Hepatobiliary - Blockage of bile flow prevents emulsification of dietary fats, leading to Steatorrhoea.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Pancreas - The pancreas produces lipase, which breaks down fats. Impaired enzyme production/ delivery leads to fat malabsorption -> Steatorrhoea. Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul></td>
-
-                <td id="steatorrhoeareal2"><ul><li><b style="font-weight: 900;">Steatorrhoea/greasy stools</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">'Difficult to flush', 'oily/greasy in appearance', 'malodorous or smelly stools'.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Caused by impaired fat production. Causes:</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Hepatobiliary - Blockage of bile flow prevents emulsification of dietary fats, leading to Steatorrhoea.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Pancreas - The pancreas produces lipase, which breaks down fats. Impaired enzyme production/ delivery leads to fat malabsorption -> Steatorrhoea. Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul></td>
+                <td id="travelreal1"><ul><li>Visual aura</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Occurs in 25% of migraines</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Especially important to ask in female patients taking the combined oral contraceptive pill as is contraindicated</li></ul>
+                </td>
+                <td id="travelreal2"><ul><li><b style="font-weight: 900;">Visual aura</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Occurs in 25% of migraines</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Especially important to ask in female patients taking the combined oral contraceptive pill as is contraindicated</li></ul>
+                </td>
             </tr>
 
 
-            <tr id="bloatingreal">
-              <td></td>
-              <td id="bloatingreal1"><ul><li>Bloating</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Chronic bloating may point towards chronic pancreatitis or IBS, whereas acute bloating may indicate intestinal obstruction, gastroenteritis, gallstones etc</li></ul></td>
-              <td id="bloatingreal2"><ul><li><b style="font-weight: 900;">Bloating</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Chronic bloating may point towards chronic pancreatitis or IBS, whereas acute bloating may indicate intestinal obstruction, gastroenteritis, gallstones etc</li></ul></td>
+
+
+              <tr id="haemoptysisreal">
+                <td></td>
+                <td id="haemoptysisreal1"><ul><li>Recent head injury</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Trauma can cause dangerous intracranial bleeding, sometimes even after minor injury and cause severe headache, drowsiness and vomiting</li></ul>
+                </td>
+                <td id="haemoptysisreal2"><ul><li><b style="font-weight: 900;">Recent head injury</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph"> - Trauma can cause dangerous intracranial bleeding, sometimes even after minor injury and cause severe headache, drowsiness and vomiting</li></ul>
+                </td>
             </tr>
-
-            <tr id="itchingreal">
-              <td></td>
-              <td id="itchingreal1"><ul><li>Pruritis/itching</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">When the flow of bile is impaired, it leads to accoumulation of bile acids in the blood stream, which deposits in the skin and activates pruritis-specific receptors.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Can point towards diagnoses such as autoimmune hepatitis, Primary Sclerosing Cholangitis (PSC) and Primary Biliary Cholangitis (PBC).</li></ul></td>
-              <td id="itchingreal2"><ul><li><b style="font-weight: 900;">Pruritis/itching</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">When the flow of bile is impaired, it leads to accoumulation of bile acids in the blood stream, which deposits in the skin and activates pruritis-specific receptors.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Can point towards diagnoses such as autoimmune hepatitis, Primary Sclerosing Cholangitis (PSC) and Primary Biliary Cholangitis (PBC).</li></ul></td>
-          </tr>
-
-
-
-            
-              <tr>
-                <td></td>
-                <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Specific questions about PMHx</center></td>
-                <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
-              </tr>
-
-              <tr id="prevgallreal">
-                <td></td>
-                <td id="prevgallreal1"><ul><li>Any previous gall stones in the past?</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">A history of gallstones significantly increases the likelihood that the current symptoms are related to a biliary cause</li></ul></td>
-                <td id="prevgallreal2"><ul><li><b style="font-weight: 900;">Any previous gall stones in the past?</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">A history of gallstones significantly increases the likelihood that the current symptoms are related to a biliary cause</li></ul></td>
-              </tr>
-
-              
-
-                   
-             
-
 
             </table>
 
@@ -1150,58 +1097,91 @@
   
   
   
+  
       <tr id="cardioexamreal">
         <td></td>
-        <td id="cardioexamreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Abdominal exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
-            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform an abdominal exam:</u></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Inspect for surgical scars, jaundice in eyes/skin,  distention/bloating, visible pulsations/masses (may suggest AAA or large tumours/hepatomegaly), spider naeviae etc</ul></li>
-            <ul class="j1"><li class = "explanationparagraph">Check capillary refill time, temperature of peripheries, mucus membranes → Look for signs of shock/dehydration</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Superficial + deep palpation -> Look for guarding, rebound tenderness, Murphy's sign (pain with palpation during inspiration over the gallbladder), pain over McBurney's point (where appendix lies), Rovsings sign (palpation over LIF causes reffered pain to the LIF region)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Percussion - helps determine if there's any hepatomegaly</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Shifting dullness - To look for ascites, which is commonly associated with liver disease</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Auscultate for bowel sounds - if not present then possible bowel obstruction</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check for psoas sign - To assess for retroperitoneal or appendix involvement</li></ul>
+        <td id="cardioexamreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Full neurological exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
+            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform a neuro exam (upper, lower limb + cerebellar exam):</u></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Inspect</b> - Look for asymmetry, abnormal movements, or facial droop ➝ To exclude focal neurological deficits suggestive of stroke or mass lesion.</ul></li>
+            <ul class="j1"><li class = "explanationparagraph"><b>Sensation</b> - Assess light touch and pinprick ➝ To ensure no persistent sensory deficit beyond a typical transient migraine aura.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Motor function</b> - To identify asymmetry or pathological reflexes indicating central pathology</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Reflexes</b> - Helps distinguish between upper motor neuron lesions (hyperreflexia) and lower motor neuron lesions (hyporeflexia)</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Coordination + cerebellar</b> Finger-to-nose, heel-to-shin, rapid alternating movements ➝ To exclude cerebellar or posterior circulation pathology</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Gait + balance:</b> Observe gait and perform Romberg test ➝ To detect ataxia suggestive of central causes</li></ul>
 
           </td>
 
         
-          <td id="cardioexamreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Abdominal exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
-            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform an abdominal exam:</u></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Inspect for surgical scars, jaundice in eyes/skin,  distention/bloating, visible pulsations/masses (may suggest AAA or large tumours/hepatomegaly), spider naeviae etc</ul></li>
-            <ul class="j1"><li class = "explanationparagraph">Check capillary refill time, temperature of peripheries, mucus membranes → Look for signs of shock/dehydration</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Superficial + deep palpation -> Look for guarding, rebound tenderness, Murphy's sign (pain with palpation during inspiration over the gallbladder), pain over McBurney's point (where appendix lies), Rovsings sign (palpation over LIF causes reffered pain to the LIF region)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Percussion - helps determine if there's any hepatomegaly</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Shifting dullness - To look for ascites, which is commonly associated with liver disease</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Auscultate for bowel sounds - if not present then possible bowel obstruction</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check for psoas sign - To assess for retroperitoneal or appendix involvement</li></ul>
+          <td id="cardioexamreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Full neurological exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
+            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform a neuro exam (upper, lower limb + cerebellar exam):</u></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Inspect</b> - Look for asymmetry, abnormal movements, or facial droop ➝ To exclude focal neurological deficits suggestive of stroke or mass lesion.</ul></li>
+            <ul class="j1"><li class = "explanationparagraph"><b>Sensation</b> - Assess light touch and pinprick ➝ To ensure no persistent sensory deficit beyond a typical transient migraine aura.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Motor function</b> - To identify asymmetry or pathological reflexes indicating central pathology</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Reflexes</b> - Helps distinguish between upper motor neuron lesions (hyperreflexia) and lower motor neuron lesions (hyporeflexia)</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Coordination + cerebellar</b> Finger-to-nose, heel-to-shin, rapid alternating movements ➝ To exclude cerebellar or posterior circulation pathology</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Gait + balance:</b> Observe gait and perform Romberg test ➝ To detect ataxia suggestive of central causes</li></ul>
 
           </td>
         
         
              </tr>
+
+
+
+
+
+
+
+             <tr id="cranialexamreal">
+              <td></td>
+              <td id="cranialexamreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b>Cranial nerve exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; </li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">To exclude focal cranial nerve deficits that would suggest a secondary cause of headache (e.g., stroke, mass, raised intracranial pressure) rather than primary migraine.</ul></li>          
+                  <ul class="j1"><li class = "explanationparagraph"><u><b>Visual field</b></u> ➝ To ensure any visual symptoms are consistent with a transient migraine aura and not a persistent visual field defect (e.g., homonymous hemianopia) indicating structural brain pathology</ul></li>          
+                  <ul class="j1"><li class = "explanationparagraph"><u><b>Speech, facial movement, swallowing</b></u> ➝ To rule out cranial nerve dysfunction causing dysarthria, facial weakness, or dysphagia, which would not be typical of uncomplicated migraine</ul></li>          
+
+                </td>
       
+              
+                <td id="cranialexamreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b>Cranial nerve exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; </li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">To exclude focal cranial nerve deficits that would suggest a secondary cause of headache (e.g., stroke, mass, raised intracranial pressure) rather than primary migraine.</ul></li>          
+                  <ul class="j1"><li class = "explanationparagraph"><u><b>Visual field</b></u> ➝ To ensure any visual symptoms are consistent with a transient migraine aura and not a persistent visual field defect (e.g., homonymous hemianopia) indicating structural brain pathology</ul></li>          
+                  <ul class="j1"><li class = "explanationparagraph"><u><b>Speech, facial movement, swallowing</b></u> ➝ To rule out cranial nerve dysfunction causing dysarthria, facial weakness, or dysphagia, which would not be typical of uncomplicated migraine</ul></li>          
+
+                </td>
+              
+              
+                   </tr>
       
 
     </table>
 
 
+    <br>
+<center><h3>Videos:</h3></center><br>
+
     <center><div class="videxam">
-      <b><a href="https://www.youtube.com/watch?v=PYAnF6GJY2I" target=”_blank” style="color: black; font-style: LTSoul; background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Love_heart_uidaodjsdsew.gif')">Click to watch a video of how to do an abdominal examination</a></b>
+      <b><a href="https://www.youtube.com/watch?v=4uAAjYzi7SY" target=”_blank” style="color: black; font-style: LTSoul; background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Love_heart_uidaodjsdsew.gif')"><b>UPPER</b> limb exam</a></b>
     </div>
   </center>
 
+  <center><div class="videxam">
+    <b><a href="https://www.youtube.com/watch?v=IdmQSVZN05I" target=”_blank” style="color: black; font-style: LTSoul; background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Love_heart_uidaodjsdsew.gif')"><b>LOWER</b> limb exam</a></b>
+  </div>
+</center>
+
+<center><div class="videxam">
+  <b><a href="https://www.youtube.com/watch?v=yZ5kV7dJoZw" target=”_blank” style="color: black; font-style: LTSoul; background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Love_heart_uidaodjsdsew.gif')"><b>CRANIAL NERVE</b> exam</a></b>
+</div>
+</center>
+<br>
+
     <tr><br>
       <h5>Some other examinations you could mention:</h5><br>
-      <h6><u style="text-decoration-thickness: 1px;">Cardiovascular/respiratory exam:</u></h6>
-        <p><b>- Atypical MI</b> An inferior wall MI can irritate the diaphragm, causing pain that mimics hepatobiliary or gastrointestinal conditions.<br>
-        <b>- Right lower lung pathologies</b> can refer pain to the RUQ due to proximity to the diaphragm (E.g. pneumonia, pleuritis, PE etc).</p><br>
-      <h6><u style="text-decoration-thickness: 1px;">Neuro exam:</u></h6>
-        <p><b>- Hepatic encephalopathy</b> can have neurological manifestations such as asterixis (flapping tremor) and confusion/altered mental state
-
+      <h6><u style="text-decoration-thickness: 1px;"><b>HINTS exam:</b></u></h6>
+        <p>To rule out a central/intracranial cause for the headache, e.g. brain malgnancy.</p>
+      
       </p>
-      <h6><u style="text-decoration-thickness: 1px;">Lymph node exam:</u></h6>
-        <p><b>- Enlarged Virchow’s node</b> (left supraclavicular lymph node): Associated with gastric or pancreatic malignancy.
-      </p>
+      
 
 
 <br><br>
@@ -1287,14 +1267,14 @@
       
       <tr id="description_summaryreal">
         <td></td>
-        <td id="description_summaryreal1"><ul><li><b style="font-weight: 900;">D</b>escription of pain</li></ul></td>
-        <td id="description_summaryreal2"><ul><li><b style="font-weight: 900;">D</b>escription of pain</li></ul></td>
+        <td id="description_summaryreal1"><ul><li><b style="font-weight: 900;">D</b>escription of the cough</li></ul></td>
+        <td id="description_summaryreal2"><ul><li><b style="font-weight: 900;">D</b>escription of the cough</li></ul></td>
       </tr>
 
       <tr id="duration_summaryreal">
         <td></td>
-        <td id="duration_summaryreal1"><ul><li><b style="font-weight: 900;">D</b>uration of the pain/onset</li></ul></td>
-        <td id="duration_summaryreal2"><ul><li><b style="font-weight: 900;">D</b>uration of the pain/onset</li></ul></td>
+        <td id="duration_summaryreal1"><ul><li><b style="font-weight: 900;">D</b>uration of the symptoms</li></ul></td>
+        <td id="duration_summaryreal2"><ul><li><b style="font-weight: 900;">D</b>uration of the symptoms</li></ul></td>
       </tr>
 
       <tr id="accompanyingSx_summaryreal">
@@ -1313,11 +1293,32 @@
 
     </table>
 <br><h6>Good example of a summary for this case:</h6>
-<p>This is a 31-year-old male presenting with intermittent right upper quadrant pain that is sharp in nature and which has been gong on over the last 2 months. He rates the pain as 7/10 in intensity. The pain radiates to the epigastric region and to the middle of his back and is accompanied with nausea and vomiting. The pain is made worse when eating heavy meals and gets better with rest and time. </p>
+<p>Mr Jake Blamford is a 25-year-old male who has presented with recurrent severe right-sided headaches that are described as pulsating in nature, and lasts a few hours in duration. The headaches get better when laid down and resting and exacerbated with movement. He gets a prodromal visual aura sensations prior to the onset of the headaches and is accompanied with nausea, lethargy and mild neck stiffness. He rates the pain as a 9/10 in severity.</p>
 <br><br>
 <center><h4>Your answer to this question:</h4>
   <i><p id = "summaryfinal" style="background-color: #f7f7f1;"></p></i></center>
 
+<!--
+Physical examination findings for this case:
+
+General:
+Appears ill, febrile (39.2°C).
+Cachectic, with notable weight loss.
+Vitals:
+BP: 130/85 mmHg
+HR: 98 bpm, regular
+RR: 22 breaths/min
+SpO₂: 91% on room air
+Chest:
+Inspection: No deformities or use of accessory muscles.
+Palpation: Tenderness over the right chest wall.
+Percussion: Dullness in the right lower lung field.
+Auscultation: Decreased breath sounds and crackles in the right lower zone.
+Wheezing bilaterally.
+Cardiac: Normal S1, S2; no murmurs or gallops.
+Abdomen: Soft, non-tender, no hepatosplenomegaly.
+Extremities: No clubbing, cyanosis, or edema.
+-->
 
 <br>
   
@@ -1378,18 +1379,14 @@
   
   
   
-      <tr id="gallstones_differentialsreal">
+      <tr id="tb_differentialsreal">
         <td></td>
-        <td id="gallstones_differentialsreal1"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Acute cholecystitis/gall stones</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph" style="background-color: yellow; display: inline;">Is the main differential</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Inflammation of the gallbladder, often due to GALL STONES</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">RUQ pain that's worse postprandially (after fatty meals), fever, nausea, and a positive Murphy's sign</li></ul>
+        <td id="tb_differentialsreal1"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Migraines with aura</b></li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Unilateral temporal recurrent headaches lasting a couple of hours described as pulsating in nature and accompanied with prodromal visual symptoms and nausea strongly points towards a diagnosis of migraines</li></ul>
           
         </td>
-        <td id="gallstones_differentialsreal2"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Acute cholecystitis/gall stones ✅</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph" style="background-color: yellow; display: inline;">Is the main differential</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Inflammation of the gallbladder, often due to GALL STONES</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">RUQ pain that's worse postprandially (after fatty meals), fever, nausea, and a positive Murphy's sign</li></ul>
+        <td id="tb_differentialsreal2"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Migraines with aura ✅</b></li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Unilateral temporal recurrent headaches lasting a couple of hours described as pulsating in nature and accompanied with prodromal visual symptoms and nausea strongly points towards a diagnosis of migraines</li></ul>
           </td>
      </tr>
       
@@ -1398,80 +1395,80 @@
       
       
 
-      <tr id="pancreatitis_differentialsreal">
+      <tr id="cancer_differentialsreal">
         <td></td>
-        <td id="pancreatitis_differentialsreal1"><ul><li><b style="font-weight: 900;">Acute pancreatitis</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">RUQ or epigastric pain radiating to the back, often due to gallstones or alcohol use.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Associated with nausea, vomiting, and elevated pancreatic enzymes.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Is one of the <b><u>main differentials</u></b>, especially as the pain also radiates to the epigastric region and the back</li></ul></td>
+        <td id="cancer_differentialsreal1"><ul><li><b style="font-weight: 900;">Tension-type headache </b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Very common in young adults</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, headache would usually be bilateral, pressing/tight in nature (not pulsating), mild–moderate intensity, no aura, and is not typically worsened by movement. Therefore, given the severity and aura it would not be your main differential.</li></ul>
+          </td>
 
-        <td id="pancreatitis_differentialsreal2"><ul><li><b style="font-weight: 900;">Acute pancreatitis</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph">RUQ or epigastric pain radiating to the back, often due to gallstones or alcohol use.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Associated with nausea, vomiting, and elevated pancreatic enzymes.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Is one of the <b><u>main differentials</u></b>, especially as the pain also radiates to the epigastric region and the back</li></ul></td>
+        <td id="cancer_differentialsreal2"><ul><li><b style="font-weight: 900;">Tension-type headache </b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Very common in young adults</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, headache would usually be bilateral, pressing/tight in nature (not pulsating), mild–moderate intensity, no aura, and is not typically worsened by movement. Therefore, given the severity and aura it would not be your main differential.</li></ul>
+          </td>
 
       </tr>
       
       
-      <tr id="hepatitis_differentialsreal">
+      <tr id="lrti_differentialsreal">
         <td></td>
-        <td id="hepatitis_differentialsreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Hepatitis</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Generalise abdominal discomfort, often in the RUQ due to liver swelling, accompanied with nausea + vomiting and flu-like symptoms.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Is also a differential due to the age of the patient and accompanying shortness of breath. Those suffering from panic attacks often complain of severe chest pain.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">However it would not explain the fact that the pain gets worse after eating fatty meals and would often present with jaundice</li></ul></td>
+        <td id="cancer_differentialsreal1"><ul><li><b style="font-weight: 900;">Cluster headache </b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Severe unilateral pain</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, headache would typically be in the orbital/retro-orbital region, last 15–180 minutes, would usually be associated with autonomic symptoms (tearing, nasal congestion), and patients are usually restless (not lying still). Aura is also not a common symptom associated with cluster headaches</li></ul>
+          </td>
 
-            <td id="hepatitis_differentialsreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Hepatitis</b></li></ul>
-              <ul class="j1"><li class = "explanationparagraph">Generalise abdominal discomfort, often in the RUQ due to liver swelling, accompanied with nausea + vomiting and flu-like symptoms.</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">Is also a differential due to the age of the patient and accompanying shortness of breath. Those suffering from panic attacks often complain of severe chest pain.</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">However it would not explain the fact that the pain gets worse after eating fatty meals and would often present with jaundice</li></ul></td>
-</tr>
+        <td id="cancer_differentialsreal2"><ul><li><b style="font-weight: 900;">Cluster headache </b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Severe unilateral pain</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, headache would typically be in the orbital/retro-orbital region, last 15–180 minutes, would usually be associated with autonomic symptoms (tearing, nasal congestion), and patients are usually restless (not lying still). Aura is also not a common symptom associated with cluster headaches</li></ul>
+          </td>
 
+      </tr>
 
-      
-      <tr>
-        <td id="leftsidebox" class="special-cell" style=" border: 2px solid; border-top: 2.7px solid; background-color: #f0f0f0; 
-        text-align: center; font-size: 20px; font-weight: bold; z-index: 1000; position: relative; font-family: LTSoul;">Other differentials:</td>
-        <td id="gastroenteritis_differentialsreal1"><ul><li><b style="font-weight: 900;">Gastroenteritis</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Is possible due to the abdominal pain, the acute nature of the symptoms, and the accompanying nausea and vomiting.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">However, is unlikely to present as RUQ pain specifically, but rather would present as generalised abdominal pain. Would also unlikely keep coming back consistently over 2 months and would instead have a shorter history.</li></ul></td>
+            <tr>
+              <td id="leftsidebox" class="special-cell" style=" border: 2px solid; border-top: 2.7px solid; background-color: #f0f0f0; 
+        text-align: center; font-size: 20px; font-weight: bold; z-index: 1000; position: relative; font-family: LTSoul;">Other less likely differentials:</td>
+              <td id="cancer_differentialsreal1"><ul><li><b style="font-weight: 900;">Meningitis</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Headache + neck stiffness</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, is unlikely given that you would usually get fever, systemic illness, and would be a progressive in nature rather than recurrent episodes</li></ul>
+          </td>
 
-          <td id="gastroenteritis_differentialsreal2"><ul><li><b style="font-weight: 900;">Gastroenteritis</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Is possible due to the abdominal pain, the acute nature of the symptoms, and the accompanying nausea and vomiting.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">However, is unlikely to present as RUQ pain specifically, but rather would present as generalised abdominal pain. Would also unlikely keep coming back consistently over 2 months and would instead have a shorter history.</li></ul></td>
-          </tr>
-
-
-    <tr>
-            <td></td>
-            <td id="gord_differentialsreal1"><ul><li><b style="font-weight: 900;">GORD</b></li></ul>
-              <ul class="j1"><li class = "explanationparagraph">The patient also is complaining of epigastric pain. GORD can present with some non-specific epigastric pain, and given the fact that patient also has nausea and the fact that the pain gets exacerbated after eating, GORD may be a possibility.</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">However, given the fact that the main complaint is RUQ pain and given the nature of the sharp pain as opposed to burning pain, GORD is unlikely.</li></ul></td>
-
-              <td id="gord_differentialsreal2"><ul><li><b style="font-weight: 900;">GORD</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">The patient also is complaining of epigastric pain. GORD can present with some non-specific epigastric pain, and given the fact that patient also has nausea and the fact that the pain gets exacerbated after eating, GORD may be a possibility.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">However, given the fact that the main complaint is RUQ pain and given the nature of the sharp pain as opposed to burning pain, GORD is unlikely.</li></ul></td>  
+        <td id="cancer_differentialsreal2"><ul><li><b style="font-weight: 900;">Meningitis</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Headache + neck stiffness</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, is unlikely given that you would usually get fever, systemic illness, and would be a progressive in nature rather than recurrent episodes</li></ul>
+          </td>
               </tr>
+            
+      
+              <tr id="lrti_differentialsreal">
+        <td></td>
+        <td id="cancer_differentialsreal1"><ul><li><b style="font-weight: 900;">Medication overuse headache </b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Patient has beenconsistently using paracetamol regularly without any effect</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, given the severity of the headache and the accompanying symptoms this would be unlikely</li></ul>
+          </td>
+
+        <td id="cancer_differentialsreal2"><ul><li><b style="font-weight: 900;">Medication overuse headache </b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Why consider: Patient has beenconsistently using paracetamol regularly without any effect</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">HOWEVER, given the severity of the headache and the accompanying symptoms this would be unlikely</li></ul>
+          </td>
+
+      </tr>
+      
+
+
+    
             
       
      
 
     </table>
-<br>
-  <h4>Some other differentials:</h4><br>
-  <p><u>Other hepatobiliary causes:</u>
-    <br><b>- Choledocholithiasis</b> (Gallstones in the common bile duct. May cause jaundice, RUQ pain, and abnormal liver function tests.), 
-    <br><b>- Acute Cholangitis</b> (Infection of the bile ducts, often due to obstruction. Presents with Charcot’s triad: RUQ pain, fever, and jaundice. Reynolds' pentad adds hypotension and confusion), 
-    <br><b>- Primary Biliary Cholangitis (PBC)</b> (Chronic autoimmune disease causing progressive destruction of intrahepatic bile ducts. Fatigue, pruritus, RUQ pain.
-    Jaundice in advanced stages. You get elevated ALP + GGT and positive antimitochondrial antibodies/AMA), 
-    <br><b>- Primary Sclerosing Cholangitis (PSC)</b> (Chronic inflammation and fibrosis of the bile ducts, often associated with inflammatory bowel disease. RUQ pain, jaundice, pruritus. You get elevated ALP, GGT. MRCP: Bile duct strictures and beading),</p>
+<br><br>
+  <h4>Differentials to think about/rule out:</h4>
+  
+   <p> <br><b>- Subarachnoid haemorrage</b> Why consider: Severe headache with neck stiffness. Against diagnosis: Typically sudden “thunderclap” onset, and be a 'first' headache rather than recurrent. The headache would also be at its highest intensity within seconds/minutes of symptom onset
 
-    <p><u>Other causes:</u>
-      <br><b>- Pancreatic cancer</b> (May present with vague RUQ pain, weight loss, jaundice, but normally presents with Courvoisier’s sign - painless jaundice with a palpable gallbladder.), 
-      <br><b>- Pulmonary Embolism</b> (May cause pleuritic chest pain or RUQ pain if infarction involves the lower right lung or diaphragm.), 
-      <br><b>- inferior MI</b> (Atypical presentation can include RUQ pain instead of chest pain.), 
-      <br><b>- Abdominal Aortic Aneurysm</b> (Pain may radiate to the RUQ if the aneurysm involves the visceral arteries. Also possibilty due to associate back pain),
-      <br><b>- Muscle strain</b></p>
-
+    <br><b>- Intracranial mass</b> - Chronic headaches can present in young males but with the absence of red flag symptoms it is unlikely, but is something to think about especially if symptoms do not improve with medication  
+    <br><b>- Intracranial bleed</b> To think about if there was any history of head trauma
+    <br></p>
 <br>
     <p>Try and show off your knowledge on this question by saying as many differentials as you can, but make sure to justify each one with reasons why they could be a possibility, but also reasons why they may be more <b style="background-color: yellow;">unlikely</b> compared to other differentials.</p>
     
@@ -1539,6 +1536,35 @@
         <th>✔️</th>
       </tr>
   
+
+   <tr>
+              <td></td>
+              <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Main imaging modality:</center></td>
+              <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
+            </tr>
+
+          
+
+
+            
+
+
+
+              <tr>
+                <td></td>
+                <td id="ct_investigationsreal1"><ul><li><b>CT head</b></li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Used to rule out subarachnoid haemorrage and intracranial mass. Is especially needed if patient has red flags symptoms such as sudden “thunderclap” onset, or if the headache was its most intense within first few seconds/minutes following onset of symptoms. Also indicated if there was any suspected bleed/trauma to the head</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">However, this patient doesn't have any obvious red flags symptoms and so urgent CT head may not be indicated. <b><u style=" background-color: yellow;">Migraines without red flags is a clinical diagnosis</u></b></li></ul>
+
+                </td>
+                <td id="ct_investigationsreal2"><ul><li><b>CT head</b></li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Used to rule out subarachnoid haemorrage and intracranial mass. Is especially needed if patient has red flags symptoms such as sudden “thunderclap” onset, or if the headache was its most intense within first few seconds/minutes following onset of symptoms. Also indicated if there was any suspected bleed/trauma to the head</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">However, this patient doesn't have any obvious red flags symptoms and so urgent CT head may not be indicated. <b><u style=" background-color: yellow;">Migraines without red flags is a clinical diagnosis</u></b></li></ul>
+                  </td>
+              </tr>
+
+
+
   <tr>
     <td></td>
     <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Bedside investigations:</center></td>
@@ -1550,34 +1576,39 @@
       <tr>
         <td></td>
         <td id="bedsideobs_investigationsreal1"><ul><li><b style="font-weight: 900;">B</b>edside obs</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check for any <b>temperature</b> - suggest infective cause and possible sepsis</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check <b>RR and HR</b>: tachycardia +/- tachypnoea are also indicators of infection/sepsis. May also suggest an atypical cause such as a PE</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check <b>glucose levels</b> - Diabetic ketoacidosis can present with abdominal pain</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check <b>BP levels</b> - Low blood pressure may suggest sepsis, or hypovolaemia secondary to the vomiting</li></ul>
-          </td>
-        <td id="bedsideobs_investigationsreal2"><ul><li><b style="font-weight: 900;">B</b>edside obs</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check for any <b>temperature</b> - suggest infective cause and possible sepsis</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check <b>RR and HR</b>: tachycardia +/- tachypnoea are also indicators of infection/sepsis. May also suggest an atypical cause such as a PE</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check <b>glucose levels</b> - Diabetic ketoacidosis can present with abdominal pain</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check <b>BP levels</b> - Low blood pressure may suggest sepsis, or hypovolaemia secondary to the vomiting</li></ul>
-         </td>      
-        </tr>
+            <ul class="j1"><li class = "explanationparagraph"><b>BP</b> - Severe hypertension/hypertensive emergency can present with headache</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>temperature</b> - Check for infection (e.g. meningitis)</li></ul>
+        </td>
+            <td id="bedsideobs_investigationsreal2"><ul><li><b style="font-weight: 900;">B</b>edside obs</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>BP</b> - Severe hypertension/hypertensive emergency can present with headache</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>temperature</b> - Check for infection (e.g. meningitis)</li></ul>
+        </td>
+            </tr>
       
-        <tr>
-          <td></td>
-          <td id="urinalysis_investigationsreal1"><ul><li><b style="font-weight: 900;">U</b>rinalysis</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">To rule out UTI, which can present with RUQ or flank pain, fever and systemic symptoms. Would also pick up any haematuria if there were any renal stones, which may cause referred pain to RUQ.</li></ul></td>
-          <td id="urinalysis_investigationsreal2"><ul><li><b style="font-weight: 900;">U</b>rinalysis</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">To rule out UTI, which can present with RUQ or flank pain, fever and systemic symptoms. Would also pick up any haematuria if there were any renal stones, which may cause referred pain to RUQ.</li></ul></td>
-          </tr>
+
+           <tr>
+                      <td></td>
+                      <td id="acidfast_investigationsreal1"><ul><li><b style="font-weight: 900;">C</b>apillary <b>blood glucose</b></li></ul>
+                          <ul class="j1"><li class = "explanationparagraph"><b><u>Hypoglycaemia</u></b> can cause headache, confusion, and visual symptoms. Checking CBG's is a quick way to rule this out</li></ul>
+                        </td>
+                      <td id="acidfast_investigationsreal2"><ul><li><b style="font-weight: 900;">C</b>apillary <b>blood glucose</b></li></ul>
+                          <ul class="j1"><li class = "explanationparagraph"><b><u>Hypoglycaemia</u></b> can cause headache, confusion, and visual symptoms. Checking CBG's is a quick way to rule this out</li></ul>
+                        </td>
+                    </tr>
+      
 
           <tr>
             <td></td>
-            <td id="ecg_investigationsreal1"><ul><li><b style="font-weight: 900;">E</b>CG +/- troponins</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">To rule out atypical inferior myocardial infarction, which can present with epigastric or RUQ discomfort.</li></ul></td>
-            <td id="ecg_investigationsreal2"><ul><li><b style="font-weight: 900;">E</b>CG +/- troponins</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">To rule out atypical inferior myocardial infarction, which can present with epigastric or RUQ discomfort.</li></ul></td>
-          </tr>
+            <td id="weight_investigationsreal1"><ul><li><b style="font-weight: 900;">W</b>eight measurement</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">To document the extent of weight loss and compare to previous readings.</li></ul></td>
+            <td id="weight_investigationsreal2"><ul><li><b style="font-weight: 900;">W</b>eight measurement</li></ul>
+              <ul class="j1"><li class = "explanationparagraph">To document the extent of weight loss and compare to previous readings.</li></ul></td>
+            </tr>
+
+           
+
+       
+
 
       <tr>
         <td></td>
@@ -1587,131 +1618,39 @@
       
       
 
-      <tr>
-        <td></td>
-        <td id="vbg_investigationsreal1"><ul><li><b style="font-weight: 900;">B</b>lood gas (ABG/VBG)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Lactate levels are elevated in sepsis.</li></ul></td>
-        <td id="vbg_investigationsreal2"><ul><li><b style="font-weight: 900;">B</b>lood gas (ABG/VBG)</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Lactate levels are elevated in sepsis.</li></ul></td>
-        </tr>
+      
 
-        <tr>
-          <td></td>
-          <td id="culture_investigationsreal1"><ul><li><b style="font-weight: 900;">B</b>lood cultures</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">If fever or sepsis is suspected then will need as part of the sepsis 6.</li></ul></td>
-          <td id="culture_investigationsreal2"><ul><li><b style="font-weight: 900;">B</b>lood cultures</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">If fever or sepsis is suspected then will need as part of the sepsis 6.</li></ul></td>
-          </tr>
-
-        <tr>
-          <td></td>
-          <td id="lft_investigationsreal1"><ul><li><b style="font-weight: 900;">L</b>iver function tests</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Elevated bilirubin: Suggests cholestasis or liver dysfunction.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">ALP and GGT elevation: Indicates biliary obstruction or cholestasis.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">AST/ALT elevation: Suggests hepatocellular damage (e.g., hepatitis).</li></ul>
-            </td>
-          <td id="lft_investigationsreal2"><ul><li><b style="font-weight: 900;">L</b>iver function tests</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Elevated bilirubin: Suggests cholestasis or liver dysfunction.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">ALP and GGT elevation: Indicates biliary obstruction or cholestasis.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">AST/ALT elevation: Suggests hepatocellular damage (e.g., hepatitis).</li></ul>
-            </td>
-          </tr>
-       
-          <tr>
-            <td></td>
-            <td id="amylase_investigationsreal1"><ul><li><b style="font-weight: 900;">A</b>mylase/Lipase</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Elevated in pancreatitis. Is crucial to order in this case. If these levels are low then pancreatitis is unlikely.</li></ul></td>
-            <td id="amylase_investigationsreal2"><ul><li><b style="font-weight: 900;">A</b>mylase/Lipase</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">Elevated in pancreatitis. Is crucial to order in this case. If these levels are low then pancreatitis is unlikely.</li></ul></td>
-            </tr>
-
+        
 
           <tr>
             <td></td>
-            <td id="normalbloods_investigationsreal1"><ul><li><b style="font-weight: 900;">Other bloods</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">FBC + CRP/ESR - Look at inflammatory markers -> Will be raised in acute cholecystitis, cholangitis etc.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">U+Es - Can get electrolyte imbalances when vomiting.</li></ul>
+            <td id="normalbloods_investigationsreal1"><ul><li><b style="font-weight: 900;">N</b>ormal bloods</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">FBC - To look for infection (may point towards meningitis).</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">CRP/ESR - Markers of inflammation may paint an infective picture.</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">U+Es - For baseline before starting medication.</li></ul>
               </td>
-            <td id="normalbloods_investigationsreal2"><ul><li><b style="font-weight: 900;">Other bloods</b></li></ul>
-              <ul class="j1"><li class = "explanationparagraph">FBC + CRP/ESR - Look at inflammatory markers -> Will be raised in acute cholecystitis, cholangitis etc.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">U+Es - Can get electrolyte imbalances when vomiting.</li></ul>
-              </td>
-            </tr>
 
-
-            <tr>
-              <td></td>
-              <td id="special_investigationsreal1"><ul><li><b style="font-weight: 900;">Special bloods</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Hepatitis screen - To rule out viral hepatitis (HBsAg, anti-HCV antibodies, HAV IgM/IgG, HEV IgM/IgG)</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Autoimmune hepatitis screen: ANA (antinuclear antibodies) and IgG (Immunoglobulin G) are both elevated in autoimmune hepatitis</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">AMA blood test (Antimitochondrial Antibodies) - Is a highly specific marker for Primary Biliary Cholangitis (PBC).</li></ul>
-                </td>
-              <td id="special_investigationsreal2"><ul><li><b style="font-weight: 900;">Special bloods</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Hepatitis screen - To rule out viral hepatitis (HBsAg, anti-HCV antibodies, HAV IgM/IgG, HEV IgM/IgG)</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Autoimmune hepatitis screen: ANA (antinuclear antibodies) and IgG (Immunoglobulin G) are both elevated in autoimmune hepatitis</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">AMA blood test (Antimitochondrial Antibodies) - Is a highly specific marker for Primary Biliary Cholangitis (PBC).</li></ul>
-                </td>
-              </tr>
-
-
-
-            <tr>
-              <td></td>
-              <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Imaging:</center></td>
-              <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
-            </tr>
-
-
-            <tr>
-              <td></td>
-              <td id="abdoUSS_investigationsreal1"><ul><li><b style="font-weight: 900;">Abdominal USS</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">First-line imaging for RUQ pain.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Identifies gallstones, bile duct dilation, liver enlargement, or masses.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Can detect signs of acute cholecystitis (e.g., gallbladder wall thickening, pericholecystic fluid).</li></ul>
-              </td>
-              <td id="abdoUSS_investigationsreal2"><ul><li><b style="font-weight: 900;">Abdominal USS</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">First-line imaging for RUQ pain.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Identifies gallstones, bile duct dilation, liver enlargement, or masses.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Can detect signs of acute cholecystitis (e.g., gallbladder wall thickening, pericholecystic fluid).</li></ul>
+            <td id="normalbloods_investigationsreal2"><ul><li><b style="font-weight: 900;">N</b>ormal bloods</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">FBC - To look for infection (may point towards meningitis).</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">CRP/ESR - Markers of inflammation may paint an infective picture.</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">U+Es - For baseline before starting medication.</li></ul>
               </td>
             </tr>
 
-
-
-              <tr>
-                <td></td>
-                <td id="stresstest_investigationsreal1"><ul><li><b style="font-weight: 900;">CT scan</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Used if ultrasound findings are inconclusive or to assess for complications like abscess or perforation.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">More detailed for masses, <u>pancreatitis</u>, or liver lesions.</li></ul>
-                  </td>
-                <td id="stresstest_investigationsreal2"><ul><li><b style="font-weight: 900;">CT scan</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Used if ultrasound findings are inconclusive or to assess for complications like abscess or perforation.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">More detailed for masses, <u>pancreatitis</u>, or liver lesions.</li></ul>
-                  </td>
-              </tr>
+           
+ 
 
 
 
-                <tr>
-                  <td></td>
-                  <td id="ddimer_investigationsreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">MRCP/ERCP</b></li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">MRCP (Magnetic Resonance Cholangiopancreatography) is used when USS/CT is inconclusive. Is used to evaluate biliary and pancreatic ducts in suspected obstruction/strictures.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">ERCP (Endoscopic Retrograde Cholangiopancreatography) is primarily a <u>therapeutic procedure</u> used to BOTH diagnose and <b>treat</b> obstructed/strictured biliary and pancreatic ducts. Unlike MRCP, it is invasive but allows direct intervention.</li></ul>
-                    </td>
-                  <td id="ddimer_investigationsreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">MRCP/ERCP</b></li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">MRCP (Magnetic Resonance Cholangiopancreatography) is used when USS/CT is inconclusive. Is used to evaluate biliary and pancreatic ducts in suspected obstruction/strictures.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">ERCP (Endoscopic Retrograde Cholangiopancreatography) is primarily a <u>therapeutic procedure</u> used to BOTH diagnose and <b>treat</b> obstructed/strictured biliary and pancreatic ducts. Unlike MRCP, it is invasive but allows direct intervention.</li></ul>
-                    </td>
-                  </tr>
+
+         
 
 
-                  
 
     </table>
 
-    <br><br>
-    <p>If the patient was a woman, don't forget to do a pregnancy test to rule out <b>ectopic pregnancy.</b></p>
-      
+    <p>Remember that the important thing to mention is that if there were any red flags then you would send to A&E for a CT head scan and if suspect subarachnoid haemorrage and CT head scan is negative then a <b><u>Lumbar Puncture (LP)</u></b> would be indicated to rule out definitively. LP would also be indicated if symptoms pointed towards <u>meningitis</u></p>
+      <p>However, migraines without red flags is mainly a <u style=" background-color: yellow;">clinical diagnosis</u></p>
 
     <br><br>
     <center><h4>Your answer to this question:</h4>
@@ -1783,79 +1722,75 @@
       <tr>
         <td></td>
         <td id="age_riskfactorsreal1"><ul><li><b style="font-weight: 900;">A</b>ge</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Often begins in adolescence or early adulthood. Peak prevalence: 20–40 years</li></ul></td>
         <td id="age_riskfactorsreal2"><ul><li><b style="font-weight: 900;">A</b>ge</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Often begins in adolescence or early adulthood. Peak prevalence: 20–40 years</li></ul></td>
       </tr>
       
       <tr>
         <td></td>
-        <td id="FH_riskfactorsreal1"><ul><li><b style="font-weight: 900;">F</b>amily history</li></ul>
-        <td id="FH_riskfactorsreal2"><ul><li><b style="font-weight: 900;">F</b>amily history</li></ul>
+        <td id="malnutrition_riskfactorsreal1"><ul><li><b style="font-weight: 900;">G</b>ender</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">More common in women. Linked to hormonal fluctuations</li></ul></td>
+
+        <td id="malnutrition_riskfactorsreal2"><ul><li><b style="font-weight: 900;">G</b>ender</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">More common in women. Linked to hormonal fluctuations</li></ul></td>
+
       </tr>
-      
-      <tr>
+
+   <tr>
         <td></td>
-        <td id="ethnicity_riskfactorsreal1"><ul><li><b style="font-weight: 900;">E</b>thnicity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Higher risk in Native Americans and Hispanics. Lower risk in African and Asian populations.</li></ul></td>
-        <td id="ethnicity_riskfactorsreal2"><ul><li><b style="font-weight: 900;">E</b>thnicity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Higher risk in Native Americans and Hispanics. Lower risk in African and Asian populations.</li></ul></td>
+        <td id="prevTB_riskfactorsreal1"><ul><li><b style="font-weight: 900;">F</b>amily history</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Strong genetic component. First-degree relatives commonly affected</li></ul></td>
+        <td id="prevTB_riskfactorsreal2"><ul><li><b style="font-weight: 900;">F</b>amily history</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Strong genetic component. First-degree relatives commonly affected</li></ul></td>
       </tr>
-      
-      <tr>
-        <td></td>
-        <td id="sex_riskfactorsreal1"><ul><li><b style="font-weight: 900;">F</b>emale sex</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the influence of estrogen, which increases cholesterol secretion into bile.</li></ul></td>
-        <td id="sex_riskfactorsreal2"><ul><li><b style="font-weight: 900;">F</b>emale sex</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the influence of estrogen, which increases cholesterol secretion into bile.</li></ul></td>
-      </tr>
+
 
       <tr>
         <td></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Modifiable risk factors:</center></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
-      
-
 
      
-      
-      <tr>
-        <td></td>
-        <td id="highcholesterol_riskfactorsreal1"><ul><li><b style="font-weight: 900;">H</b>igh cholesterol</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
-        <td id="highcholesterol_riskfactorsreal2"><ul><li><b style="font-weight: 900;">H</b>igh cholesterol</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
-      </tr>
 
-      
-      <tr>
-        <td></td>
-        <td id="obesity_riskfactorsreal1"><ul><li><b style="font-weight: 900;">O</b>besity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
-        <td id="obesity_riskfactorsreal2"><ul><li><b style="font-weight: 900;">O</b>besity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
-      </tr>
 
       <tr>
         <td></td>
-        <td id="unhealthydiet_riskfactorsreal1"><ul><li><b style="font-weight: 900;">U</b>nhealthy diet/<u>high-fat</u> diet</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Promotes cholesterol stone formation.</li></ul></td>
+        <td id="lifestyle_riskfactorsreal1"><ul><li><b style="font-weight: 900;">L</b>ifestyle factors</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">Sleep deprivation or oversleeping</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">Dehydration</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Skipped meals</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Caffeine excess or withdrawal</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Alcohol (especially red wine)</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Bright lights</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Loud noise</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Strong smells</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Smoking - Associated with increased frequency and severity</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Dietary triggers: Chocolate, aged cheeses, processed meats, MSG</li></ul>
 
-        <td id="unhealthydiet_riskfactorsreal2"><ul><li><b style="font-weight: 900;">U</b>nhealthy diet/<u>high-fat</u> diet</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Promotes cholesterol stone formation.</li></ul></td>
+        </td>
+        
+        <td id="lifestyle_riskfactorsreal2"><ul><li><b style="font-weight: 900;">L</b>ifestyle factors</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Sleep deprivation or oversleeping</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">Dehydration</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Skipped meals</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Caffeine excess or withdrawal</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Alcohol (especially red wine)</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Bright lights</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Loud noise</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Strong smells</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Smoking - Associated with increased frequency and severity</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Dietary triggers: Chocolate, aged cheeses, processed meats, MSG</li></ul>
 
-      </tr>
+        </td>
+     </tr>
 
         
 
     </table>
 
-    <br>
-    <h4>Top tips:</h4><br>
-    <p>Remember the 4 T's:
-      <br><b>- Fat</b> 
-      <br><b>- Fair</b> 
-      <br><b>- Female</b> 
-      <br><b>- Forty</b></p>
+    
       
 
       
@@ -1917,56 +1852,84 @@
 
     <table id="customers">
       <tr>
-        <th>Assuming diagnosis of gallstones</th><!--General Information gathering-->
+        <th>Assuming migraines with aura</th><!--General Information gathering-->
         <th>❌</th>
         <th>✔️</th>
       </tr>
-  
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       <tr>
         <td></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Immediate Management:</center></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
   
+
       <tr>
         <td></td>
-        <td id="analgesia_treatmentsreal1"><ul><li><b style="font-weight: 900;">A</b>nalgesia</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Start with weaker analgesics and move your way up: I.e. Paracetamol, codeine, Oramorph etc.</li></ul></td>
-        <td id="analgesia_treatmentsreal2"><ul><li><b style="font-weight: 900;">A</b>nalgesia</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Start with weaker analgesics and move your way up: I.e. Paracetamol, codeine, Oramorph etc.</li></ul></td>
+        <td id="admit_treatmentsreal1"><ul><li><b style="font-weight: 900;">P</b>aracetamol or NSAIDs (e.g. ibuprofen, naproxen)</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">➝ Effective for mild–moderate attacks.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Make sure to also co-prescribe a <b>PPI</b> e.g. omeprazole if prescribing a course of NSAIDs</li></ul></td>
+        <td id="admit_treatmentsreal2"><ul><li><b style="font-weight: 900;">P</b>aracetamol or NSAIDs (e.g. ibuprofen, naproxen)</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">➝ Effective for mild–moderate attacks.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Make sure to also co-prescribe a <b>PPI</b> e.g. omeprazole if prescribing a course of NSAIDs</li></ul></td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td id="analgesia_treatmentsreal1"><ul><li><b style="font-weight: 900;">A</b>ntiemetics</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Metoclopramide, prochlorperazine</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">➝ These help nausea and improve absorption of oral meds</li></ul>
+        </td>
+        <td id="analgesia_treatmentsreal2"><ul><li><b style="font-weight: 900;">A</b>ntiemetics</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Metoclopramide, prochlorperazine</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">➝ These help nausea and improve absorption of oral meds</li></ul>
+        </td>       
+      </tr>
+      
+ <tr>
+        <td></td>
+        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Prophylaxis:</center></td>
+        <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
+      </tr>
+
+
+      <tr>
+        <td></td>
+        <td id="oxygen_treatmentsreal1"><ul><li><b style="font-weight: 900;">T</b>riptans</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">e.g., sumatriptan. Use early in the attack for moderate-severe attacks to control the headache. You can combine with NSAIDs</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">⚠️ Avoid in: Uncontrolled hypertension, ischaemic heart disease, stroke history</li></ul>
+        </td>
+        <td id="oxygen_treatmentsreal2"><ul><li><b style="font-weight: 900;">T</b>riptans</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">e.g., sumatriptan. Use early in the attack for moderate-severe attacks to control the headache. You can combine with NSAIDs</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">⚠️ Avoid in: Uncontrolled hypertension, ischaemic heart disease, stroke history</li></ul>
+        </td>
         </tr>
       
+
       <tr>
         <td></td>
-        <td id="fluids_treatmentsreal1"><ul><li><b style="font-weight: 900;">IV fluids</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the patient has infective symptoms and has possible hypovolaemia due to vomiting, IV fluids is important, especially if bedside investigations point towards a septic picture</li></ul></td>
-        <td id="fluids_treatmentsreal2"><ul><li><b style="font-weight: 900;">IV fluids</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the patient has infective symptoms and has possible hypovolaemia due to vomiting, IV fluids is important, especially if bedside investigations point towards a septic picture</li></ul></td>
+        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Preventative treatments:</center></td>
+        <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
 
-      <tr>
+<tr>
         <td></td>
-        <td id="abx_treatmentsreal1"><ul><li><b style="font-weight: 900;">A</b>ntibiotics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the infective symptoms, ABX would be warranted, especially if bloods and bedside investigations come back +ve for infection (generally for cholecystitis/cholangitis you would give Piperacillin-tazobactam/tazosin or ceftriaxone + metronidazole).</li></ul></td>
-        <td id="abx_treatmentsreal2"><ul><li><b style="font-weight: 900;">A</b>ntibiotics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the infective symptoms, ABX would be warranted, especially if bloods and bedside investigations come back +ve for infection (generally for cholecystitis/cholangitis you would give Piperacillin-tazobactam/tazosin or ceftriaxone + metronidazole).</li></ul></td>
-      </tr>
-      
-      <tr>
-        <td></td>
-        <td id="antiemetics_treatmentsreal1"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">A</b>ntiemetics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the vomiting and nausea</li></ul></td>
-        <td id="antiemetics_treatmentsreal2"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">A</b>ntiemetics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the vomiting and nausea</li></ul></td>
-      </tr>
-
+        <td id="oxygen_treatmentsreal1"><ul><li><b style="font-weight: 900;">P</b>ropranolol/<b>T</b>opiramate</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Especially if the patient is unable to maintain oral intake or shows signs of dehydration.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Are 1st line preventatives. Avoid topiramate if patient is a woman of child bearing age. Avoid propanolol in patients with severe asthma</li></ul>
+        </td>
+        <td id="oxygen_treatmentsreal2"><ul><li><b style="font-weight: 900;">P</b>ropranolol/<b>T</b>opiramate</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Especially if the patient is unable to maintain oral intake or shows signs of dehydration.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Are 1st line preventatives. Avoid topiramate if patient is a woman of child bearing age. Avoid propanolol in patients with severe asthma</li></ul>
+        </td>
+        </tr>
 
 
 
 
       <tr>
         <td></td>
-        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Definitive Management:</center></td>
+        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Other treatments:</center></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
 
@@ -1975,75 +1938,43 @@
 
       <tr>
         <td></td>
-        <td id="cholecystectomy_treatmentsreal1"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">C</b>holecystectomy</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Surgical removal of the gall bladder. Surgery is the definitive treatment for gallbladder disease can be performed acutely and electively depending on symptom severity.</li></ul></td>
-        <td id="cholecystectomy_treatmentsreal2"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">C</b>holecystectomy</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Surgical removal of the gall bladder. Surgery is the definitive treatment for gallbladder disease can be performed acutely and electively depending on symptom severity.</li></ul></td>
-      </tr>
+        <td id="meds_treatmentsreal1"><ul><li><b style="font-weight: 900;">L</b>ifestyle modifications</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Regular sleep schedule</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Regular meals</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Hydration</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Stress managament</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Avoid known trigger</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Reduce caffeine</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Stop smoking</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Headache diary - Can be very helpful</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Counsel them about avoiding compined oral contraceptive pill (for females)</li></ul>
 
-      <tr>
-        <td></td>
-        <td id="ercp_treatmentsreal1"><ul><li><b style="font-weight: 900;">ERCP</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">You should do ERCP instead of cholecystectomy when the primary issue involves the <u>bile ducts</u> (e.g., CBD stones, cholangitis, strictures, or leaks), or if the patient is not fit for surgery.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">ERCP provides a minimally invasive option for urgent or therapeutic intervention in ductal pathologies, while cholecystectomy is indicated for conditions directly affecting the <u>gallbladder</u>, e.g. cholecystitis</li></ul></td>
+        </td>
 
-        <td id="ercp_treatmentsreal2"><ul><li><b style="font-weight: 900;">ERCP</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph">You should do ERCP instead of cholecystectomy when the primary issue involves the <u>bile ducts</u> (e.g., CBD stones, cholangitis, strictures, or leaks), or if the patient is not fit for surgery.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">ERCP provides a minimally invasive option for urgent or therapeutic intervention in ductal pathologies, while cholecystectomy is indicated for conditions directly affecting the <u>gallbladder</u>, e.g. cholecystitis</li></ul></td>
+
+        <td id="meds_treatmentsreal2"><ul><li><b style="font-weight: 900;">L</b>ifestyle modifications</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Regular sleep schedule</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Regular meals</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Hydration</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Stress managament</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Avoid known trigger</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Reduce caffeine</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Stop smoking</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Headache diary - Can be very helpful</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Counsel them about avoiding compined oral contraceptive pill (for females)</li></ul>
+
+        </td>
       </tr>
 
       
-      
-      
-    
 
-      <tr>
-        <td></td>
-        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Further Management:</center></td>
-        <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
-      </tr>
-
-      <tr id="painlocationreal">
-        <td></td>
-        <td id="cardiologyreferral_treatmentsreal1"><ul><li><b style="font-weight: 900;">G</b>eneral surgery/Hepatobiliary team referral ± MDT referral</li></ul>
-        <td id="cardiologyreferral_treatmentsreal2"><ul><li><b style="font-weight: 900;">G</b>eneral surgery/Hepatobiliary team referral ± MDT referral</li></ul>
-      </tr>
-
-
-      
-
-      <tr>
-        <td></td>
-        <td id="lifestyle_treatmentsreal1"><ul><li><b style="font-weight: 900;">L</b>ifestyle changes</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Low-fat diet to prevent biliary colic</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Weight management to reduce risk of gallstone formation</li></ul>
-          </td>
-
-        <td id="lifestyle_treatmentsreal2"><ul><li><b style="font-weight: 900;">L</b>ifestyle changes</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Exercise, diet, alcohol, smoking counselling etc to try and improve the risk factors</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Can consider referral to weight loss clinics, smoking cessation clinics, Alcoholics anonymous etc. </li></ul>
-          </td>
-
-      </tr>
-
-      <tr>
-        <td></td>
-        <td id="udca_treatmentsreal1"><ul><li><b style="font-weight: 900;">Ursodeoxycholic acid (UDCA)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Can dissolve cholesterol stones - is particular useful in those unfit for surgery</li></ul></td>
-        <td id="udca_treatmentsreal2"><ul><li><b style="font-weight: 900;">Ursodeoxycholic acid (UDCA)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Can dissolve cholesterol stones - is particular useful in those unfit for surgery</li></ul></td>
-      </tr>
-
-
-
-      
 
     </table>
-
+<br><br>
   <h4>Top tip:</h4>
-  <p>Remember to also say that you would perform an A to E assessment of your patient</p>
+  <p>You should also advise them to rest in a dark, quiet room, to try and sleep if possible, and to keep hydrated.<p>
+  <p>Also consider advisig to take time off work during the acute episode</p>  
   <p>Try and show-off as much knowledge as you can in this question. Try and <b>expand on your answer</b> as much as you can to show the examiner that you know everything about the topic.</p>
-  <p>Remember to also include social and financial aspects in your management section (such as available benefits for the patient, psychological support available, and assistance for carers.)</p>
 
   <br><br>
   <center><h4>Your answer to this question:</h4>
@@ -3043,6 +2974,7 @@
 
 
 
+<div id="chatgpt-response" style="z-index: 123456789;">chatgpt response</div>
 
 
 <br>

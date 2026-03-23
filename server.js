@@ -248,44 +248,11 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 
-app.post("/api/2ndcase", async (req, res) => {
+app.post("/api/TUTOR2ndcase", async (req, res) => {
   const { input, previousquestion, response_question } = req.body;
 
   try {
-    /*const completeSentence = async (responseText) => {
-      // Loop until we have a sentence-ending punctuation mark
-      while (!(responseText.endsWith('.') || responseText.endsWith('!') || responseText.endsWith('?'))) {
-        // Make a request to complete the sentence
-        const additionalResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo", // or another model, like "gpt-4"
-            messages: [
-              { role: "system", content: "you're Jason, a 40 year old male. with right upper quadrant sharp pain that comes + goes for last 2 months + happened this morning. You're in a consultation room & the Dr is asking you questions. Answer as Jason" },
-              { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
-                                          Your previous response: ${response_question || "N/A"}
-                                          New Dr question: ${input}
-                                          Jason's answer: ${responseText}` },
-            ],
-            temperature: 0.1,
-            max_tokens: 20, // Allow a bit more tokens for completion
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0
-          }),
-        });
 
-        const data = await additionalResponse.json();
-        responseText += ' ' + data.choices[0].message.content.trim(); // Add the extra tokens
-      }
-      return responseText.trim();
-    };
-*/
-    // Initial request to OpenAI 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -295,11 +262,11 @@ app.post("/api/2ndcase", async (req, res) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo", //gpt-4o-mini
         messages: [
-          { role: "system", content: "you're Jason, a 40 year old male. with right upper quadrant sharp pain that comes + goes for last 2 months + happened this morning. You're in a consultation room & the Dr is asking you questions. Answer as Jason be minimal max 1 sentence" },
-          { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
-                                    Your previous response: ${response_question || "N/A"}
-                                    New Dr question: ${input}
-                                    Jason's answer:` },
+          { role: "system", content: "You're conducting an interview & you're the interviewer. The question that you asked was: Why do you want to become a Doctor?" },
+          { role: "user", content: `Interviewee's response to your previous question: ${previousquestion || "N/A"}
+                                    Your previous question: ${response_question || "N/A"}
+                                    This is the response of the applicant: ${input}
+                                    Create a follow-up question to ask the applicant:` },
         ],
         temperature: 0.1,
         max_tokens: 25,
@@ -484,6 +451,92 @@ app.post("/api/4thcase", async (req, res) => {
 
 
 
+
+
+
+
+
+
+app.post("/api/5thcase", async (req, res) => {
+  const { input, previousquestion, response_question } = req.body;
+
+  try {
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo", //gpt-4o-mini
+        messages: [
+          { role: "system", content: "you're Greg, a 56 yr old with new shortness of breath. You're struggling to breath. You're in a consultation room & the Dr is asking you questions. Answer as Greg be minimal max 1 sentence" },
+          { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
+                                    Your previous response: ${response_question || "N/A"}
+                                    New Dr question: ${input}
+                                    Greg's answer:` },
+        ],
+        temperature: 0.1,
+        max_tokens: 25,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0
+      }),
+    });
+
+    const data = await response.json();
+    res.json({ content: data.choices[0].message.content.trim() });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to connect to OpenAI" });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+app.post("/api/6thcase", async (req, res) => {
+  const { input, previousquestion, response_question } = req.body;
+
+  try {
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo", //gpt-4o-mini
+        messages: [
+          { role: "system", content: "you're Jon, a 30 yr old with new central abdominal pain. You're in a consultation room & the Dr is asking you questions (Dx is appendicitis). Answer as Jon be minimal max 1 sentence" },
+          { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
+                                    Your previous response: ${response_question || "N/A"}
+                                    New Dr question: ${input}
+                                    Jon's answer:` },
+        ],
+        temperature: 0.1,
+        max_tokens: 25,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0
+      }),
+    });
+
+    const data = await response.json();
+    res.json({ content: data.choices[0].message.content.trim() });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to connect to OpenAI" });
+  }
+});
 
 
 

@@ -1030,39 +1030,32 @@ if (isMobile) {
   
        
 
-       //if (noteContent.includes("dark")||noteContent.includes("pale")){darkurinex = true;}
-       //if (noteContent.includes("back")){backpainx = true;}
-       //if (noteContent.includes("shoulder")||noteContent.includes("tip")){shouldertipx = true;}
-       //if (noteContent.includes("greasy")||noteContent.includes("flush")||noteContent.includes("smell")||noteContent.includes("adour")||noteContent.includes("steato")||noteContent.includes("fatty")){steatorrhoeax = true;}
-       //if (noteContent.includes("bloat")){bloatingx = true;}
-       //if (noteContent.includes("itch")||noteContent.includes("prutitis")){itchingx = true;}
-       //if (noteContent.includes("gall")||noteContent.includes("stone")){prevgallx = true;}
-       //if (noteContent.includes("worse when")){makeitworsex = true;}
-       //if (noteContent.includes("better when")){makeitbetterx = true;}    
-      
+/*
+- Cough - Do they produce any sputum? If yes then most likely infective cause
+- Haemoptysis - Red flag for cancer
+- Weight loss - Unintentional weight loss is ed flag for cancer
+- Appetite - Reduced appetite is a red flag for cancer
+- Fever - If present then may suggest infective cause to symptoms
 
-       var darkurinereal1 = $('#darkurinereal1'); var darkurinereal2 = $('#darkurinereal2'); if (noteContent.includes("dark")||noteContent.includes("pale")){redstyles(darkurinereal1); greenstyles(darkurinereal2);}
-       var backpainreal1 = $('#backpainreal1'); var backpainreal2 = $('#backpainreal2'); if (noteContent.includes("back")){redstyles(backpainreal1); greenstyles(backpainreal2);}
-       var shouldertipreal1 = $('#shouldertipreal1'); var shouldertipreal2 = $('#shouldertipreal2'); if (noteContent.includes("shoulder")||noteContent.includes("tip")){redstyles(shouldertipreal1); greenstyles(shouldertipreal2);}
-       var steatorrhoeareal1 = $('#steatorrhoeareal1'); var steatorrhoeareal2 = $('#steatorrhoeareal2'); if (noteContent.includes("greasy")||noteContent.includes("flush")||noteContent.includes("smell")||noteContent.includes("adour")||noteContent.includes("steato")||noteContent.includes("fatty")){redstyles(steatorrhoeareal1); greenstyles(steatorrhoeareal2);}
-       var bloatingreal1 = $('#bloatingreal1'); var bloatingreal2 = $('#bloatingreal2'); if (noteContent.includes("bloat")){redstyles(bloatingreal1); greenstyles(bloatingreal2);}
-       var itchingreal1 = $('#itchingreal1'); var itchingreal2 = $('#itchingreal2'); if (noteContent.includes("itch")||noteContent.includes("prutitis")){redstyles(itchingreal1); greenstyles(itchingreal2);}
-       var prevgallreal1 = $('#prevgallreal1'); var prevgallreal2 = $('#prevgallreal2'); if (noteContent.includes("gall")||noteContent.includes("stone")){redstyles(prevgallreal1); greenstyles(prevgallreal2);}
-       var makeitworsereal1 = $('#makeitworsereal1'); var makeitworsereal2 = $('#makeitworsereal2'); if (noteContent.includes("worse when")){redstyles_aboveline(makeitworsereal1); greenstyles_aboveline(makeitworsereal2);}
-       var makeitbetterreal1 = $('#makeitbetterreal1'); var makeitbetterreal2 = $('#makeitbetterreal2'); if (noteContent.includes("better when")){redstyles(makeitbetterreal1); greenstyles(makeitbetterreal2);}     
+*/
 
-
+var coughreal1 = $('#coughreal1'); var coughreal2 = $('#coughreal2'); if (noteContent.includes("sputum")||noteContent.includes("bring")||noteContent.includes("mucus")||noteContent.includes("produce")||noteContent.includes("phlegm")){redstyles(coughreal1); greenstyles(coughreal2);}       
+var haemoptysisreal1 = $('#haemoptysisreal1'); var haemoptysisreal2 = $('#haemoptysisreal2'); if (noteContent.includes("blood")||noteContent.includes("red")||noteContent.includes("pink")){redstyles(haemoptysisreal1); greenstyles(haemoptysisreal2);}       
+var weightlossreal1 = $('#weightlossreal1'); var weightlossreal2 = $('#weightlossreal2'); if (noteContent.includes("weight")||noteContent.includes("loose")||noteContent.includes("pound")||noteContent.includes("kg")||noteContent.includes("kilo")){redstyles(weightlossreal1); greenstyles(weightlossreal2);}       
+var appetitereal1 = $('#appetitereal1'); var appetitereal2 = $('#appetitereal2'); if (noteContent.includes("appetite")||noteContent.includes("hungry")||noteContent.includes("eat")){redstyles(appetitereal1); greenstyles(appetitereal2);}       
+var feverreal1 = $('#feverreal1'); var feverreal2 = $('#feverreal2'); if (noteContent.includes("fever")||noteContent.includes("chill")||noteContent.includes("temp")){redstyles(feverreal1); greenstyles(feverreal2);}
+       
 
 
   
       if(nameage_repeat == 0 && (noteContent.includes("name") && noteContent.includes("age"))) {
-        //readOutLoud("My name is Jason Miller and I am 40")
-        previousquestion = noteContent; nameage_repeat++;   response_question = "I'm Jason and am 40";
+        //readOutLoud("My name is Jack Forest and I am 59")
+        previousquestion = noteContent; nameage_repeat++;   response_question = "I'm Jack and am 59";
         document.getElementById("mp4_src").src = "videos/name+age.mp4"; allifsaction();}
       
       else if(age_repeat == 0 && (noteContent.includes("age")||noteContent.includes("old"))){
-        //readOutLoud("I'm 40 years old")
-        previousquestion = noteContent; age_repeat++;   response_question = "I'm 40";
+        //readOutLoud("I'm 59 years old")
+        previousquestion = noteContent; age_repeat++;   response_question = "I'm 59";
         document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}
   
       else if (oktospeak_repeat == 0 && (noteContent.includes("is it ok")||noteContent.includes("would it be ok")||noteContent.includes("talk to you")
@@ -1073,13 +1066,13 @@ if (isMobile) {
   
       else if (name_repeat == 0 && (noteContent.includes("your name")||noteContent.includes("full name"))) {
         /////////////////////////////////////////////////////////////////////////////////////////////
-        //My name is Jason Miller
-        previousquestion = noteContent; name_repeat++;  response_question = "I'm Jason";
+        //My name is Joack
+        previousquestion = noteContent; name_repeat++;  response_question = "I'm Jack";
         document.getElementById("mp4_src").src = "videos/name.mp4"; allifsaction();}//name
   
       else if (call_repeat == 0 && (noteContent.includes("call")||noteContent.includes("address"))) {
-        //readOutLoud("Jason is fine");
-        previousquestion = noteContent; call_repeat++;  response_question = "Jason is fine";
+        //readOutLoud("Jack is fine");
+        previousquestion = noteContent; call_repeat++;  response_question = "Jack is fine";
         document.getElementById("mp4_src").src = "videos/jasonisfine.mp4"; allifsaction();}//how would you like to be addressed as
   
     /*  else if (noteContent.includes("age")||noteContent.includes("old")) {
@@ -1088,13 +1081,13 @@ if (isMobile) {
         document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}//age
       */
       else if (dob_repeat == 0 && (noteContent.includes("date of birth")||noteContent.includes("when")&&noteContent.includes("born"))) {
-        //readOutLoud("the 4th of June 1984");
-        previousquestion = noteContent; dob_repeat++;  response_question = "4th of June 1984";
+        //readOutLoud("the 12th of February 1967");
+        previousquestion = noteContent; dob_repeat++;  response_question = "12th of Feb 1967";
         document.getElementById("mp4_src").src = "videos/dob.mp4"; allifsaction();}//DOB
   
       else if (work_repeat == 0 &&(noteContent.includes("occupation")||noteContent.includes("job")||noteContent.includes("work"))) {
-        //readOutLoud("I work as a lawyer");
-        previousquestion = noteContent;   response_question = "I'm a lawyer";
+        //readOutLoud("I work as a builder");
+        previousquestion = noteContent;   response_question = "I'm a builder";
         jobx = true; work_repeat ++; 
         document.getElementById("mp4_src").src = "videos/job.mp4"; allifsaction();}//job
       
@@ -1104,8 +1097,8 @@ if (isMobile) {
         document.getElementById("mp4_src").src = "videos/stress.mp4"; allifsaction();}//Are you stressed at work
       
       else if (howareyou_repeat == 0 && (noteContent.includes("how are you")||noteContent.includes("how are things")||noteContent.includes("what about you"))) {
-        //readOutLoud("I'm not feeling the best but I am ok");
-        previousquestion = noteContent; howareyou_repeat++;  response_question = "I'm not feeling the best but I am ok";
+        //readOutLoud("I don't feel well Doctor, this cough is really affecting me");
+        previousquestion = noteContent; howareyou_repeat++;  response_question = "I don't feel well Dr, this cough is really affecting me";
         document.getElementById("mp4_src").src = "videos/imnotfeelingthebest.mp4"; allifsaction();}//how are you?
   
   
@@ -1113,40 +1106,40 @@ if (isMobile) {
       
   
       else if (alwayspain_repeat == 0 && (noteContent.includes("always there")&&noteContent.includes("come"))) {
-        //readOutLoud("The pain is not constantly always there, but instead I would say it comes and goes");
-        previousquestion = noteContent; alwayspain_repeat++;  response_question = "The pain comes and goes";
+        //readOutLoud("The cough is constant and is always there");
+        previousquestion = noteContent; alwayspain_repeat++;  response_question = "The cough is constant and is always there";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
       else if (constant_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("come"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; constant_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The cough is constant and is always there");
+        previousquestion = noteContent; constant_repeat++;  response_question = "The cough is constant and is always there";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
       else if (painconstant_repeat == 0 && (noteContent.includes("always there")&&noteContent.includes("intermittent"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; painconstant_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The cough is constant and is always there");
+        previousquestion = noteContent; painconstant_repeat++;  response_question = "The cough is constant and is always there";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
       else if (intermittent_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("intermittent"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; intermittent_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The cough is constant and is always there");
+        previousquestion = noteContent; intermittent_repeat++;  response_question = "The cough is constant and is always there";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
   
   
       else if (alwaysthere_repeat == 0 && (noteContent.includes("constant")||noteContent.includes("always there"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; alwaysthere_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The cough is constant and is always there");
+        previousquestion = noteContent; alwaysthere_repeat++;  response_question = "The cough is constant and is always there";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain constant
   
       else if (comeandgo_repeat == 0 && (noteContent.includes("intermittent")||noteContent.includes("come and go")||noteContent.includes("comes and go"))) {
-        //readOutLoud("The pain come and goes all the time");
-        previousquestion = noteContent; comeandgo_repeat++;  response_question = "The pain come and goes";
+        //readOutLoud("The cough is constant and is always there");
+        previousquestion = noteContent; comeandgo_repeat++;  response_question = "The cough is constant and is always there";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain intermittent
   
@@ -1159,8 +1152,8 @@ if (isMobile) {
           ||noteContent.includes("I help")||(noteContent.includes("you have any pain")&&!noteContent.includes("else"))
           ||noteContent.includes("i can do for you")||noteContent.includes("can i do for you")
           ||noteContent.includes("problem"))) {
-        //readOutLoud("This morning I felt this pain in my tummy a few hours after eating breakfast, but now this is becoming quite regular and it's starting to really affect my life");
-        previousquestion = noteContent;   response_question = "I've got abdominal pain this morning and now this has been going on for quite a long time, I'd say about 2 months and affecting my life";
+        //readOutLoud("I have been having this niggling cough that's been going on for such a long time, I would say probably 3 or 4 months now and it's just not going away. I originally thougt that it would go away after a few weeks but it's still there so I thought I would get it checked out");
+        previousquestion = noteContent;   response_question = "I've had cough last 3 or 4 months and not going away.";
         painlocationrepeat ++;  
         painlocationx = true;
         onsetx = true;
@@ -1185,54 +1178,55 @@ if (isMobile) {
   
   
       else if (onsetrepeat == 0 &&(noteContent.includes("bit more")||noteContent.includes("tell me more")||noteContent.includes("tell me about"))&&(noteContent.includes("pain")||noteContent.includes("it"))) {
-        //readOutLoud("The pain is quite debilitating for me I feel, and it just keeps coming back so I thought I would come get it checked out.");
-        previousquestion = noteContent; onsetrepeat++;  response_question = "The pain is quite debilitating for me, and it keeps coming back so came to get it checked out";
+        //readOutLoud("I feel like I'm constantly coughing for no reason. I'll be honest it's my wife who told me to come here today because the coughing is contant and it's always waking her up at night");
+        previousquestion = noteContent; onsetrepeat++;  response_question = "I feel like I'm constantly coughing for no reason. My wife told me to come here today because the coughing is contant + always waking her up";
         onsetx = true;
         
       document.getElementById("mp4_src").src = "videos/bitmore.mp4"; allifsaction();}//tell me a bit more
   
       else if (whathappened_repeat == 0 && (noteContent.includes("how")&&(noteContent.includes("pain")||noteContent.includes("it"))&&(noteContent.includes("develop")||noteContent.includes("start")||noteContent.includes("begin")||noteContent.includes("come")||noteContent.includes("brought"))
       ||noteContent.includes("what happen"))) {
-        //readOutLoud("The pain started around half an hour after I ate breakfast. I did eat a lot as I had a full english breakfast and so I thought it could've been related to the food");
-        previousquestion = noteContent; whathappened_repeat++;  response_question = "The pain started 30 mins after full english breakfast"; onsetx = true;
+        //readOutLoud("The pain started gradually around 3 or 4 months ago. I can't really put my foot on what the trigger was for it and I can't really think of anything that might be causing it.");
+        previousquestion = noteContent; whathappened_repeat++;  response_question = "The pain started gradually 3 or 4 mths ago. Idk what the trigger/cause was for it"; onsetx = true;
         document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}//how did you get the pain/how did it start
         
       //pain
-      
+    
+      /*
       else if (wherepainexactly_repeat == 0 && (noteContent.includes("where")&&(noteContent.includes("pain")||noteContent.includes("discomfort")||noteContent.includes("hurt"))&&!noteContent.includes("else")&&!noteContent.includes("somewhere")&&!noteContent.includes("anywhere")&&!noteContent.includes("everywhere")
       )) {
-        //readOutLoud("The pain is in the upper right region of my tummy"); - DON'T REMOVE THE SPACE BEFORE 'WHERE' AS CAN BE 'ANYWHERE (ELSE)'FOR RADIATION OF PAIN
-        previousquestion = noteContent; wherepainexactly_repeat++;  response_question = "The pain's in the upper right region of my tummy";
+        //readOutLoud("The pain is just behind my belly button - DON'T REMOVE THE SPACE BEFORE 'WHERE' AS CAN BE 'ANYWHERE (ELSE)'FOR RADIATION OF PAIN
+        previousquestion = noteContent; wherepainexactly_repeat++;  response_question = "The pain is just behind my belly button";
         painlocationx = true;
   
         document.getElementById("mp4_src").src = "videos/wherepain.mp4"; allifsaction();}//where is the pain
       
+  */
   
   
   
   
-  
-          
+          /*
      
       else if (describepain_repeat == 0 && (noteContent.includes("describe")||noteContent.includes("it feel like")
           ||noteContent.includes("pain feel like"))) {
-        //readOutLoud("The pain feels like a sharp pain");
-        previousquestion = noteContent; describepain_repeat++;  response_question = "The pain feels like a sharp pain";
+        //readOutLoud("The pain feels like a dull crampy pain");
+        previousquestion = noteContent; describepain_repeat++;  response_question = "The pain feels like a dull crampy pain";
         characterx = true;
       document.getElementById("mp4_src").src = "videos/feelslikehorsekickedme.mp4"; allifsaction();}//describe the pain
       
-    
+    */
       
   
   ////
       
       
   
-  
+  /*
       else if (radiate_repeat == 0 && (noteContent.includes("radiate")||noteContent.includes("other pain")
       ||(noteContent.includes("anywhere")||noteContent.includes("other"))&&(noteContent.includes("move")||noteContent.includes("go")))) {
-        //readOutLoud("now you mention it, I have also noticed that the pain goes to the middle of my tummy as well, and also a bit in the middle of my back too");
-        previousquestion = noteContent; radiate_repeat++;  response_question = "I have pain that goes to the middle of my tummy, and also a bit in the middle of my back";
+        //readOutLoud("now you mention it, I have also noticed that the pain has now moved to my lower right side, just below my ribs, but this has just happened maybe half an hour ago");
+        previousquestion = noteContent; radiate_repeat++;  response_question = "now you mention it, I have also noticed that the pain has now moved to my lower right side, just below my ribs, but this has just happened maybe half an hour ago";
         radiatex = true;
   
         document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//does the pain radiate/move anywhere/does the pain move to other parts of the body
@@ -1241,46 +1235,46 @@ if (isMobile) {
       ||noteContent.includes("severe")&&(noteContent.includes("pain")||noteContent.includes("it"))
       ||noteContent.includes("1-10")||noteContent.includes("1 to 10")||noteContent.includes("one to ten")||noteContent.includes("-10")
           ||noteContent.includes("out of 10")||noteContent.includes("out of ten"))) {
-        //readOutLoud("Honesty I would say the pain is probably around 7/10, and I normally have quite a high pain threshold");
-        previousquestion = noteContent; ratethepain_repeat++;  response_question = "The pain is 7/10 in severity";
+        //readOutLoud("Honesty I would say the pain is definitely a 10 out of 10, and I normally have quite a high pain threshold. I don't think I've ever had something more painful than this");
+        previousquestion = noteContent; ratethepain_repeat++;  response_question = "The pain is 10/10 in severity";
         ratepainx = true;
         document.getElementById("mp4_src").src = "videos/painis9outof10.mp4"; allifsaction();}//rate the pain
-      
-      else if (makeitbetter_repeat == 0 && (noteContent.includes("make it better")||noteContent.includes("make the pain better")
-          ||noteContent.includes("makes it better")||noteContent.includes("makes the pain better")
+   */   
+      else if (makeitbetter_repeat == 0 && (noteContent.includes("make it better")||noteContent.includes("make the cough better")
+          ||noteContent.includes("makes it better")||noteContent.includes("makes the cough better")
           ||noteContent.includes("relieve")||noteContent.includes("ease"))) {
-        //readOutLoud("Honestly, nothing makes the pain better, it just seems to ease off by itself after 30 minutes");
-        previousquestion = noteContent; makeitbetter_repeat++;  response_question = "nothing makes the pain better, it just eases off by itself after 30 mins";
+        //readOutLoud("Honestly, nothing makes the cough better, I tried these cough syrups and these different remedies from the pharmacy but they haven't helped");
+        previousquestion = noteContent; makeitbetter_repeat++;  response_question = "nothing makes cough better, I tried cough syrups and these different remedies from the pharmacy but not helped";
         makeitbetterx = true;
         document.getElementById("mp4_src").src = "videos/nothingmakesitbetter.mp4"; allifsaction();}//anything make it better/anything ease the pain
       
       else if (makeitworse_repeat == 0 && (noteContent.includes("make it worse")||noteContent.includes("exacerbate")
           ||noteContent.includes("make the pain worse")||noteContent.includes("makes the pain worse")
           ||noteContent.includes("makes it worse"))) {
-        //readOutLoud("Eating fatty meals like burgers or fish and chips makes the pain worse.");
-        previousquestion = noteContent; makeitworse_repeat++;  response_question = "Eating fatty meals, burgers, fish + chips makes the pain worse";
+        //readOutLoud("the cough is slightly worse when I am walking or trying to do any exercise and when I'm outside doing the gardening.");
+        previousquestion = noteContent; makeitworse_repeat++;  response_question = "cough is  worse when walking or exercising + when doing gardening";
         makeitworsex = true;
       
         document.getElementById("mp4_src").src = "videos/anymovementmakesitworse.mp4"; allifsaction();}//anything make it worse
       
      
       else if (whenstarted_repeat == 0 && ((noteContent.includes("how long")||noteContent.includes("start"))&&!noteContent.includes("smok")&&!noteContent.includes("alcohol")&&!noteContent.includes("drink"))) {
-        //readOutLoud("This pain started this morning after breakfast but stopped after 30 minutes");
-        previousquestion = noteContent; whenstarted_repeat++;  response_question = "This pain started this morning after breakfast but stopped after 30 mins";
-        document.getElementById("mp4_src").src = "videos/startedthismorning.mp4"; allifsaction();}//How long have you had the pain for/when did the pain start
+        //readOutLoud("The pain started gradually around 3 or 4 months ago.");
+        previousquestion = noteContent; whenstarted_repeat++;  response_question = "The pain started gradually around 3 or 4 months ago";
+        document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}//How long have you had the pain for/when did the pain start
       
       else if (gottenworsethroughtime_repeat == 0 && (noteContent.includes("got worse")||noteContent.includes("gotten worse")
           ||noteContent.includes("gotten better")||noteContent.includes("got better")||noteContent.includes("sudden"))) {
-        //readOutLoud("The pain has not gotten worse since this morning, and actually is not too bad now");
-        previousquestion = noteContent; gottenworsethroughtime_repeat++;  response_question = "The pain has not gotten worse since this morning, and actually is not too bad now";
+        //readOutLoud("The cough has gotten worse over the last few weeks, and I'd probably say it's been affecting my sleep for the last week at least");
+        previousquestion = noteContent; gottenworsethroughtime_repeat++;  response_question = "The cough has gotten worse over  last few wks, and been affecting my sleep for the last week";
         document.getElementById("mp4_src").src = "videos/painisgottenworseovertheday.mp4"; allifsaction();}//Has the pain gradually gotten worse/better
       
       
       
       
       else if(happenbefore_repeat == 0 && ((noteContent.includes("happen")||noteContent.includes("felt"))&& noteContent.includes("before"))){
-        //readOutLoud("This has now happened quite a few times actually and is happening more often recently");
-        previousquestion = noteContent; happenbefore_repeat++;  response_question = "This has now happened quite a few times actually and is happening more often recently";
+        //readOutLoud("This is the first time that I've had somehing like this before");
+        previousquestion = noteContent; happenbefore_repeat++;  response_question = "This is the first time that I've had somehing like this before";
         happenbeforex = true;
         document.getElementById("mp4_src").src = "videos/nothatsneverhappenedbefore.mp4"; allifsaction();}
   
@@ -1290,26 +1284,29 @@ if (isMobile) {
   
   
       //rule out pain anywhere else
-      else if (painin_repeat == 0 && ((noteContent.includes("have")||noteContent.includes("notice")||noteContent.includes("any"))&&(noteContent.includes("pain in")||noteContent.includes("pains in")))) {
-        //readOutLoud("I've mainly got pain in the upper right side of my abdomen, but also noticed in the middle of my abdomen and my back");
-        previousquestion = noteContent; painin_repeat++;  response_question = "I've mainly got pain in my upper right abdomen but also noticed in my back and upper abdomen";
+      else if (painin_repeat == 0 && ((noteContent.includes("have")||noteContent.includes("notice")||noteContent.includes("any"))&&(noteContent.includes("pain")||noteContent.includes("pains in")))) {
+        //readOutLoud("I've not got any pain anyhere in my body to be honest");
+        previousquestion = noteContent; painin_repeat++;  response_question = "I've mainly got pain in the middle of my tummy, but I've also noticed it now on my lower right side";
         radiatex = true;
         backpainx = true;
+        associatedsymptomsx = true;
+
       document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//any pain in X (eg in the shoulders, in the side etc)
       
       //other symptoms    
       else if (othersymptoms_repeat == 0 && (noteContent.includes("symptoms")||noteContent.includes("come along with")
           ||noteContent.includes("anything else")||noteContent.includes("come with"))) {
-        //readOutLoud("I've also vomited once earlier today, but I've been feeling sick for the whole day");
-        previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I've also vomited once earlier today, but I've been feeling sick for the whole day";
+        //readOutLoud("I've also been off my food and just can't eat anything at all");
+        previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I've also been off my food and just can't eat anything at all";
         associatedsymptomsx = true;
+        appetitex = true;
         document.getElementById("mp4_src").src = "videos/sobbutcozofthepain.mp4"; allifsaction();}//any other Sx/does anything else come along with the pain
       
       else if (fever_repeat == 0 && (noteContent.includes("fever")||noteContent.includes("felt off")||noteContent.includes("felt yourself")
           ||noteContent.includes("feel")&&noteContent.includes("off")||noteContent.includes("a cold")||noteContent.includes("under the weather")
           ||noteContent.includes("temperature")&&noteContent.includes("high"))) {
-        //readOutLoud("Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently");
-        previousquestion = noteContent; fever_repeat++;  response_question = "Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently";
+        //readOutLoud("I've not felt under the weather recently, and I haven't had any fever or temperature");
+        previousquestion = noteContent; fever_repeat++;  response_question = "I've not felt under the weather recently, and I haven't had any fever or temperature";
         associatedsymptomsx = true;
         feverx = true;
         document.getElementById("mp4_src").src = "videos/fever.mp4"; allifsaction();}//fever
@@ -1322,8 +1319,8 @@ if (isMobile) {
     document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you feel tired all the time/any chills (it eliminates if you say 'do you feel tired of X')
   
       else if (nausea_repeat == 0 && (noteContent.includes("naus")||noteContent.includes("vomit"))) {
-        //readOutLoud("Yes, I vomited earlier on today");
-        previousquestion = noteContent; nausea_repeat++;  response_question = "Yes, I vomited earlier on today";
+        //readOutLoud("No");
+        previousquestion = noteContent; nausea_repeat++;  response_question = "No";
         associatedsymptomsx = true;
         nauseax = true;
         document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any vomiting/nausea/nauseous
@@ -1347,21 +1344,21 @@ if (isMobile) {
         previousquestion = noteContent; sweat_repeat++;  response_question = "No";
         associatedsymptomsx = true;
         document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any sweating/clammy
-  
+  /*
       else if (cough_repeat == 0 && (noteContent.includes("cough")&&!noteContent.includes("colour")&&!noteContent.includes("texture")&&!noteContent.includes("consistency"))) {
-        //readOutLoud("No");
+        //readOutLoud("I've not noticed any ");
         previousquestion = noteContent; cough_repeat++;  response_question = "No";
         associatedsymptomsx = true;
         coughx = true;
         document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//cough
-      
+     */ 
       else if (sputum_repeat == 0 && (noteContent.includes("bring up any")||noteContent.includes("sputum")||noteContent.includes("phlegm")
       ||noteContent.includes("cough")&&(noteContent.includes("bring up")||noteContent.includes("come")))) {
-        //readOutLoud("No");
-        previousquestion = noteContent; sputum_repeat++;  response_question = "No";
+        //readOutLoud("I've not noticed any sputum when I cough");
+        previousquestion = noteContent; sputum_repeat++;  response_question = "I've not noticed any sputum when I cough";
         associatedsymptomsx = true;
         coughx = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you bring up anything when you cough/vomit/ anything come out?
+        document.getElementById("mp4_src").src = "videos/coughtexture.mp4"; allifsaction();}//do you bring up anything when you cough/vomit/ anything come out?
       
       
       //SOB   
@@ -1372,25 +1369,26 @@ if (isMobile) {
         document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//SOB/dyspnoea
       
   
-  
+
   
       else if (walkdistance_repeat == 0 && (noteContent.includes("whilst walk")||noteContent.includes("when you walk")
           ||noteContent.includes("whilst you walk")||noteContent.includes("when walk")||noteContent.includes("during walk")
           ||noteContent.includes("walk")&&(noteContent.includes("far")||noteContent.includes("how much")||noteContent.includes("stop")||noteContent.includes("until")))) {
-        //readOutLoud("I can walk about 200 metres no problem, but after that I get a bit short of breath");
-        previousquestion = noteContent; walkdistance_repeat++;  response_question = "I can walk about 200 metres no problem, but after that I get a bit short of breath";
+        //readOutLoud("I walk about 100 metres no problem, but after that I get a bit short of breath");
+        previousquestion = noteContent; walkdistance_repeat++;  response_question = "I can walk about 100 metres no problem, but after that I get a bit short of breath";
         walkdistancex = true;
         document.getElementById("mp4_src").src = "videos/icanwalk.mp4"; allifsaction();}//how far can you walk/when do you feel short of breath/ dyu get SOB whilst walking/when walking
       
         
-      
+     /*   
       //Gastro
       else if (bloating_repeat == 0 && (noteContent.includes("bloat"))) {
         //readOutLoud("I haven't noticed any bloating");
         previousquestion = noteContent; bloating_repeat++;  response_question = "I haven't noticed any bloating";
         associatedsymptomsx = true;
         document.getElementById("mp4_src").src = "videos/bloating.mp4"; allifsaction();}//bloating
-      
+     
+
       else if (yellow_repeat == 0 && (noteContent.includes("yellow")||noteContent.includes("jaundice"))) {
         //readOutLoud("I've not noticed any yellowing of the skin or of my eyes");
         previousquestion = noteContent; yellow_repeat++;  response_question = "I've not noticed any yellowing of the skin or of my eyes'";
@@ -1398,7 +1396,7 @@ if (isMobile) {
         jaundicex = true;
         document.getElementById("mp4_src").src = "videos/yellowingofskin.mp4"; allifsaction();}//jaundice
   
-  
+   */
   
   
   
@@ -1424,19 +1422,20 @@ if (isMobile) {
   
   //red flags   
   else if (weight_repeat == 0 && (noteContent.includes("weigh"))) {
-    //readOutLoud("I've not noticed any weight loss to be honest");
-    previousquestion = noteContent; weight_repeat++;  response_question = "I've not noticed any weight loss";
+    //readOutLoud("I've definitely noticed that I've lost some weight, I would say over the last few weeks that I've lost maybe 6 or 7 kilograms, which is great because I didn't even need to do any exercise to lose all that weight");
+    previousquestion = noteContent; weight_repeat++;  response_question = "I've definitely noticed I've lost weight, in last few wks I've lost maybe 6 or 7 kg, which is great as I didn't even need to do any exercise to lose all that weight";
     weightx = true;
     document.getElementById("mp4_src").src = "videos/wtlossgain.mp4"; allifsaction();}//weight loss
   
-  else if (blood_repeat == 0 && (noteContent.includes("blood"))) {
-    //readOutLoud("I've not noticed any blood loss from anywhere");
-    previousquestion = noteContent; blood_repeat++;  response_question = "I've not noticed any blood loss from anywhere";
+  else if (blood_repeat == 0 && (noteContent.includes("blood")||noteContent.includes("red")||noteContent.includes("pink"))) {
+    //readOutLoud("I've have noticed coughing up some blood a few times to be honest, which was more of a pinky colour, but to be honest it hasn't happened for a few days now so I think it must've settled");
+    previousquestion = noteContent; blood_repeat++;  response_question = "I've have noticed coughing up some blood a few times to be honest, which was more of a pinky colour, but to be honest it hasn't happened for a few days now so I think it must've settled";
+    bloodx = true;
     document.getElementById("mp4_src").src = "videos/bloodloss.mp4"; allifsaction();}//blood loss
   
   else if (appetite_repeat == 0 && (noteContent.includes("appetite")||noteContent.includes("eating"))) {
-    //readOutLoud("I've not noticed any changes in my appetite");
-    previousquestion = noteContent; appetite_repeat++;  response_question = "I've not noticed any changes in my appetite";
+    //readOutLoud("I have noticed that my appetite has significantly gotten worse. To be honest I haven't eaten anything today and I've just not felt like eating anything");
+    previousquestion = noteContent; appetite_repeat++;  response_question = "I have noticed that my appetite has significantly gotten worse. To be honest I haven't eaten anything today";
     appetitex = true;
     document.getElementById("mp4_src").src = "videos/changesinappetite.mp4"; allifsaction();}//changes in appetite
   
@@ -1444,21 +1443,21 @@ if (isMobile) {
     //ICE
     else if (idea_repeat == 0 && (noteContent.includes("idea")||noteContent.includes("do you think")||noteContent.includes("do you think")&&((noteContent.includes("going on")
       ||noteContent.includes("reckon")||noteContent.includes("happening"))))) {
-    //readOutLoud("I think I might be having a bit of reflux, but I'm not too sure");
-    previousquestion = noteContent; idea_repeat++;  response_question = "I think I might be having a bit of reflux, but I'm not too sure";
+    //readOutLoud("I think I might be having something like long-term Covid. I must have caught it come time ago and it's just been lingering");
+    previousquestion = noteContent; idea_repeat++;  response_question = "I think I might be having something like long-term Covid. I must have caught it come time ago and it's just been lingering";
     ideasx = true;
     document.getElementById("mp4_src").src = "videos/ideas.mp4"; allifsaction();}//Ideas/what's your ideas of what's happening/what dyu think's happening/do you think it's cancer
   
   else if (concerns_repeat == 0 && (noteContent.includes("concern")||noteContent.includes("worr")||noteContent.includes("worry")||noteContent.includes("scar"))) {
-    //readOutLoud("I'm really worried that the pain keeps coming back all the time");
-    previousquestion = noteContent; concerns_repeat++;  response_question = "I'm really worried that the pain keeps coming back all the time";
+    //readOutLoud("I'm just concerned that the cough has not gotten better and the fact that it's really affecting my sleep, and the fact that it wakes up my wife as well");
+    previousquestion = noteContent; concerns_repeat++;  response_question = "I'm just concerned that the cough has not gotten better and the fact that it's really affecting my sleep, and my wife's sleep";
     concernsx = true;
     document.getElementById("mp4_src").src = "videos/concerns.mp4"; allifsaction();}//Concerns/anything scaring you
   
   else if (expectations_repeat == 0 && (noteContent.includes("expect")||noteContent.includes("get out of")||noteContent.includes("like from us")||noteContent.includes("hoping")||noteContent.includes("hope")
   ||noteContent.includes("can we help")||noteContent.includes("what can we do for you")||noteContent.includes("what can i do for you"))) {
-    //readOutLoud("I would like to figure out what is going on with me if that's possible");
-    previousquestion = noteContent; expectations_repeat++;  response_question = "I want to figure out what's going on with me";
+    //readOutLoud("I would like you to give me something to get rid of this cough please. I've tried cough syrups but it's not worked so I want something stronger");
+    previousquestion = noteContent; expectations_repeat++;  response_question = "I would like you to give me something to get rid of this cough please. I've tried cough syrups but it's not worked so I want something stronger";
     expectationsx = true;
     document.getElementById("mp4_src").src = "videos/expectations.mp4"; allifsaction();}//Expectations/what would you like from us
   
@@ -1469,8 +1468,8 @@ if (isMobile) {
  
 ///  
   else if (familyheart_repeat == 0 && (noteContent.includes("family")||noteContent.includes("run in the"))) {
-    //readOutLoud("My dad and my uncle both have high blood pressure");
-    previousquestion = noteContent; familyheart_repeat++;  response_question = "My dad and my uncle both have high blood pressure";
+    //readOutLoud("My dad has had a heart atack before and he had liver cancer, and my mum has COPD");
+    previousquestion = noteContent; familyheart_repeat++;  response_question = "My dad has had a heart atack before and he had liver cancer, and my mum has COPD";
     familyhistoryx = true;
     document.getElementById("mp4_src").src = "videos/familyhistory.mp4"; allifsaction();}//FHx
   
@@ -1478,8 +1477,8 @@ if (isMobile) {
   
   else if (pmhx_repeat == 0 && (!noteContent.includes("famil")&&!noteContent.includes("ask")&&(noteContent.includes("anything else")||noteContent.includes("other problem")||noteContent.includes("other condition"))
   ||(noteContent.includes("medical")&&(noteContent.includes("problem")||noteContent.includes("condition")||noteContent.includes("issue"))))) {
-    //readOutLoud("I have high cholesterol and my blood pressure is on the high side. I'm also prediabetic as well.");
-    previousquestion = noteContent; pmhx_repeat++;  response_question = "I have high cholesterol and my blood pressure is on the high side. I'm also prediabetic as well";
+    //readOutLoud("I don't have any medical problems in the past.");
+    previousquestion = noteContent; pmhx_repeat++;  response_question = "I don't have any medical problems in the past";
     pmhx = true;
     document.getElementById("mp4_src").src = "videos/pmhx.mp4"; allifsaction();}//PMHx / suffere from anything else (you also want to rule out is there anything else you want to ask me)
   
@@ -1503,15 +1502,15 @@ if (isMobile) {
     allergiesx = true;
     document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//FHx
   
-  else if (takeforpain_repeat == 0 && (noteContent.includes("do you take anything for")||noteContent.includes("paracetamol")||noteContent.includes("pain relief")||noteContent.includes("relie")&&noteContent.includes("pain"))) {
-    //readOutLoud("I take paracetamol, but it doesn't work");
-    previousquestion = noteContent; takeforpain_repeat++;  response_question = "I take paracetomol but it doesn't work";
+  else if (takeforpain_repeat == 0 && (noteContent.includes("do you take anything for")||noteContent.includes("paracetamol")||noteContent.includes("pain relief")||noteContent.includes("relie")&&noteContent.includes("cough"))) {
+    //readOutLoud("I've taken some cough syrup, but it hasn't worked");
+    previousquestion = noteContent; takeforpain_repeat++;  response_question = "I've taken some cough syrup but it doesn't work";
     medstestx = true;
     document.getElementById("mp4_src").src = "videos/itakeparacetamolbutdoesntwork.mp4"; allifsaction();}//Do you take anything for the pain? + does it work
   
   else if (illicitdrugs_repeat == 0 && (noteContent.includes("meds")||noteContent.includes("medication")||noteContent.includes("drugs")&&!noteContent.includes("illicit")&&!noteContent.includes("illegal"))) {
-    //readOutLoud("I only take Ramipril 1.25 milligrams once a day for my blood pressure");
-    previousquestion = noteContent; illicitdrugs_repeat++;  response_question = "I take ramipril for high BP";
+    //readOutLoud("I don't take any regular medications");
+    previousquestion = noteContent; illicitdrugs_repeat++;  response_question = "I don't take any regular medications";
     medstestx = true;
     document.getElementById("mp4_src").src = "videos/medicationsaspirin.mp4"; allifsaction();}//meds
   
@@ -1520,15 +1519,15 @@ if (isMobile) {
   
   
   else if (howmuchsmoke_repeat == 0 && (noteContent.includes("smok")||noteContent.includes("how much do you smoke"))) {
-    //readOutLoud("I smoke around 15 cigarettes every day and i started when i was 15");
-    previousquestion = noteContent; howmuchsmoke_repeat++;  response_question = "i smoke 15 cigarettes a day + started when i was 15";
+    //readOutLoud("I smoke quite a lot to be honest, I smoke about 20 cigarretes a day, and I've been smoking since I was in school, probably when I was around 16 or 17 years old");
+    previousquestion = noteContent; howmuchsmoke_repeat++;  response_question = "I smoke about 20 cigarretes a day since I was around 16";
     smokingx = true;
     document.getElementById("mp4_src").src = "videos/smoke.mp4"; allifsaction();}//smoking
   
   
   else if(drinkingalcohol_repeat == 0 && (noteContent.includes("drink")||noteContent.includes("alcohol")||noteContent.includes("how much do you drink"))){
-    //readOutLoud("I drink about half a bottle of wine every day + started as a teenager");
-    previousquestion = noteContent; drinkingalcohol_repeat++;  response_question = "i drink about half a bottle of wine per day";
+    //readOutLoud("I drink only in the occasional party, otherwise I don't regularly consume");
+    previousquestion = noteContent; drinkingalcohol_repeat++;  response_question = "I drink only in the occasional party, otherwise I don't regularly consume";
     alcoholx = true;
     document.getElementById("mp4_src").src = "videos/alcohol.mp4"; allifsaction();}//alcohol
   
@@ -1544,16 +1543,16 @@ if (isMobile) {
   
   else if (exercise_repeat == 0 && (noteContent.includes("exercise")||noteContent.includes("go on walk")||noteContent.includes("active")
   ||noteContent.includes("sport")||noteContent.includes("physical"))){
-    //readOutLoud("I try and do exercise from time to time like going on walks with my dog and sometimes play badminton with my friends");
-    previousquestion = noteContent; exercise_repeat++;  response_question = "I try do exercise like going on walks with my dog and play badminton";
+    //readOutLoud("I don't do any sport to be honest. I used to play darts before but I stopped, but I need to get back into it");
+    previousquestion = noteContent; exercise_repeat++;  response_question = "I don't do any sport to be honest. I used to play darts before but I stopped, but I need to get back into it";
     physicalactivityx = true;
     document.getElementById("mp4_src").src = "videos/exercise.mp4"; allifsaction();}//exercise/do you keep active
   
   ////
   
   else if (diet_repeat == 0 && (noteContent.includes("diet")||noteContent.includes("do you eat")||noteContent.includes("what you eat"))){
-    //readOutLoud("I eat quite a lot of fatty products, a lot of cheese, eggs, meat, things like that.");
-    previousquestion = noteContent; diet_repeat++;  response_question = "I eat quite a lot of fatty products, a lot of cheese, eggs, meat, things like that";
+    //readOutLoud("I normally eat quite a lot of junk food to be honest, but I still try to eat my vegetables from time to time. But I've not been able to eat much recently because I've just not felt like eating");
+    previousquestion = noteContent; diet_repeat++;  response_question = "I normally eat quite a lot of junk food to be honest, but I still try to eat my vegetables from time to time. But I've not been able to eat much recently because I've just not felt like eating";
     appetitex = true;
     document.getElementById("mp4_src").src = "videos/ieattoomuch.mp4"; allifsaction();}//how's your diet/what sorts of things do you eat/describe what you eat
   
@@ -1562,15 +1561,15 @@ if (isMobile) {
   
   //home situation    
   else if (livewithathome_repeat == 0 && (noteContent.includes("at home")||noteContent.includes("live with"))){
-    //readOutLoud("I live alone in a flat in the city");
-    previousquestion = noteContent; livewithathome_repeat++;  response_question = "i live alone in a flat";
+    //readOutLoud("I live in a small house with my wife and my 2 teenage kids in the city centre");
+    previousquestion = noteContent; livewithathome_repeat++;  response_question = "I live in a small house with my wife and my 2 teenage kids in city centre";
     homesituationx = true;
     document.getElementById("mp4_src").src = "videos/livingsituation.mp4"; allifsaction();}//who's at home/who lives at home/who dyu live with
   
   else if (bungalo_repeat == 0 && (noteContent.includes("bungalo")||noteContent.includes("house")||noteContent.includes("appartment")
       ||noteContent.includes("live in")||noteContent.includes("you live")||noteContent.includes("living situation")||noteContent.includes("housing situation"))){
-    //readOutLoud("I live in a little flat in the city");
-    previousquestion = noteContent; bungalo_repeat++;  response_question = "i live in little flat in the city";
+    //readOutLoud("I live in a small house with my wife and my 2 teenage kids in the city centre");
+    previousquestion = noteContent; bungalo_repeat++;  response_question = "I live in a small house with my wife and my 2 teenage kids in the city centre";
     homesituationx = true;
     document.getElementById("mp4_src").src = "videos/livingsituation.mp4"; allifsaction();}//where dyu live/dyu live in a flat etc
   
@@ -1617,7 +1616,7 @@ if (isMobile) {
 
 
 const generateResponse = async (input) => {
-  const response = await fetch("https://oscesimstrial1.onrender.com/api/TUTOR2ndcase", {
+  const response = await fetch("https://oscesimstrial1.onrender.com/api/7thcase", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ 
@@ -2145,73 +2144,30 @@ audio.load();
   
   /*Final year questions:*/
   
-  var dizzinessreal1 = $('#dizzinessreal1'); var dizzinessreal2 = $('#dizzinessreal2');
-  if (dizzinessx === true){
-  redstyles(dizzinessreal1); greenstyles(dizzinessreal2);
-  }
-
-  var feverreal1 = $('#feverreal1'); var feverreal2 = $('#feverreal2');
-  if (feverx === true){
-  redstyles(feverreal1); greenstyles(feverreal2);
-  }
-
-  var weightreal1 = $('#weightreal1'); var weightreal2 = $('#weightreal2');
-  if (weightx === true){
-  redstyles(weightreal1); greenstyles(weightreal2);
-  }
-
   var appetitereal1 = $('#appetitereal1'); var appetitereal2 = $('#appetitereal2');
   if (appetitex === true){
   redstyles(appetitereal1); greenstyles(appetitereal2);
   }
   
-  var jaundicereal1 = $('#jaundicereal1'); var jaundicereal2 = $('#jaundicereal2');
-  if (jaundicex === true){
-  redstyles(jaundicereal1); greenstyles(jaundicereal2);
+  var feverreal1 = $('#feverreal1'); var feverreal2 = $('#feverreal2');
+  if (feverx === true){
+  redstyles(feverreal1); greenstyles(feverreal2);
   }
-  
-  var darkurinereal1 = $('#darkurinereal1'); var darkurinereal2 = $('#darkurinereal2');
-  if (darkurinex === true){
-  redstyles(darkurinereal1); greenstyles(darkurinereal2);
+
+   var weightlossreal1 = $('#weightlossreal1'); var weightlossreal2 = $('#weightlossreal2');
+  if (weightlossx === true){
+  redstyles(weightlossreal1); greenstyles(weightlossreal2);
   }
-  
-  var nauseareal1 = $('#nauseareal1'); var nauseareal2 = $('#nauseareal2');
-  if (nauseax === true){
-  redstyles(nauseareal1); greenstyles(nauseareal2);
+
+   var coughreal1 = $('#coughreal1'); var coughreal2 = $('#coughreal2');
+  if (coughx === true){
+  redstyles(coughreal1); greenstyles(coughreal2);
   }
-  
-  var backpainreal1 = $('#backpainreal1'); var backpainreal2 = $('#backpainreal2');
-  if (backpainx === true){
-  redstyles(backpainreal1); greenstyles(backpainreal2);
+
+   var haemoptysisreal1 = $('#haemoptysisreal1'); var haemoptysisreal2 = $('#haemoptysisreal2');
+  if (haemoptysisx === true){
+  redstyles(haemoptysisreal1); greenstyles(haemoptysisreal2);
   }
-  
-  var shouldertipreal1 = $('#shouldertipreal1'); var shouldertipreal2 = $('#shouldertipreal2');
-  if (shouldertipx === true){
-  redstyles(shouldertipreal1); greenstyles(shouldertipreal2);
-  }
-  
-  var steatorrhoeareal1 = $('#steatorrhoeareal1'); var steatorrhoeareal2 = $('#steatorrhoeareal2');
-  if (steatorrhoeax === true){
-  redstyles(steatorrhoeareal1); greenstyles(steatorrhoeareal2);
-  }
-  
-  var bloatingreal1 = $('#bloatingreal1'); var bloatingreal2 = $('#bloatingreal2');
-  if (bloatingx === true){
-  redstyles(bloatingreal1); greenstyles(bloatingreal2);
-  }
-    
-  var itchingreal1 = $('#itchingreal1'); var itchingreal2 = $('#itchingreal2');
-  if (itchingx === true){
-  redstyles(itchingreal1); greenstyles(itchingreal2);
-  }
-  
-  var prevgallreal1 = $('#prevgallreal1'); var prevgallreal2 = $('#prevgallreal2');
-  if (prevgallx === true){
-  redstyles(prevgallreal1); greenstyles(prevgallreal2);
-  }
-   
-  
-  
 
   
   

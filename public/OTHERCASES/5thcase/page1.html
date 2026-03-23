@@ -8,7 +8,7 @@
         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shoelace-css/1.0.0-beta16/shoelace.css">
         <link rel="stylesheet" href="../../styles.css">
-        <link rel="icon" type="image/png" href="../../art/logoupdated1.webp">
+        <link rel="icon" type="image/png" href="../../art/logoupdated1.png">
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -48,21 +48,22 @@
 
             
 
-            <video id="myVideo" autoplay playsinline webkit-playsinline><!--if you add the 'controls' before autoplay then you can pause and mute etc -->
-              <source id="mp4_src" src="WIN_20230328_13_59_37_Pro.webm" type="video/mp4">
+            <video id="myVideo" autoplay  playsinline webkit-playsinline><!--if you add the 'controls' before autoplay then you can pause and mute etc -->
+              <source id="mp4_src" src="WIN_20230328_13_59_37_Pro.mp4" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>
-            
-                          <script>// Check if in fullscreen
-                            document.getElementById('myVideo').addEventListener('ended', () => {if (document.fullscreenElement) {document.exitFullscreen();}});
-                          </script>
 
-            <video id="mutedVideo" autoplay muted loop      playsinline webkit-playsinline><!--LAST 2 THINGS IS FOR IT TO NOT GO FULL SCREEN ON PHONE. if you add the 'controls' before autoplay then you can pause and mute etc -->
+                            <script>// Check if in fullscreen
+                              document.getElementById('myVideo').addEventListener('ended', () => {if (document.fullscreenElement) {document.exitFullscreen();}});
+                            </script>
+
+
+            <video id="mutedVideo" autoplay muted loop     playsinline webkit-playsinline ><!--LAST 2 THINGS IS FOR IT TO NOT GO FULL SCREEN ON PHONE. if you add the 'controls' before autoplay then you can pause and mute etc -->
               <source id="mutedmp4_src" src="vid-whatsbroughtyouin.mp4" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>
 
-            <video id="inbetweenVideo" autoplay      playsinline webkit-playsinline muted><!--LAST 2 THINGS IS FOR IT TO NOT GO FULL SCREEN ON PHONE. if you add the 'controls' before autoplay then you can pause and mute etc -->
+            <video id="inbetweenVideo" autoplay playsinline webkit-playsinline muted><!--LAST 2 THINGS IS FOR IT TO NOT GO FULL SCREEN ON PHONE. if you add the 'controls' before autoplay then you can pause and mute etc -->
               <source id="inbetweenmp4_src" src="silentvideo.mp4" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>
@@ -80,7 +81,7 @@
                <!--IS FOR THE ELEVENLABS:
                <button onclick="speak()">Speak</button>-->
 
-               <center><b><h2 id="casenameformobile"style="font-family: LTSoul;">Jason Miller</h2></b></center>
+               <center><b><h2 id="casenameformobile"style="font-family: LTSoul;">John Doe</h2></b></center>
 <br id="extraspacemobile">
                   
                 <!--<img class = "mainimage" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Lesliejordan.jpg/220px-Lesliejordan.jpg" alt="Male for case 1">  -->
@@ -92,9 +93,9 @@
 
                 
                 <div class="vidthatsfake">
-                  <img id="fakeVideo" src="../../pics/2ndcase.webp"  style="width:100%"></img>
+                  <img id="fakeVideo" src="../../pics/4thcase.webp"  style="width:100%"></img>
                   <div class="groupedvid">
-                    <h4 style="font-family: LTSoul;"><b>Jason Miller</b></h4> 
+                    <h4 style="font-family: LTSoul;"><b>John Doe</b></h4> 
                     <p>31 y/o Male</p> 
                   </div>
                 </div>
@@ -103,7 +104,7 @@
               
 
               
-              <center><b><h2 id="casename"style="font-family: LTSoul;">Jason Miller</h2></b></center>
+              <center><b><h2 id="casename"style="font-family: LTSoul;">John Doe</h2></b></center>
               
 
 
@@ -161,10 +162,11 @@
         </div></div>
  
 
-        <p id="initialpromptforpresssubmit" style=" display : none; z-index: 1; color: #f0f0f0;">
-          <b id="enlargify">Speak!</b><br><br>
-          <b id="enlargify2">(Remember, only speak when the <u>microphone</u> icon above appears!)</b><br><br>Ask your first question to your patient,<br>then press the <b id="enlargify3">'ENTER'</b> key or the submit button
-        </p> 
+  <p id="initialpromptforpresssubmit" style=" display : none; z-index: 1; color: #f0f0f0;">
+    <b id="enlargify">Speak!</b><br><br>
+    <b id="enlargify2">(Remember, only speak when the <u>microphone</u> icon above appears!)</b><br><br>Ask your first question to your patient,<br>then press the <b id="enlargify3">'ENTER'</b> key or the submit button
+  </p>
+ 
 
 
   
@@ -200,7 +202,7 @@
 
 <div id="placementofpage">
 
-                <br><h4 id="introstatement" style="margin-bottom: -10px; font-family: LTSoul;"><b>You are a Junior Doctor in a GP, and your next patient is a 31 year old male that is complaining of abdominal pain. Please take a full history.</b></h4>
+                <br><h4 id="introstatement" style="margin-bottom: -10px; font-family: LTSoul;"><b>You are a Junior Doctor in A + E, and your next patient is a 50 year old male that is complaining of arm weakness. Please take a full history.</b></h4>
 
 <br id="linebreakremove" class="linebreakremove">
 
@@ -255,7 +257,6 @@
 
 
 
-
 <!-- The Modal -->
 <div id="myModal" class="modal">
 
@@ -264,7 +265,7 @@
 
   <!-- Modal Content (The Video) -->
   <video class="modal-content" id="img01" controls>
-    <source src="videos/tutorial.webm" type="video/mp4">    Your browser does not support the video tag.
+    <source src="videos/3or4pillows.mp4" type="video/mp4">    Your browser does not support the video tag.
   </video>
 
   <!-- Modal Caption (Image Text)--> 
@@ -310,7 +311,7 @@
 
 
                 <br>
-               <!-- <p style="float: right; margin-top: -170px;">Jason Miller, 31 y/o M</p>-->
+               <!-- <p style="float: right; margin-top: -170px;">Marc Jevner, 31 y/o M</p>-->
 
                 <div id="formatstartbtn">
 
@@ -660,12 +661,11 @@
 
   <br>
 
-
 <!--Is for the yellow warning to say quality of recording effects results -->
 <div id="audio-warning" class="auto-fade-message" style="display: none; padding: 10px 20px; background-color: #ffcc00; color: #333; border-left: 5px solid #ff9900; font-weight: bold; font-style: italic; border-radius: 4px; position: fixed; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1000;
     opacity: 0; transition: opacity 3s ease; /* initial fade-in duration */">  ⚠️ Results may vary depending on recording quality. The mark scheme is based on what we could hear, so it might not perfectly reflect your actual answers.</div>
 
-<div id="chatgpt-response" style="z-index: 123456789;">chatgpt response</div>
+
 
 
 <!--Slideshow for review section-->
@@ -707,77 +707,34 @@
                     
                     
                     
-                        <tr id="painlocationreal">
-                          <td></td>
-                          <td id="painlocationreal1"><ul><li><b style="font-weight: 900;">S</b>ite</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">The location of the pain</li></ul></td>
-                          <td id="painlocationreal2"><ul><li><b style="font-weight: 900;">S</b>ite</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">The location of the pain</li></ul></td>
-                        </tr>
+                        
                         
                         <tr id="onsetreal">
                           <td></td>
                           <td id="onsetreal1"><ul><li><b style="font-weight: 900;">O</b>nset</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">How did the pain start?</li></ul></td>
+                              <ul class="j1"><li class = "explanationparagraph">When did the weakness start? - Important as guides management for strokes</li></ul></td>
                           <td id="onsetreal2"><ul><li><b style="font-weight: 900;">O</b>nset</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">How did the pain start?</li></ul></td>
+                              <ul class="j1"><li class = "explanationparagraph">When did the weakness start? - Important as guides management for strokes</li></ul></td>
                         </tr>
                         
-                        <tr id="characterreal">
-                          <td></td>
-                          <td id="characterreal1"><ul><li><b style="font-weight: 900;">C</b>haracter</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">Describe the pain? Is it sharp? dull? burning sensation? etc</li></ul></td>
-                          <td id="characterreal2"><ul><li><b style="font-weight: 900;">C</b>haracter</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">Describe the pain? Is it sharp? dull? burning sensation? etc</li></ul></td>
-                        </tr>
-                        
-                        <tr id="radiatereal">
-                          <td></td>
-                          <td id="radiatereal1"><ul><li><b style="font-weight: 900;">R</b>adiation</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">Does the pain radiate to anywhere? the neck? the left arm? etc</li></ul></td>
-                          <td id="radiatereal2"><ul><li><b style="font-weight: 900;">R</b>adiation</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">Does the pain radiate to anywhere? the neck? the left arm? etc</li></ul></td>
-                        </tr>
+                       
 
                         <tr id="associatedsymptomsreal">
                           <td></td>
                           <td id="associatedsymptomsreal1"><ul><li><b style="font-weight: 900;">A</b>ssociated symptoms</li></ul>
                               <ul class="j1"><li class = "explanationparagraph">Were there any other symptoms that came along with the pain</li></ul></td>
-                          <td id="associatedsymptomsreal2"><ul><li><b style="font-weight: 900;">A</b>ssociatedsymptoms</li></ul>
+                          <td id="associatedsymptomsreal2"><ul><li><b style="font-weight: 900;">A</b>ssociated symptoms</li></ul>
                               <ul class="j1"><li class = "explanationparagraph">Were there any other symptoms that came along with the pain</li></ul></td>
                         </tr>
 
                         <tr id="timecoursereal">
                           <td></td>
                           <td id="timecoursereal1"><ul><li><b style="font-weight: 900;">T</b>ime course</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">How has the pain changed over time? Is it constant? Does it come and go?</li></ul></td>
+                              <ul class="j1"><li class = "explanationparagraph">How has the weakness changed over time? Is it constant? Does it come and go?</li></ul></td>
                           <td id="timecoursereal2"><ul><li><b style="font-weight: 900;">T</b>imecourse</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">How has the pain changed over time? Is it constant? Does it come and go?</li></ul></td>
+                              <ul class="j1"><li class = "explanationparagraph">How has the weakness changed over time? Is it constant? Does it come and go?</li></ul></td>
                         </tr>
 
-                        <tr id="makeitbetterreal">
-                          <td></td>
-                          <td id="makeitbetterreal1"><ul><li><b style="font-weight: 900;">E</b>xacerbating factors</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">What makes the pain worse?</li></ul></td>
-                          <td id="makeitbetterreal2"><ul><li><b style="font-weight: 900;">E</b>xacerbating factors</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">What makes the pain worse?</li></ul></td>
-                        </tr>
-
-                        <tr id="ratepainreal">
-                          <td></td>
-                          <td id="ratepainreal1"><ul><li><b style="font-weight: 900;">S</b>everity</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">On a scale of 1-10 how'd you rate the pain, with 10 being the worst pain?</li></ul></td>
-                          <td id="ratepainreal2"><ul><li><b style="font-weight: 900;">S</b>everity</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">On a scale of 1-10 how'd you rate the pain, with 10 being the worst pain?</li></ul></td>
-                        </tr>
-
-                        <tr id="makeitworsereal">
-                          <td></td>
-                          <td id="makeitworsereal1"><ul><li>Relieving factors</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">What makes the pain better?</li></ul></td>
-                          <td id="makeitworsereal2"><ul><li>Relieving factors</li></ul>
-                              <ul class="j1"><li class = "explanationparagraph">What makes the pain better?</li></ul></td>
-                        </tr>
 
                         <tr id="happenbeforereal">
                           <td></td>
@@ -957,132 +914,81 @@
           
               
               
-              <tr id="dizzinessreal">
+              
+             
+
+
+
+              
+
+              <tr id="oedemareal">
                 <td></td>
-                <td id="dizzinessreal1"><ul><li>Dizziness/fainting/lightheadedness/lethargy</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">May suggest severe infection and possible sepsis</li></ul></td>
-                <td id="dizzinessreal2"><ul><li><b style="font-weight: 900;">Dizziness/fainting/lightheadedness/lethargy</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">May suggest severe infection and possible sepsis</li></ul></td>
+                <td id="oedemareal1"><ul><li><b style="font-weight: 900;">O</b>edema</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Oedema, including pulmonary and peripheral oedema, is an important symptom found in acute heart failure</li></ul>
+                </td>
+                    
+                <td id="oedemareal2"><ul><li><b style="font-weight: 900;">O</b>edema</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Oedema, including pulmonary and peripheral oedema, is an important symptom found in acute heart failure</li></ul>
+                </td>
               </tr>
 
-              <tr id="feverreal">
+              <tr id="wtgainreal">
                 <td></td>
-                <td id="feverreal1"><ul><li>Fever/chills</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">To screen for infection, such as cholecystitis or cholangitis</li></ul></td>
-                <td id="feverreal2"><ul><li><b style="font-weight: 900;">Fever/chills</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">To screen for infection, such as cholecystitis or cholangitis</li></ul></td>
+                <td id="wtgainreal1"><ul><li><b style="font-weight: 900;">W</b>eight gain</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Recent weight gain can also point towards the patient having recent build up of oedema</li></ul>
+                </td>
+                <td id="wtgainreal2"><ul><li><b style="font-weight: 900;">W</b>eight gain</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Recent weight gain can also point towards the patient having recent build up of oedema</li></ul>
+                </td>
               </tr>
 
-              <tr id="weightreal">
+              <tr id="orthopnoeareal">
                 <td></td>
-                <td id="weightreal1"><ul><li>Changes in weight</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Unintented weight loss is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-                <td id="weightreal2"><ul><li><b style="font-weight: 900;">Changes in weight</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Unintented weight loss is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-              </tr>
-
-              <tr id="appetitereal">
-                <td></td>
-                <td id="appetitereal1"><ul><li>Loss of appetite</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Loss of appetite is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-                <td id="appetitereal2"><ul><li><b style="font-weight: 900;">Loss of appetite</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Loss of appetite is a red flags for cancer, such as pancreatic or liver cancer</li></ul></td>
-              </tr>
-
-
-
-
-              <tr id="jaundicereal">
-                <td></td>
-                <td id="jaundicereal1"><ul><li>Jaundice of skin/eyes</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Points towards pathologies that impair bile flow or liver pathologies</li></ul></td>
-                <td id="jaundicereal2"><ul><li><b style="font-weight: 900;">Changes in weight/loss of appetite</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Points towards pathologies that impair bile flow or liver pathologies</li></ul></td>
-              </tr>
-
-              <tr id="darkurinereal">
-                <td></td>
-                <td id="darkurinereal1"><ul><li>Dark urine/pale stools</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Another sign of jaundice - Indicates bile flow obstruction</li></ul></td>
-                <td id="darkurinereal2"><ul><li><b style="font-weight: 900;">Dark urine/pale stools</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Another sign of jaundice - Indicates bile flow obstruction</li></ul></td>
-              </tr>
-
-              <tr id="nauseareal">
-                <td></td>
-                <td id="nauseareal1"><ul><li>Nausea/vomiting</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Is common symptom in cholecystitis due to inflammation and irritation of gallbladder. Also present in acute pancreatitis</li></ul></td>
-                <td id="nauseareal2"><ul><li><b style="font-weight: 900;">Nausea/vomiting</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Is common symptom in cholecystitis due to inflammation and irritation of gallbladder. Also present in acute pancreatitis</li></ul></td>
-              </tr>
-
-              <tr id="backpainreal">
-                <td></td>
-                <td id="backpainreal1"><ul><li>Back pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Radiation to the back is common in acute pancreatitis</li></ul></td>
-                <td id="backpainreal2"><ul><li><b style="font-weight: 900;">Back pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Radiation to the back is common in acute pancreatitis</li></ul></td>
-              </tr>
-
-              <tr id="shouldertipreal">
-                <td></td>
-                <td id="shouldertipreal1"><ul><li>Shoulder-tip pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">There can often be radiation to the right shoulder-tip in acute cholecystitis due to irritation of the diaphragm causing reffered pain through the phrenic nerve</li></ul></td>
-                <td id="shouldertipreal2"><ul><li><b style="font-weight: 900;">Shoulder-tip pain</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">There can often be radiation to the right shoulder-tip in acute cholecystitis due to irritation of the diaphragm causing reffered pain through the phrenic nerve</li></ul></td>
-              </tr>
-
-              <tr id="steatorrhoeareal">
-                <td></td>
-                <td id="steatorrhoeareal1"><ul><li>Steatorrhoea/greasy stools</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">'Difficult to flush', 'oily/greasy in appearance', 'malodorous or smelly stools'.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Caused by impaired fat production. Causes:</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Hepatobiliary - Blockage of bile flow prevents emulsification of dietary fats, leading to Steatorrhoea.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Pancreas - The pancreas produces lipase, which breaks down fats. Impaired enzyme production/ delivery leads to fat malabsorption -> Steatorrhoea. Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul></td>
-
-                <td id="steatorrhoeareal2"><ul><li><b style="font-weight: 900;">Steatorrhoea/greasy stools</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">'Difficult to flush', 'oily/greasy in appearance', 'malodorous or smelly stools'.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Caused by impaired fat production. Causes:</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Hepatobiliary - Blockage of bile flow prevents emulsification of dietary fats, leading to Steatorrhoea.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Pancreas - The pancreas produces lipase, which breaks down fats. Impaired enzyme production/ delivery leads to fat malabsorption -> Steatorrhoea. Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Intestines - If diseased then impairs fat absorption in intestines -> steatorrhoea </li></ul></td>
+                <td id="orthopnoeareal1"><ul><li><b style="font-weight: 900;">O</b>rthopnoea</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Difficulty when laying flat, which exacerbates the dyspnoea</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Good question to ask is how many pillows do you sleep with at night. Orthopnoea is often seen in heart failure</li></ul>
+                </td>
+                <td id="orthopnoeareal2"><ul><li><b style="font-weight: 900;">O</b>rthopnoea</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Difficulty when laying flat, which exacerbates the dyspnoea</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Good question to ask is how many pillows do you sleep with at night. Orthopnoea is often seen in heart failure</li></ul>
+              </td>
             </tr>
 
 
-            <tr id="bloatingreal">
+            <tr id="pndreal">
               <td></td>
-              <td id="bloatingreal1"><ul><li>Bloating</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Chronic bloating may point towards chronic pancreatitis or IBS, whereas acute bloating may indicate intestinal obstruction, gastroenteritis, gallstones etc</li></ul></td>
-              <td id="bloatingreal2"><ul><li><b style="font-weight: 900;">Bloating</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Chronic bloating may point towards chronic pancreatitis or IBS, whereas acute bloating may indicate intestinal obstruction, gastroenteritis, gallstones etc</li></ul></td>
+              <td id="pndreal1"><ul><li><b style="font-weight: 900;">P</b>aroxysmal <b style="font-weight: 900;">N</b>octurnal <b style="font-weight: 900;">D</b>yspnoea</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Is when you wake up in the middle of the night gasping for air. PND is often seen in heart failure</li></ul>
+              </td>
+              <td id="pndreal2"><ul><li><b style="font-weight: 900;">P</b>aroxysmal <b style="font-weight: 900;">N</b>octurnal <b style="font-weight: 900;">D</b>yspnoea</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Is when you wake up in the middle of the night gasping for air. PND is often seen in heart failure</li></ul>
+              </td>
             </tr>
 
-            <tr id="itchingreal">
+            <tr id="coughreal">
               <td></td>
-              <td id="itchingreal1"><ul><li>Pruritis/itching</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">When the flow of bile is impaired, it leads to accoumulation of bile acids in the blood stream, which deposits in the skin and activates pruritis-specific receptors.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Can point towards diagnoses such as autoimmune hepatitis, Primary Sclerosing Cholangitis (PSC) and Primary Biliary Cholangitis (PBC).</li></ul></td>
-              <td id="itchingreal2"><ul><li><b style="font-weight: 900;">Pruritis/itching</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">When the flow of bile is impaired, it leads to accoumulation of bile acids in the blood stream, which deposits in the skin and activates pruritis-specific receptors.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Can point towards diagnoses such as autoimmune hepatitis, Primary Sclerosing Cholangitis (PSC) and Primary Biliary Cholangitis (PBC).</li></ul></td>
-          </tr>
+              <td id="coughreal1"><ul><li><b style="font-weight: 900;">C</b>ough/sputum</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Pink, frothy sputum is a sign of pulmonary edema</li></ul>
+                </td>
+              <td id="coughreal2"><ul><li><b style="font-weight: 900;">C</b>ough/sputum</li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Pink, frothy sputum is a sign of pulmonary edema</li></ul>
+                </td>
+              </tr>
 
-
-
-            
               <tr>
                 <td></td>
-                <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Specific questions about PMHx</center></td>
+                <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Considering other differentials:</center></td>
                 <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
               </tr>
 
-              <tr id="prevgallreal">
+              <tr id="asthmareal">
                 <td></td>
-                <td id="prevgallreal1"><ul><li>Any previous gall stones in the past?</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">A history of gallstones significantly increases the likelihood that the current symptoms are related to a biliary cause</li></ul></td>
-                <td id="prevgallreal2"><ul><li><b style="font-weight: 900;">Any previous gall stones in the past?</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">A history of gallstones significantly increases the likelihood that the current symptoms are related to a biliary cause</li></ul></td>
+                <td id="asthmareal1"><ul><li><b style="font-weight: 900;">B</b>ackground of asthma/COPD?</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Sudden onset shortness of breath can also be from asthma/COPD, so asking if they've had a history of these may point more towards this diagnosis</li></ul>
+                </td>
+                <td id="asthmareal2"><ul><li><b style="font-weight: 900;">B</b>ackground of asthma/COPD?</li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">Sudden onset shortness of breath can also be from asthma/COPD, so asking if they've had a history of these may point more towards this diagnosis</li></ul>
+                </td>
               </tr>
 
               
@@ -1152,56 +1058,80 @@
   
       <tr id="cardioexamreal">
         <td></td>
-        <td id="cardioexamreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Abdominal exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
-            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform an abdominal exam:</u></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Inspect for surgical scars, jaundice in eyes/skin,  distention/bloating, visible pulsations/masses (may suggest AAA or large tumours/hepatomegaly), spider naeviae etc</ul></li>
-            <ul class="j1"><li class = "explanationparagraph">Check capillary refill time, temperature of peripheries, mucus membranes → Look for signs of shock/dehydration</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Superficial + deep palpation -> Look for guarding, rebound tenderness, Murphy's sign (pain with palpation during inspiration over the gallbladder), pain over McBurney's point (where appendix lies), Rovsings sign (palpation over LIF causes reffered pain to the LIF region)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Percussion - helps determine if there's any hepatomegaly</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Shifting dullness - To look for ascites, which is commonly associated with liver disease</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Auscultate for bowel sounds - if not present then possible bowel obstruction</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check for psoas sign - To assess for retroperitoneal or appendix involvement</li></ul>
+        <td id="cardioexamreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Cardiac exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
+            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform a cardiac exam:</u></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">To check the pulses for rate, rhythm and strength → weak pulse may indicate cardiogenic shock</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check capillary refill time → if high then could have cardiogenic shock</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check for raised JVP → hallmark sign of heart failure</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Listen to the chest → could elicit a murmur</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Listen to lung bases for pulmonary oedema</b>→ may suggest acute heart failure</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check for peripheral oedema → points towards heart failure</li></ul>
 
           </td>
 
         
-          <td id="cardioexamreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Abdominal exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
-            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform an abdominal exam:</u></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Inspect for surgical scars, jaundice in eyes/skin,  distention/bloating, visible pulsations/masses (may suggest AAA or large tumours/hepatomegaly), spider naeviae etc</ul></li>
-            <ul class="j1"><li class = "explanationparagraph">Check capillary refill time, temperature of peripheries, mucus membranes → Look for signs of shock/dehydration</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Superficial + deep palpation -> Look for guarding, rebound tenderness, Murphy's sign (pain with palpation during inspiration over the gallbladder), pain over McBurney's point (where appendix lies), Rovsings sign (palpation over LIF causes reffered pain to the LIF region)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Percussion - helps determine if there's any hepatomegaly</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Shifting dullness - To look for ascites, which is commonly associated with liver disease</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Auscultate for bowel sounds - if not present then possible bowel obstruction</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check for psoas sign - To assess for retroperitoneal or appendix involvement</li></ul>
+          <td id="cardioexamreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Cardiac exam ✅</b>  &nbsp;&nbsp;&nbsp;&nbsp; <u style=" background-color: yellow;">← Main examination!!</u></li></ul>
+            <br><ul class="j1"><li class = "explanationparagraph"><u style="text-decoration-thickness: 1px;">Reasons you could give to perform a cardiac exam:</u></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">To check the pulses for rate, rhythm and strength → weak pulse may indicate cardiogenic shock</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check capillary refill time → if high then could have cardiogenic shock</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check for raised JVP → hallmark sign of heart failure</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Listen to the chest → could elicit a murmur</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Listen to lung bases for pulmonary oedema</b>→ may suggest acute heart failure</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check for peripheral oedema → points towards heart failure</li></ul>
 
           </td>
         
         
              </tr>
       
+
+
+
+
+
+
+             <tr id="cranialexamreal">
+              <td></td>
+              <td id="cranialexamreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b>Respiratory exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; </li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Bilateral basal crackles -> Pulmonary oedema</ul></li>          
+                  <ul class="j1"><li class = "explanationparagraph">Wheeze may point towards asthma/COPD exacerbation</ul></li>          
+
+                </td>
+      
+              
+                <td id="cranialexamreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b>Respiratory exam</b>  &nbsp;&nbsp;&nbsp;&nbsp; </li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">Bilateral basal crackles -> Pulmonary oedema</ul></li>          
+                  <ul class="j1"><li class = "explanationparagraph">Wheeze may point towards asthma/COPD exacerbation</ul></li>        
+
+                </td>
+              
+              
+                   </tr>
+      
       
 
     </table>
-
+<br>
+<center><h3>Videos:</h3></center><br>
 
     <center><div class="videxam">
-      <b><a href="https://www.youtube.com/watch?v=PYAnF6GJY2I" target=”_blank” style="color: black; font-style: LTSoul; background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Love_heart_uidaodjsdsew.gif')">Click to watch a video of how to do an abdominal examination</a></b>
+      <b><a href="https://www.youtube.com/watch?v=XU_xeUMJ3Zc" target=”_blank” style="color: black; font-style: LTSoul; background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Love_heart_uidaodjsdsew.gif')">Cardiovascular examination</a></b>
     </div>
   </center>
+<br>
 
     <tr><br>
       <h5>Some other examinations you could mention:</h5><br>
-      <h6><u style="text-decoration-thickness: 1px;">Cardiovascular/respiratory exam:</u></h6>
-        <p><b>- Atypical MI</b> An inferior wall MI can irritate the diaphragm, causing pain that mimics hepatobiliary or gastrointestinal conditions.<br>
-        <b>- Right lower lung pathologies</b> can refer pain to the RUQ due to proximity to the diaphragm (E.g. pneumonia, pleuritis, PE etc).</p><br>
-      <h6><u style="text-decoration-thickness: 1px;">Neuro exam:</u></h6>
-        <p><b>- Hepatic encephalopathy</b> can have neurological manifestations such as asterixis (flapping tremor) and confusion/altered mental state
+      
+        
+      <h6><u style="text-decoration-thickness: 1px;">Fluid status exam:</u></h6>
+        <p>Assess perfusion: Temperature - Cold peripheries and high capillary refill time suggests poor perfusion -> ?Cardiogenic shock</p>
+        <p>Look for fluid overload -> sacral oedema, pitting oedema, pulmonary oedema etc</p>
 
-      </p>
-      <h6><u style="text-decoration-thickness: 1px;">Lymph node exam:</u></h6>
-        <p><b>- Enlarged Virchow’s node</b> (left supraclavicular lymph node): Associated with gastric or pancreatic malignancy.
-      </p>
+    <h6><u style="text-decoration-thickness: 1px;">Peripheral pulses exam:</u></h6>
+            <p>Weak pulses -> ?Cardiogenic shock</p>
+
+      <br>
 
 
 <br><br>
@@ -1285,16 +1215,12 @@
         <td id="gender_summaryreal2"><ul><li><b style="font-weight: 900;">G</b>ender</li></ul></td>
       </tr>
       
-      <tr id="description_summaryreal">
-        <td></td>
-        <td id="description_summaryreal1"><ul><li><b style="font-weight: 900;">D</b>escription of pain</li></ul></td>
-        <td id="description_summaryreal2"><ul><li><b style="font-weight: 900;">D</b>escription of pain</li></ul></td>
-      </tr>
+      
 
       <tr id="duration_summaryreal">
         <td></td>
-        <td id="duration_summaryreal1"><ul><li><b style="font-weight: 900;">D</b>uration of the pain/onset</li></ul></td>
-        <td id="duration_summaryreal2"><ul><li><b style="font-weight: 900;">D</b>uration of the pain/onset</li></ul></td>
+        <td id="duration_summaryreal1"><ul><li><b style="font-weight: 900;">D</b>uration of the weakness/onset</li></ul></td>
+        <td id="duration_summaryreal2"><ul><li><b style="font-weight: 900;">D</b>uration of the weakness/onset</li></ul></td>
       </tr>
 
       <tr id="accompanyingSx_summaryreal">
@@ -1313,7 +1239,7 @@
 
     </table>
 <br><h6>Good example of a summary for this case:</h6>
-<p>This is a 31-year-old male presenting with intermittent right upper quadrant pain that is sharp in nature and which has been gong on over the last 2 months. He rates the pain as 7/10 in intensity. The pain radiates to the epigastric region and to the middle of his back and is accompanied with nausea and vomiting. The pain is made worse when eating heavy meals and gets better with rest and time. </p>
+<p>This is a 56-year-old male presenting with new-onset dyspnoea starting this morning, which has been constant andsevere in nature. This is accompanied with pink forthy sputum and has a background of 2 myocardial infarctions in the past. </p>
 <br><br>
 <center><h4>Your answer to this question:</h4>
   <i><p id = "summaryfinal" style="background-color: #f7f7f1;"></p></i></center>
@@ -1378,18 +1304,16 @@
   
   
   
-      <tr id="gallstones_differentialsreal">
+      <tr id="stroke_differentialsreal">
         <td></td>
-        <td id="gallstones_differentialsreal1"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Acute cholecystitis/gall stones</b></li></ul>
+        <td id="stroke_differentialsreal1"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Acute heart failure</b></li></ul>
           <ul class="j1"><li class = "explanationparagraph" style="background-color: yellow; display: inline;">Is the main differential</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Inflammation of the gallbladder, often due to GALL STONES</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">RUQ pain that's worse postprandially (after fatty meals), fever, nausea, and a positive Murphy's sign</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Sudden onset of severe dyspnoea accompanied with pink frothy sputum on a background of a myocardial infarction strongly suggest acute heart failure.</li></ul>
           
         </td>
-        <td id="gallstones_differentialsreal2"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Acute cholecystitis/gall stones ✅</b></li></ul>
+        <td id="stroke_differentialsreal2"><ul><li><b style="font-weight: 900; display: inline-block; padding: 10px; border: 2px solid black; border-radius: 50%; text-align: center; font-size: larger;">Acute heart failure ✅</b></li></ul>
           <ul class="j1"><li class = "explanationparagraph" style="background-color: yellow; display: inline;">Is the main differential</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Inflammation of the gallbladder, often due to GALL STONES</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">RUQ pain that's worse postprandially (after fatty meals), fever, nausea, and a positive Murphy's sign</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Sudden onset of severe dyspnoea accompanied with pink frothy sputum on a background of a myocardial infarction strongly suggest acute heart failure.</li></ul>
           </td>
      </tr>
       
@@ -1398,79 +1322,74 @@
       
       
 
-      <tr id="pancreatitis_differentialsreal">
+      <tr id="angina_differentialsreal">
         <td></td>
-        <td id="pancreatitis_differentialsreal1"><ul><li><b style="font-weight: 900;">Acute pancreatitis</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">RUQ or epigastric pain radiating to the back, often due to gallstones or alcohol use.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Associated with nausea, vomiting, and elevated pancreatic enzymes.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Is one of the <b><u>main differentials</u></b>, especially as the pain also radiates to the epigastric region and the back</li></ul></td>
+        <td id="angina_differentialsreal1"><ul><li><b style="font-weight: 900;">Asthma/COPD</b></li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Sudden-onset dyspnoae may suggest a respiratory cause such as asthma/COPD.</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">However, given that there has not been any background of asthma and that the patient has background of 2 heart attacks, acute heart failure is more likely.</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">COPD may be a differential too as patient is a heavy smoker.</li></ul>
 
-        <td id="pancreatitis_differentialsreal2"><ul><li><b style="font-weight: 900;">Acute pancreatitis</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph">RUQ or epigastric pain radiating to the back, often due to gallstones or alcohol use.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Associated with nausea, vomiting, and elevated pancreatic enzymes.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Is one of the <b><u>main differentials</u></b>, especially as the pain also radiates to the epigastric region and the back</li></ul></td>
+        </td>
+
+        <td id="angina_differentialsreal2"><ul><li><b style="font-weight: 900;">Asthma/COPD</b></li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Sudden-onset dyspnoae may suggest a respiratory cause such as asthma/COPD.</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">However, given that there has not been any background of asthma and that the patient has background of 2 heart attacks, acute heart failure is more likely.</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">COPD may be a differential too as patient is a heavy smoker.</li></ul>
+         </td>
 
       </tr>
       
       
-      <tr id="hepatitis_differentialsreal">
-        <td></td>
-        <td id="hepatitis_differentialsreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Hepatitis</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Generalise abdominal discomfort, often in the RUQ due to liver swelling, accompanied with nausea + vomiting and flu-like symptoms.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Is also a differential due to the age of the patient and accompanying shortness of breath. Those suffering from panic attacks often complain of severe chest pain.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">However it would not explain the fact that the pain gets worse after eating fatty meals and would often present with jaundice</li></ul></td>
 
-            <td id="hepatitis_differentialsreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Hepatitis</b></li></ul>
-              <ul class="j1"><li class = "explanationparagraph">Generalise abdominal discomfort, often in the RUQ due to liver swelling, accompanied with nausea + vomiting and flu-like symptoms.</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">Is also a differential due to the age of the patient and accompanying shortness of breath. Those suffering from panic attacks often complain of severe chest pain.</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">However it would not explain the fact that the pain gets worse after eating fatty meals and would often present with jaundice</li></ul></td>
-</tr>
+      <tr id="tia_differentialsreal">
+        <td></td>
+
+      <td id="tia_differentialsreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Pneumothorax</b></li></ul>
+        <ul class="j1"><li class = "explanationparagraph">Pneumothorax may present with sudden-onset shortness of breath. Good clinical examination and a chest X-ray is important to rule out a pneumothorax.</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">However, primary pneumothorax is unlikely to be present in this age group, and there is no trauma in the history to suggest a secondary cause.</li></ul>
+      </td>
+
+        <td id="tia_differentialsreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Pneumothorax</b></li></ul>
+          <ul class="j1"><li class = "explanationparagraph">Pneumothorax may present with sudden-onset shortness of breath. Good clinical examination and a chest X-ray is important to rule out a pneumothorax.</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">However, primary pneumothorax is unlikely to be present in this age group, and there is no trauma in the history to suggest a secondary cause.</li></ul>
+      </td>
+        </tr>
 
 
       
-      <tr>
-        <td id="leftsidebox" class="special-cell" style=" border: 2px solid; border-top: 2.7px solid; background-color: #f0f0f0; 
+     
+        
+
+
+          <tr id="sol_differentialsreal">
+            <td id="leftsidebox" class="special-cell" style=" border: 2px solid; border-top: 2.7px solid; background-color: #f0f0f0; 
         text-align: center; font-size: 20px; font-weight: bold; z-index: 1000; position: relative; font-family: LTSoul;">Other differentials:</td>
-        <td id="gastroenteritis_differentialsreal1"><ul><li><b style="font-weight: 900;">Gastroenteritis</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Is possible due to the abdominal pain, the acute nature of the symptoms, and the accompanying nausea and vomiting.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">However, is unlikely to present as RUQ pain specifically, but rather would present as generalised abdominal pain. Would also unlikely keep coming back consistently over 2 months and would instead have a shorter history.</li></ul></td>
 
-          <td id="gastroenteritis_differentialsreal2"><ul><li><b style="font-weight: 900;">Gastroenteritis</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Is possible due to the abdominal pain, the acute nature of the symptoms, and the accompanying nausea and vomiting.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">However, is unlikely to present as RUQ pain specifically, but rather would present as generalised abdominal pain. Would also unlikely keep coming back consistently over 2 months and would instead have a shorter history.</li></ul></td>
-          </tr>
+            <td id="sol_differentialsreal1"><ul><li><b style="font-weight: 900;">Anxiety/panic attack</b></li></ul>
+                <ul class="j1"><li class = "explanationparagraph">May be a possibility due to the sudden onset and severity, however unlikely as has gone on for a few hours now and there is no past medical history of mental health problems from the history.</li></ul>
+              </td>
+    
+                <td id="sol_differentialsreal2"><ul><li><b style="font-weight: 900;">Anxiety/panic attack</b></li></ul>
+                <ul class="j1"><li class = "explanationparagraph">May be a possibility due to the sudden onset and severity, however unlikely as has gone on for a few hours now and there is no past medical history of mental health problems from the history.</li></ul>
+              </td>
+            </tr>
 
 
-    <tr>
-            <td></td>
-            <td id="gord_differentialsreal1"><ul><li><b style="font-weight: 900;">GORD</b></li></ul>
-              <ul class="j1"><li class = "explanationparagraph">The patient also is complaining of epigastric pain. GORD can present with some non-specific epigastric pain, and given the fact that patient also has nausea and the fact that the pain gets exacerbated after eating, GORD may be a possibility.</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">However, given the fact that the main complaint is RUQ pain and given the nature of the sharp pain as opposed to burning pain, GORD is unlikely.</li></ul></td>
+        <tr id="tia_differentialsreal">
+        <td></td>
 
-              <td id="gord_differentialsreal2"><ul><li><b style="font-weight: 900;">GORD</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">The patient also is complaining of epigastric pain. GORD can present with some non-specific epigastric pain, and given the fact that patient also has nausea and the fact that the pain gets exacerbated after eating, GORD may be a possibility.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">However, given the fact that the main complaint is RUQ pain and given the nature of the sharp pain as opposed to burning pain, GORD is unlikely.</li></ul></td>  
-              </tr>
-            
+      <td id="tia_differentialsreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Pulmonary embolism</b></li></ul>
+        <ul class="j1"><li class = "explanationparagraph">PE can present with sudden onset dyspnoea, however unlikely given the lack of chest pain and lack of risk factors for PE.</li></ul>
+      </td>
+
+        <td id="tia_differentialsreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Pulmonary embolism</b></li></ul>
+        <ul class="j1"><li class = "explanationparagraph">PE can present with sudden onset dyspnoea, however unlikely given the lack of chest pain and lack of risk factors for PE.</li></ul>
+      </td>
+        </tr>    
       
      
 
     </table>
-<br>
-  <h4>Some other differentials:</h4><br>
-  <p><u>Other hepatobiliary causes:</u>
-    <br><b>- Choledocholithiasis</b> (Gallstones in the common bile duct. May cause jaundice, RUQ pain, and abnormal liver function tests.), 
-    <br><b>- Acute Cholangitis</b> (Infection of the bile ducts, often due to obstruction. Presents with Charcot’s triad: RUQ pain, fever, and jaundice. Reynolds' pentad adds hypotension and confusion), 
-    <br><b>- Primary Biliary Cholangitis (PBC)</b> (Chronic autoimmune disease causing progressive destruction of intrahepatic bile ducts. Fatigue, pruritus, RUQ pain.
-    Jaundice in advanced stages. You get elevated ALP + GGT and positive antimitochondrial antibodies/AMA), 
-    <br><b>- Primary Sclerosing Cholangitis (PSC)</b> (Chronic inflammation and fibrosis of the bile ducts, often associated with inflammatory bowel disease. RUQ pain, jaundice, pruritus. You get elevated ALP, GGT. MRCP: Bile duct strictures and beading),</p>
-
-    <p><u>Other causes:</u>
-      <br><b>- Pancreatic cancer</b> (May present with vague RUQ pain, weight loss, jaundice, but normally presents with Courvoisier’s sign - painless jaundice with a palpable gallbladder.), 
-      <br><b>- Pulmonary Embolism</b> (May cause pleuritic chest pain or RUQ pain if infarction involves the lower right lung or diaphragm.), 
-      <br><b>- inferior MI</b> (Atypical presentation can include RUQ pain instead of chest pain.), 
-      <br><b>- Abdominal Aortic Aneurysm</b> (Pain may radiate to the RUQ if the aneurysm involves the visceral arteries. Also possibilty due to associate back pain),
-      <br><b>- Muscle strain</b></p>
 
 <br>
     <p>Try and show off your knowledge on this question by saying as many differentials as you can, but make sure to justify each one with reasons why they could be a possibility, but also reasons why they may be more <b style="background-color: yellow;">unlikely</b> compared to other differentials.</p>
@@ -1539,178 +1458,110 @@
         <th>✔️</th>
       </tr>
   
-  <tr>
+ <tr>
     <td></td>
     <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Bedside investigations:</center></td>
     <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
   </tr>
   
-            
+      <tr>
+        <td></td>
+        <td id="ecg_investigationsreal1"><ul><li><b style="font-weight: 900;">E</b>CG</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b style="background-color: yellow;">W</b>ill ellicit signs of left ventricular dysfunction such as High QRS voltage, LBBB etc. Sinus tachycardia and S1Q3T3 patterns may also point more towards a PE.</li></ul></td>
+        <td id="ecg_investigationsreal2"><ul><li><b style="font-weight: 900;">E</b>CG</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b style="background-color: yellow;">W</b>ill ellicit signs of left ventricular dysfunction such as High QRS voltage, LBBB etc. Sinus tachycardia and S1Q3T3 patterns may also point more towards a PE.</li></ul></td>
+      </tr>
+      
+      <tr>
+        <td></td>
+        <td id="xray_investigationsreal1"><ul><li><b style="font-weight: 900;">C</b>hest X-ray</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">To look for pulmonary oedema and to look for gross cardiomegaly. Will also pick out if there is any obvious pneumothorax</li></ul></td>
+        <td id="xray_investigationsreal2"><ul><li><b style="font-weight: 900;">C</b>hest X-ray</li></ul>
+          <ul class="j1"><li class = "explanationparagraph">To look for pulmonary oedema and to look for gross cardiomegaly. Will also pick out if there is any obvious pneumothorax</li></ul></td>
+        </tr>
       
       <tr>
         <td></td>
         <td id="bedsideobs_investigationsreal1"><ul><li><b style="font-weight: 900;">B</b>edside obs</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check for any <b>temperature</b> - suggest infective cause and possible sepsis</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check <b>RR and HR</b>: tachycardia +/- tachypnoea are also indicators of infection/sepsis. May also suggest an atypical cause such as a PE</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check <b>glucose levels</b> - Diabetic ketoacidosis can present with abdominal pain</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Check <b>BP levels</b> - Low blood pressure may suggest sepsis, or hypovolaemia secondary to the vomiting</li></ul>
-          </td>
+            <ul class="j1"><li class = "explanationparagraph">Check for any <b>temperature</b> - fever may suggest asthma exacerbation, pneumonia etc</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check <b>RR and HR</b>: tachycardia +/- tachypnoea may suggest pulmonary embolism, acute heart failure, pneumonia etc</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check <b>BP levels</b> - Low blood pressure may suggest cardiogenic shock secondary to heart failure</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check <b>O2 levels</b> - Is critical to find out what the pO2 of the patient is in order to know whether oxygen needs to be given</li></ul>
+
+        </td>
         <td id="bedsideobs_investigationsreal2"><ul><li><b style="font-weight: 900;">B</b>edside obs</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check for any <b>temperature</b> - suggest infective cause and possible sepsis</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check <b>RR and HR</b>: tachycardia +/- tachypnoea are also indicators of infection/sepsis. May also suggest an atypical cause such as a PE</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check <b>glucose levels</b> - Diabetic ketoacidosis can present with abdominal pain</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Check <b>BP levels</b> - Low blood pressure may suggest sepsis, or hypovolaemia secondary to the vomiting</li></ul>
-         </td>      
+            <ul class="j1"><li class = "explanationparagraph">Check for any <b>temperature</b> - fever may suggest asthma exacerbation, pneumonia etc</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check <b>RR and HR</b>: tachycardia +/- tachypnoea may suggest pulmonary embolism, acute heart failure, pneumonia etc</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check <b>BP levels</b> - Low blood pressure may suggest cardiogenic shock secondary to heart failure</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Check <b>O2 levels</b> - Is critical to find out what the pO2 of the patient is in order to know whether oxygen needs to be given</li></ul>
+
+        </td>      
         </tr>
       
-        <tr>
-          <td></td>
-          <td id="urinalysis_investigationsreal1"><ul><li><b style="font-weight: 900;">U</b>rinalysis</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">To rule out UTI, which can present with RUQ or flank pain, fever and systemic symptoms. Would also pick up any haematuria if there were any renal stones, which may cause referred pain to RUQ.</li></ul></td>
-          <td id="urinalysis_investigationsreal2"><ul><li><b style="font-weight: 900;">U</b>rinalysis</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">To rule out UTI, which can present with RUQ or flank pain, fever and systemic symptoms. Would also pick up any haematuria if there were any renal stones, which may cause referred pain to RUQ.</li></ul></td>
-          </tr>
-
-          <tr>
-            <td></td>
-            <td id="ecg_investigationsreal1"><ul><li><b style="font-weight: 900;">E</b>CG +/- troponins</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">To rule out atypical inferior myocardial infarction, which can present with epigastric or RUQ discomfort.</li></ul></td>
-            <td id="ecg_investigationsreal2"><ul><li><b style="font-weight: 900;">E</b>CG +/- troponins</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">To rule out atypical inferior myocardial infarction, which can present with epigastric or RUQ discomfort.</li></ul></td>
-          </tr>
-
       <tr>
         <td></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Bloods to order:</center></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
       
-      
 
       <tr>
         <td></td>
         <td id="vbg_investigationsreal1"><ul><li><b style="font-weight: 900;">B</b>lood gas (ABG/VBG)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Lactate levels are elevated in sepsis.</li></ul></td>
+            <ul class="j1"><li class = "explanationparagraph">Elevated lactate indicates poor tissue perfusion -> ?cardiogenic shock. If elevated CO2 on ABG then potentially need to step up ventilatory support.</li></ul></td>
         <td id="vbg_investigationsreal2"><ul><li><b style="font-weight: 900;">B</b>lood gas (ABG/VBG)</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Lactate levels are elevated in sepsis.</li></ul></td>
+          <ul class="j1"><li class = "explanationparagraph">Elevated lactate indicates poor tissue perfusion -> ?cardiogenic shock. If elevated CO2 on ABG then potentially need to step up ventilatory support.</li></ul></td>
         </tr>
 
         <tr>
           <td></td>
-          <td id="culture_investigationsreal1"><ul><li><b style="font-weight: 900;">B</b>lood cultures</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">If fever or sepsis is suspected then will need as part of the sepsis 6.</li></ul></td>
-          <td id="culture_investigationsreal2"><ul><li><b style="font-weight: 900;">B</b>lood cultures</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">If fever or sepsis is suspected then will need as part of the sepsis 6.</li></ul></td>
+          <td id="bnp_investigationsreal1"><ul><li><b style="font-weight: 900;">BNP</b></li></ul>
+              <ul class="j1"><li class = "explanationparagraph">An elevated BNP may indicate heart failure</li></ul></td>
+          <td id="bnp_investigationsreal2"><ul><li><b style="font-weight: 900;">BNP</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph">An elevated BNP may indicate heart failure</li></ul></td>
           </tr>
-
-        <tr>
-          <td></td>
-          <td id="lft_investigationsreal1"><ul><li><b style="font-weight: 900;">L</b>iver function tests</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Elevated bilirubin: Suggests cholestasis or liver dysfunction.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">ALP and GGT elevation: Indicates biliary obstruction or cholestasis.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">AST/ALT elevation: Suggests hepatocellular damage (e.g., hepatitis).</li></ul>
-            </td>
-          <td id="lft_investigationsreal2"><ul><li><b style="font-weight: 900;">L</b>iver function tests</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Elevated bilirubin: Suggests cholestasis or liver dysfunction.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">ALP and GGT elevation: Indicates biliary obstruction or cholestasis.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">AST/ALT elevation: Suggests hepatocellular damage (e.g., hepatitis).</li></ul>
-            </td>
-          </tr>
-       
-          <tr>
-            <td></td>
-            <td id="amylase_investigationsreal1"><ul><li><b style="font-weight: 900;">A</b>mylase/Lipase</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Elevated in pancreatitis. Is crucial to order in this case. If these levels are low then pancreatitis is unlikely.</li></ul></td>
-            <td id="amylase_investigationsreal2"><ul><li><b style="font-weight: 900;">A</b>mylase/Lipase</li></ul>
-              <ul class="j1"><li class = "explanationparagraph">Elevated in pancreatitis. Is crucial to order in this case. If these levels are low then pancreatitis is unlikely.</li></ul></td>
-            </tr>
-
 
           <tr>
             <td></td>
-            <td id="normalbloods_investigationsreal1"><ul><li><b style="font-weight: 900;">Other bloods</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">FBC + CRP/ESR - Look at inflammatory markers -> Will be raised in acute cholecystitis, cholangitis etc.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">U+Es - Can get electrolyte imbalances when vomiting.</li></ul>
+            <td id="normalbloods_investigationsreal1"><ul><li><b style="font-weight: 900;">Normal bloods</b></li></ul>
+                <ul class="j1"><li class = "explanationparagraph">FBC + CRP - Look at inflammatory markers -> May point to an infective cause.</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">U+Es - oor cardiac output → ↓ renal perfusion, which can cause acute kidney injury (AKI).</li></ul>
               </td>
-            <td id="normalbloods_investigationsreal2"><ul><li><b style="font-weight: 900;">Other bloods</b></li></ul>
-              <ul class="j1"><li class = "explanationparagraph">FBC + CRP/ESR - Look at inflammatory markers -> Will be raised in acute cholecystitis, cholangitis etc.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">U+Es - Can get electrolyte imbalances when vomiting.</li></ul>
+
+            <td id="normalbloods_investigationsreal2"><ul><li><b style="font-weight: 900;">Normal bloods</b></li></ul>
+              <ul class="j1"><li class = "explanationparagraph">FBC + CRP - Look at inflammatory markers -> May point to an infective cause.</li></ul>
+                <ul class="j1"><li class = "explanationparagraph">U+Es - oor cardiac output → ↓ renal perfusion, which can cause acute kidney injury (AKI).</li></ul>
               </td>
             </tr>
 
 
             <tr>
               <td></td>
-              <td id="special_investigationsreal1"><ul><li><b style="font-weight: 900;">Special bloods</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Hepatitis screen - To rule out viral hepatitis (HBsAg, anti-HCV antibodies, HAV IgM/IgG, HEV IgM/IgG)</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Autoimmune hepatitis screen: ANA (antinuclear antibodies) and IgG (Immunoglobulin G) are both elevated in autoimmune hepatitis</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">AMA blood test (Antimitochondrial Antibodies) - Is a highly specific marker for Primary Biliary Cholangitis (PBC).</li></ul>
-                </td>
-              <td id="special_investigationsreal2"><ul><li><b style="font-weight: 900;">Special bloods</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Hepatitis screen - To rule out viral hepatitis (HBsAg, anti-HCV antibodies, HAV IgM/IgG, HEV IgM/IgG)</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Autoimmune hepatitis screen: ANA (antinuclear antibodies) and IgG (Immunoglobulin G) are both elevated in autoimmune hepatitis</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">AMA blood test (Antimitochondrial Antibodies) - Is a highly specific marker for Primary Biliary Cholangitis (PBC).</li></ul>
-                </td>
-              </tr>
-
-
-
-            <tr>
-              <td></td>
-              <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Imaging:</center></td>
+              <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Other investigations:</center></td>
               <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
             </tr>
-
-
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             <tr>
               <td></td>
-              <td id="abdoUSS_investigationsreal1"><ul><li><b style="font-weight: 900;">Abdominal USS</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">First-line imaging for RUQ pain.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Identifies gallstones, bile duct dilation, liver enlargement, or masses.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Can detect signs of acute cholecystitis (e.g., gallbladder wall thickening, pericholecystic fluid).</li></ul>
-              </td>
-              <td id="abdoUSS_investigationsreal2"><ul><li><b style="font-weight: 900;">Abdominal USS</b></li></ul>
-                <ul class="j1"><li class = "explanationparagraph">First-line imaging for RUQ pain.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Identifies gallstones, bile duct dilation, liver enlargement, or masses.</li></ul>
-                <ul class="j1"><li class = "explanationparagraph">Can detect signs of acute cholecystitis (e.g., gallbladder wall thickening, pericholecystic fluid).</li></ul>
-              </td>
-            </tr>
-
-
-
-              <tr>
-                <td></td>
-                <td id="stresstest_investigationsreal1"><ul><li><b style="font-weight: 900;">CT scan</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Used if ultrasound findings are inconclusive or to assess for complications like abscess or perforation.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">More detailed for masses, <u>pancreatitis</u>, or liver lesions.</li></ul>
-                  </td>
-                <td id="stresstest_investigationsreal2"><ul><li><b style="font-weight: 900;">CT scan</b></li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">Used if ultrasound findings are inconclusive or to assess for complications like abscess or perforation.</li></ul>
-                  <ul class="j1"><li class = "explanationparagraph">More detailed for masses, <u>pancreatitis</u>, or liver lesions.</li></ul>
-                  </td>
+              <td id="echo_investigationsreal1"><ul><li><b style="font-weight: 900;">ECHO cardiogram</b></li></ul>
+                  <ul class="j1"><li class = "explanationparagraph">To look at the level of function of the heart and definitively diagnose heart failure</li></ul></td>
+              <td id="echo_investigationsreal2"><ul><li><b style="font-weight: 900;">ECHO cardiogram</b></li></ul>
+                <ul class="j1"><li class = "explanationparagraph">To look at the level of function of the heart and definitively diagnose heart failure</li></ul></td>
               </tr>
-
 
 
                 <tr>
                   <td></td>
-                  <td id="ddimer_investigationsreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">MRCP/ERCP</b></li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">MRCP (Magnetic Resonance Cholangiopancreatography) is used when USS/CT is inconclusive. Is used to evaluate biliary and pancreatic ducts in suspected obstruction/strictures.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">ERCP (Endoscopic Retrograde Cholangiopancreatography) is primarily a <u>therapeutic procedure</u> used to BOTH diagnose and <b>treat</b> obstructed/strictured biliary and pancreatic ducts. Unlike MRCP, it is invasive but allows direct intervention.</li></ul>
-                    </td>
-                  <td id="ddimer_investigationsreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">MRCP/ERCP</b></li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">MRCP (Magnetic Resonance Cholangiopancreatography) is used when USS/CT is inconclusive. Is used to evaluate biliary and pancreatic ducts in suspected obstruction/strictures.</li></ul>
-                    <ul class="j1"><li class = "explanationparagraph">ERCP (Endoscopic Retrograde Cholangiopancreatography) is primarily a <u>therapeutic procedure</u> used to BOTH diagnose and <b>treat</b> obstructed/strictured biliary and pancreatic ducts. Unlike MRCP, it is invasive but allows direct intervention.</li></ul>
-                    </td>
+                  <td id="ddimer_investigationsreal1"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Wells score/Ddimer/CTPA</b></li></ul>
+                      <ul class="j1"><li class = "explanationparagraph">If there is no myocardial infarction and you are leaning more towards pulmonary embolism, then a Wells score can be performed and if high then a Ddimer or CTPA can be done based on the Wells score</li></ul></td>
+                  <td id="ddimer_investigationsreal2"style="border-bottom: 4px solid;  border-color:rgb(190, 188, 188);"><ul><li><b style="font-weight: 900;">Stress test</b></li></ul>
+                    <ul class="j1"><li class = "explanationparagraph">If there is no myocardial infarction and you are leaning more towards stable angina, a stress test could be considered</li></ul></td>
                   </tr>
-
-
                   
 
     </table>
 
     <br><br>
-    <p>If the patient was a woman, don't forget to do a pregnancy test to rule out <b>ectopic pregnancy.</b></p>
       
 
     <br><br>
@@ -1780,32 +1631,34 @@
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
   
-      <tr>
+      <tr id="age_riskfactorsreal">
         <td></td>
         <td id="age_riskfactorsreal1"><ul><li><b style="font-weight: 900;">A</b>ge</li></ul>
         <td id="age_riskfactorsreal2"><ul><li><b style="font-weight: 900;">A</b>ge</li></ul>
       </tr>
       
-      <tr>
+      <tr id="FH_riskfactorsreal">
         <td></td>
-        <td id="FH_riskfactorsreal1"><ul><li><b style="font-weight: 900;">F</b>amily history</li></ul>
-        <td id="FH_riskfactorsreal2"><ul><li><b style="font-weight: 900;">F</b>amily history</li></ul>
+        <td id="FH_riskfactorsreal1"><ul><li><b style="font-weight: 900;">F</b>amily history of cardiomyopathy</li></ul>
+        <td id="FH_riskfactorsreal2"><ul><li><b style="font-weight: 900;">F</b>amily history of cardiomyopathy</li></ul>
       </tr>
       
-      <tr>
-        <td></td>
-        <td id="ethnicity_riskfactorsreal1"><ul><li><b style="font-weight: 900;">E</b>thnicity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Higher risk in Native Americans and Hispanics. Lower risk in African and Asian populations.</li></ul></td>
-        <td id="ethnicity_riskfactorsreal2"><ul><li><b style="font-weight: 900;">E</b>thnicity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Higher risk in Native Americans and Hispanics. Lower risk in African and Asian populations.</li></ul></td>
-      </tr>
+     
       
-      <tr>
+      <tr id="male_riskfactorsreal">
         <td></td>
-        <td id="sex_riskfactorsreal1"><ul><li><b style="font-weight: 900;">F</b>emale sex</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the influence of estrogen, which increases cholesterol secretion into bile.</li></ul></td>
-        <td id="sex_riskfactorsreal2"><ul><li><b style="font-weight: 900;">F</b>emale sex</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the influence of estrogen, which increases cholesterol secretion into bile.</li></ul></td>
+        <td id="male_riskfactorsreal1"><ul><li><b style="font-weight: 900;">M</b>ale sex</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Men have a higher incidence of ischemic HF.</li></ul></td>
+        <td id="male_riskfactorsreal2"><ul><li><b style="font-weight: 900;">M</b>ale sex</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Men have a higher incidence of ischemic HF.</li></ul></td>
+      </tr>
+
+      <tr id="stroke_riskfactorsreal">
+        <td></td>
+        <td id="stroke_riskfactorsreal1"><ul><li><b style="font-weight: 900;">P</b>revious Myocardial Infarction</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b><u>One of the strongest risk factors for developing heart failure.</u></b></li></ul></td>
+        <td id="stroke_riskfactorsreal2"><ul><li><b style="font-weight: 900;">P</b>revious  Myocardial Infarction</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b><u>One of the strongest risk factors for developing heart failure.</u></b></li></ul></td>
       </tr>
 
       <tr>
@@ -1820,42 +1673,49 @@
       
       <tr>
         <td></td>
-        <td id="highcholesterol_riskfactorsreal1"><ul><li><b style="font-weight: 900;">H</b>igh cholesterol</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
-        <td id="highcholesterol_riskfactorsreal2"><ul><li><b style="font-weight: 900;">H</b>igh cholesterol</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
+        <td id="pmhx_riskfactorsreal1"><ul><li><b style="font-weight: 900;">M</b>edical conditions</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>HTN</b> - Espscially if longstanding.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Diabetes</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Atrial Fibrillation and other arrhythmias eg VT, severe bradycardia</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Carotid Artery Disease</b> – narrowing of carotid arteries</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>CKD</b></li></ul>
+          </td>
+        <td id="pmhx_riskfactorsreal2"><ul><li><b style="font-weight: 900;">M</b>edical conditions</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>HTN</b> - Espscially if longstanding.</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Diabetes</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Atrial Fibrillation and other arrhythmias eg VT, severe bradycardia</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Carotid Artery Disease</b> – narrowing of carotid arteries</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>CKD</b></li></ul>
+         </td>
       </tr>
 
       
       <tr>
         <td></td>
-        <td id="obesity_riskfactorsreal1"><ul><li><b style="font-weight: 900;">O</b>besity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
-        <td id="obesity_riskfactorsreal2"><ul><li><b style="font-weight: 900;">O</b>besity</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Increased cholesterol levels lead to gallstone formation.</li></ul></td>
+        <td id="lifestyle_riskfactorsreal1"><ul><li><b style="font-weight: 900;">L</b>ifestyle factors</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Smoking</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Excessive Alcohol Consumption</b> – binge drinking raises blood pressure</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Physical Inactivity</b> – lack of exercise increases vascular disease risk</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Obesity</b> – contributes to hypertension, diabetes, and heart disease</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Unhealthy Diet</b> – high in saturated fats, cholesterol, and salt</li></ul>
+          </td>
+        <td id="lifestyle_riskfactorsreal2"><ul><li><b style="font-weight: 900;">L</b>ifestyle factors</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Smoking</b></li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Excessive Alcohol Consumption</b> – binge drinking raises blood pressure</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Physical Inactivity</b> – lack of exercise increases vascular disease risk</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Obesity</b> – contributes to hypertension, diabetes, and heart disease</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Unhealthy Diet</b> – high in saturated fats, cholesterol, and salt</li></ul>
+        </td>
       </tr>
 
-      <tr>
-        <td></td>
-        <td id="unhealthydiet_riskfactorsreal1"><ul><li><b style="font-weight: 900;">U</b>nhealthy diet/<u>high-fat</u> diet</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Promotes cholesterol stone formation.</li></ul></td>
-
-        <td id="unhealthydiet_riskfactorsreal2"><ul><li><b style="font-weight: 900;">U</b>nhealthy diet/<u>high-fat</u> diet</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Promotes cholesterol stone formation.</li></ul></td>
-
-      </tr>
+    
 
         
 
     </table>
 
     <br>
-    <h4>Top tips:</h4><br>
-    <p>Remember the 4 T's:
-      <br><b>- Fat</b> 
-      <br><b>- Fair</b> 
-      <br><b>- Female</b> 
-      <br><b>- Forty</b></p>
+
       
 
       
@@ -1917,7 +1777,7 @@
 
     <table id="customers">
       <tr>
-        <th>Assuming diagnosis of gallstones</th><!--General Information gathering-->
+        <th>Assuming ischaemic stroke</th><!--General Information gathering-->
         <th>❌</th>
         <th>✔️</th>
       </tr>
@@ -1930,84 +1790,77 @@
   
       <tr>
         <td></td>
-        <td id="analgesia_treatmentsreal1"><ul><li><b style="font-weight: 900;">A</b>nalgesia</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Start with weaker analgesics and move your way up: I.e. Paracetamol, codeine, Oramorph etc.</li></ul></td>
-        <td id="analgesia_treatmentsreal2"><ul><li><b style="font-weight: 900;">A</b>nalgesia</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">Start with weaker analgesics and move your way up: I.e. Paracetamol, codeine, Oramorph etc.</li></ul></td>
+        <td id="antiplatelet_treatmentsreal1"><ul><li><b style="font-weight: 900;">D</b>iuretics</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><u style="background-color: yellow;">A</u>ggressive administration of diuretics in acute pulmonary oedema. Make sure to monior BP levels, especially if on the low side + consider restricting fluids if overloaded.</li></ul></td>
+        <td id="antiplatelet_treatmentsreal2"><ul><li><b style="font-weight: 900;">D</b>iuretics</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><u style="background-color: yellow;">A</u>ggressive administration of diuretics in acute pulmonary oedema. Make sure to monior BP levels, especially if on the low side + consider restricting fluids if overloaded.</li></ul></td>
         </tr>
       
       <tr>
         <td></td>
-        <td id="fluids_treatmentsreal1"><ul><li><b style="font-weight: 900;">IV fluids</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the patient has infective symptoms and has possible hypovolaemia due to vomiting, IV fluids is important, especially if bedside investigations point towards a septic picture</li></ul></td>
-        <td id="fluids_treatmentsreal2"><ul><li><b style="font-weight: 900;">IV fluids</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the patient has infective symptoms and has possible hypovolaemia due to vomiting, IV fluids is important, especially if bedside investigations point towards a septic picture</li></ul></td>
-      </tr>
+        <td id="thrombolysis_treatmentsreal1"><ul><li><b style="font-weight: 900;">O</b>xygen</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Give oxygen if SpO₂ is less than 94%</li></ul></td>
+        <td id="thrombolysis_treatmentsreal2"><ul><li><b style="font-weight: 900;">O</b>xygen</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">Give oxygen if SpO₂ is less than 94%</li></ul></td>
+        </tr>
 
-      <tr>
-        <td></td>
-        <td id="abx_treatmentsreal1"><ul><li><b style="font-weight: 900;">A</b>ntibiotics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the infective symptoms, ABX would be warranted, especially if bloods and bedside investigations come back +ve for infection (generally for cholecystitis/cholangitis you would give Piperacillin-tazobactam/tazosin or ceftriaxone + metronidazole).</li></ul></td>
-        <td id="abx_treatmentsreal2"><ul><li><b style="font-weight: 900;">A</b>ntibiotics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Given the infective symptoms, ABX would be warranted, especially if bloods and bedside investigations come back +ve for infection (generally for cholecystitis/cholangitis you would give Piperacillin-tazobactam/tazosin or ceftriaxone + metronidazole).</li></ul></td>
-      </tr>
+        <tr>
+          <td></td>
+          <td id="swallow_treatmentsreal1"><ul><li><b style="font-weight: 900;">F</b>luid monitoring</b></li></ul>
+              <ul class="j1"><li class = "explanationparagraph">FLuid input/output, consider restricting fluids and needs constant reasessment to see whether needs more diuretics to offload the fluid overload.</li></ul>
+                </td>
+  
+          <td id="swallow_treatmentsreal2"><ul><li><b style="font-weight: 900;">F</b>luid monitoring</b></li></ul>
+              <ul class="j1"><li class = "explanationparagraph">FLuid input/output, consider restricting fluids and needs constant reasessment to see whether needs more diuretics to offload the fluid overload.</li></ul>
+                </td>
+          </tr>
+     
       
       <tr>
         <td></td>
-        <td id="antiemetics_treatmentsreal1"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">A</b>ntiemetics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the vomiting and nausea</li></ul></td>
-        <td id="antiemetics_treatmentsreal2"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">A</b>ntiemetics</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Due to the vomiting and nausea</li></ul></td>
-      </tr>
-
-
-
-
-
-      <tr>
-        <td></td>
-        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Definitive Management:</center></td>
+        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Other acute interventions to consider:</center></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
 
 
 
 
-      <tr>
-        <td></td>
-        <td id="cholecystectomy_treatmentsreal1"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">C</b>holecystectomy</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Surgical removal of the gall bladder. Surgery is the definitive treatment for gallbladder disease can be performed acutely and electively depending on symptom severity.</li></ul></td>
-        <td id="cholecystectomy_treatmentsreal2"style="font-weight: 900;"><ul><li><b style="font-weight: 900;">C</b>holecystectomy</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Surgical removal of the gall bladder. Surgery is the definitive treatment for gallbladder disease can be performed acutely and electively depending on symptom severity.</li></ul></td>
-      </tr>
+
+      
 
       <tr>
         <td></td>
-        <td id="ercp_treatmentsreal1"><ul><li><b style="font-weight: 900;">ERCP</b></li></ul>
-            <ul class="j1"><li class = "explanationparagraph">You should do ERCP instead of cholecystectomy when the primary issue involves the <u>bile ducts</u> (e.g., CBD stones, cholangitis, strictures, or leaks), or if the patient is not fit for surgery.</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">ERCP provides a minimally invasive option for urgent or therapeutic intervention in ductal pathologies, while cholecystectomy is indicated for conditions directly affecting the <u>gallbladder</u>, e.g. cholecystitis</li></ul></td>
+        <td id="stroketeam_treatmentsreal1"><ul><li><b style="font-weight: 900;">C</b>onsider ITU discussion</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">In severe acute heart failure the patient may need mechanical circulatory support</li></ul></td>
 
-        <td id="ercp_treatmentsreal2"><ul><li><b style="font-weight: 900;">ERCP</b></li></ul>
-          <ul class="j1"><li class = "explanationparagraph">You should do ERCP instead of cholecystectomy when the primary issue involves the <u>bile ducts</u> (e.g., CBD stones, cholangitis, strictures, or leaks), or if the patient is not fit for surgery.</li></ul>
-          <ul class="j1"><li class = "explanationparagraph">ERCP provides a minimally invasive option for urgent or therapeutic intervention in ductal pathologies, while cholecystectomy is indicated for conditions directly affecting the <u>gallbladder</u>, e.g. cholecystitis</li></ul></td>
+        <td id="stroketeam_treatmentsreal2"><ul><li><b style="font-weight: 900;">C</b>onsider ITU discussion</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">In severe acute heart failure the patient may need mechanical circulatory support</li></ul></td>
+        </tr>
+
+ <tr>
+        <td></td>
+        <td id="thrombectomy_treatmentsreal1"><ul><li><b style="font-weight: 900;">I</b>notropes</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">E.g. dobutamine. Use if pt is hypotensive/cardiogenic shock. These improve cardiac output</li></ul>
+          </td>
+        <td id="thrombectomy_treatmentsreal2"><ul><li><b style="font-weight: 900;">I</b>notropes</li></ul>
+            <ul class="j1"><li class = "explanationparagraph">E.g. dobutamine. Use if pt is hypotensive/cardiogenic shock. These improve cardiac output</li></ul>
+</td>
       </tr>
 
+
+        
       
       
-      
+          
     
 
       <tr>
         <td></td>
-        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Further Management:</center></td>
+        <td style="background-color:blanchedalmond;   border: solid black 2px; border-right: 0px; font-size:larger; font-stretch:ultra-expanded"><center>Secondary prevention/Management:</center></td>
         <td style="background-color:blanchedalmond;   border: solid black 2px; border-left: 0px; visibility: visible;"></td>
       </tr>
 
-      <tr id="painlocationreal">
-        <td></td>
-        <td id="cardiologyreferral_treatmentsreal1"><ul><li><b style="font-weight: 900;">G</b>eneral surgery/Hepatobiliary team referral ± MDT referral</li></ul>
-        <td id="cardiologyreferral_treatmentsreal2"><ul><li><b style="font-weight: 900;">G</b>eneral surgery/Hepatobiliary team referral ± MDT referral</li></ul>
-      </tr>
+      
 
 
       
@@ -2015,32 +1868,45 @@
       <tr>
         <td></td>
         <td id="lifestyle_treatmentsreal1"><ul><li><b style="font-weight: 900;">L</b>ifestyle changes</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Low-fat diet to prevent biliary colic</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Weight management to reduce risk of gallstone formation</li></ul>
-          </td>
+            <ul class="j1"><li class = "explanationparagraph"><b>Smoking cessation</b> - Provide counseling, nicotine replacement therapy, or medications</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Diet</b> - Encourage a Mediterranean-style diet rich in fruits, vegetables, and healthy fats</li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Exercise</b></li></ul>
+            <ul class="j1"><li class = "explanationparagraph"><b>Alcohol</b> - Advise moderation or abstinence</li></ul></td>
 
         <td id="lifestyle_treatmentsreal2"><ul><li><b style="font-weight: 900;">L</b>ifestyle changes</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Exercise, diet, alcohol, smoking counselling etc to try and improve the risk factors</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Can consider referral to weight loss clinics, smoking cessation clinics, Alcoholics anonymous etc. </li></ul>
-          </td>
-
+          <ul class="j1"><li class = "explanationparagraph"><b>Smoking cessation</b> - Provide counseling, nicotine replacement therapy, or medications</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Diet</b> - Encourage a Mediterranean-style diet rich in fruits, vegetables, and healthy fats</li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Exercise</b></li></ul>
+          <ul class="j1"><li class = "explanationparagraph"><b>Alcohol</b> - Advise moderation or abstinence</li></ul></td>
       </tr>
+
 
       <tr>
         <td></td>
-        <td id="udca_treatmentsreal1"><ul><li><b style="font-weight: 900;">Ursodeoxycholic acid (UDCA)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Can dissolve cholesterol stones - is particular useful in those unfit for surgery</li></ul></td>
-        <td id="udca_treatmentsreal2"><ul><li><b style="font-weight: 900;">Ursodeoxycholic acid (UDCA)</li></ul>
-            <ul class="j1"><li class = "explanationparagraph">Can dissolve cholesterol stones - is particular useful in those unfit for surgery</li></ul></td>
-      </tr>
+        <td id="daptlongterm_treatmentsreal1"><ul><li><b style="font-weight: 900;">H</b>eart failure meds</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">Once stable, start or optimize:
+        <ul class="j1"><li class = "explanationparagraph">- ACE inhibitors / ARBs</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">- Beta-blockers</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">- Mineralocorticoid receptor antagonists</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">- SGLT2 inhibitors</li></ul>
+    </td>
+
+        <td id="daptlongterm_treatmentsreal2"><ul><li><b style="font-weight: 900;">H</b>eart failure meds</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">Once stable, start or optimize:
+        <ul class="j1"><li class = "explanationparagraph">- ACE inhibitors / ARBs</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">- Beta-blockers</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">- Mineralocorticoid receptor antagonists</li></ul>
+        <ul class="j1"><li class = "explanationparagraph">- SGLT2 inhibitors</li></ul>
+    </td>
+        </tr>
 
 
 
-      
 
     </table>
 
-  <h4>Top tip:</h4>
+  <h4>Top tips:</h4>
+  <br>
   <p>Remember to also say that you would perform an A to E assessment of your patient</p>
   <p>Try and show-off as much knowledge as you can in this question. Try and <b>expand on your answer</b> as much as you can to show the examiner that you know everything about the topic.</p>
   <p>Remember to also include social and financial aspects in your management section (such as available benefits for the patient, psychological support available, and assistance for carers.)</p>
@@ -3043,6 +2909,7 @@
 
 
 
+<div id="chatgpt-response" style="z-index: 123456789;">chatgpt response</div>
 
 
 <br>

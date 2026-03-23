@@ -223,6 +223,26 @@ function endConsultation(){
   document.getElementById('logoduringconsultation').style.display = 'none';
   document.getElementById('myVideo').style.display = 'none';
 
+//FOR THE YELLOW WARNING FADE IN AND OUT:
+  const message = document.getElementById('audio-warning');
+  message.style.display = 'block';
+
+  // Trigger fade-in (1 second)
+  setTimeout(() => {
+    message.style.opacity = 1;
+  }, 10); // small timeout to ensure CSS is applied
+
+  // After 1s fade-in + 3s visible = 4s, start fade-out (2 seconds)
+  setTimeout(() => {
+    message.style.transition = 'opacity 2s ease'; // change fade-out duration
+    message.style.opacity = 0;
+  }, 6000);
+
+  // After total duration (1+3+2=6s), hide the element
+  setTimeout(() => {
+    message.style.display = 'none';
+  }, 10000);
+
 
 
 /*------
@@ -1244,7 +1264,7 @@ var timerforsubmitting = null;
     
     //other symptoms    
     else if (othersymptoms_repeat == 0 && (noteContent.includes("symptoms")||noteContent.includes("come along with")
-        ||noteContent.includes("experience anything else")||noteContent.includes("come with"))) {
+        ||noteContent.includes("anything else")||noteContent.includes("come with"))) {
       //readOutLoud("I've also noticed that I've gotten quite short of breath as well, especially worse over the last 3 days and is now even occuring at rest");
       previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I've  noticed that I've gotten quite short of breath as well, worse over last 3 days + now occuring at rest";
       associatedsymptomsx = true; dyspnoeax = true;

@@ -8,6 +8,7 @@ try {
     $('.app').hide();
   }
   
+
   //THIS IS ACTIONED FOR THOSE THAT ARE LOGGED IN!!!!
 document.addEventListener("DOMContentLoaded", () => {
   const authStatus = document.getElementById("authStatus");
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
   
   
+
   var noteTextarea = $('#note-textarea');
   var instructions = $('#recording-instructions');
   var notesList = $('ul#notes');
@@ -36,12 +38,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let emptyif = document.getElementById('emptyif');
   
   
+  
+
+
 
 // Fire-and-forget warmup request to render to prevent cold starts
 fetch("https://oscesimstrial1.onrender.com/health", {
   method: "GET",
   mode: "no-cors"
 }).catch(() => {});
+
 
 
 /*------
@@ -77,7 +83,9 @@ if (isMobile) {
 
 
 
-  
+
+
+
   
   // Get all notes from previous sessions and display them.
   
@@ -235,16 +243,9 @@ if (isMobile) {
   setTimeout(() => {
     message.style.display = 'none';
   }, 10000);
+
+
   
-
-
-
-
-
-
-
-
-
   /*------
   THIS NEXT PART IS JUST TO MAKE THE ENDCONSULTATION BUTTON STILL SUBMIT THE ANSWER
   --------*/
@@ -357,9 +358,8 @@ if (isMobile) {
   
   
     
-      document.getElementById('myVideo').style.display = 'unset'; document.getElementById("mp4_src").src = "videos/examinations.mp4"; document.getElementById("myVideo").load();
-
-
+    document.getElementById('myVideo').style.display = 'unset'; document.getElementById("mp4_src").src = "videos/examinations.mp4"; document.getElementById("myVideo").load();
+    
     document.getElementById('myVideo').onended = function(e) {
       //messagebeforeacceptingmic.style.display = 'unset'; micisworking.style.display = 'unset';
     recognition_examinations.start();     document.getElementById('messagebeforeacceptingmic_examinations').style.display = 'unset';
@@ -419,7 +419,7 @@ if (isMobile) {
   
     recognition_investigations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
     document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load();
-    document.getElementById('myVideo').onended = function(e) {//!!
+    document.getElementById('myVideo').onended = function(e) {
     recognition_riskfactors.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
     document.getElementById('save-note-btn-for-riskfactors').style.display = 'unset';
     }
@@ -656,19 +656,17 @@ if (isMobile) {
   alcoholx = false;
   
   /*Important not to miss*/
-  dizzinessx = false;
-  feverx = false;
+  aphasiax = false;
+  visionx = false;
+  ataxiax = false;
+  headachex = false;
+  dysphagiax = false;
   weightx = false;
   appetitex = false;
-  jaundicex = false;
-  darkurinex = false;
-  nauseax = false;
-  backpainx = false;
-  shouldertipx = false;
-  steatorrhoeax = false;
-  bloatingx = false;
-  itchingx = false;
-  prevgallx = false;
+  anticoagulantsx = false;
+  drivex = false;
+  righthandedx = false;
+  
   
   
   /*Examinations*/
@@ -802,10 +800,7 @@ if (isMobile) {
   
   
   
-  
-  
-  
-  
+
   
   
   let counterforpresssubmitprompt = 0;
@@ -1027,42 +1022,58 @@ if (isMobile) {
   
     recognition.stop();
        document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
+
+
+    //if (noteContent.includes("vision")||noteContent.includes("see")||noteContent.includes("visual")||noteContent.includes("eye")){visionx = true;}
+    //if (noteContent.includes("speech")||noteContent.includes("language")||noteContent.includes("phasia")){aphasiax = true;}
+    //if (noteContent.includes("walk")||noteContent.includes("gait")||noteContent.includes("gate")||noteContent.includes("walk")||noteContent.includes("mobili")||noteContent.includes("ataxi")){ataxiax = true;}
+    //if (noteContent.includes("headache")){headachex = true;}
+    //if (noteContent.includes("dysphagia")||noteContent.includes("swallow")||(noteContent.includes("eat")&&(noteContent.includes("difficul")||noteContent.includes("hard")))){dysphagiax = true;}
+    //if (noteContent.includes("coagul")||noteContent.includes("aspirin")||noteContent.includes("clopid")||noteContent.includes("aban")||noteContent.includes("atran")){anticoagulantsx = true;}
+    //if (noteContent.includes("drive")){drivex = true;}
+    //if (noteContent.includes("hand")||noteContent.includes("dominan")){righthandedx = true;}
+
+    
+
+/*
+Rule out subarachnoid haemorrage *
+- Is headache come on suddenly?
+- Is headache worse headache of your life?
+- Did it reach maximum intensity within seconds or minutes?
+Red flags for cancer *
+- Ask for unintenional weight loss, reduced appetite etc
+Photophobia - Light sensitivity is a common symptom with migraines
+Phonophobia - Sound sensitivity is a common symptom with migraines
+nausea - Common in migraines
+Visual aura - Occurs in 25% of migraines
+Recent injury - Trauma can cause dangerous intracranial bleeding, sometimes even after minor injury and cause severe headache, drowsiness and vomiting
+
+
+*/
+
+    var subarachnoidreal1 = $('#subarachnoidreal1'); var subarachnoidreal2 = $('#subarachnoidreal2'); if (noteContent.includes("subarachnoid")||noteContent.includes("sudden")||noteContent.includes("wors")||noteContent.includes("max")||noteContent.includes("strong")){redstyles(subarachnoidreal1); greenstyles(subarachnoidreal2); }
+    var redflagreal1 = $('#redflagreal1'); var redflagreal2 = $('#redflagreal2'); if (noteContent.includes("weigh")||noteContent.includes("lose")||noteContent.includes("appetite")||noteContent.includes("eat")){redstyles(redflagreal1); greenstyles(redflagreal2); }
+    var photophobiareal1 = $('#photophobiareal1'); var photophobiareal2 = $('#photophobiareal2'); if (noteContent.includes("sensitiv")||noteContent.includes("light")||noteContent.includes("photophob")||noteContent.includes("bright")){redstyles(photophobiareal1); greenstyles(photophobiareal2); }
+    var phonophobiareal1 = $('#phonophobiareal1'); var phonophobiareal2 = $('#phonophobiareal2'); if (noteContent.includes("phonophobia")||noteContent.includes("noise")||noteContent.includes("loud")||noteContent.includes("sound")||noteContent.includes("quiet")){redstyles(phonophobiareal1); greenstyles(phonophobiareal2); }
+    var nauseareal1 = $('#nauseareal1'); var nauseareal2 = $('#nauseareal2'); if (noteContent.includes("nausea")||noteContent.includes("vomit")||noteContent.includes("sick")){redstyles(nauseareal1); greenstyles(nauseareal2); }
+    var visionreal1 = $('#visionreal1'); var visionreal2 = $('#visionreal2'); if (noteContent.includes("vision")||noteContent.includes("see")||noteContent.includes("visual")||noteContent.includes("eye")){redstyles(visionreal1); greenstyles(visionreal2); }
+    var injuryreal1 = $('#injuryreal1'); var injuryreal2 = $('#injuryreal2'); if (noteContent.includes("injur")||noteContent.includes("hit")||noteContent.includes("bang")||noteContent.includes("fall")){redstyles(injuryreal1); greenstyles(injuryreal2); }
+
   
-       
-
-       //if (noteContent.includes("dark")||noteContent.includes("pale")){darkurinex = true;}
-       //if (noteContent.includes("back")){backpainx = true;}
-       //if (noteContent.includes("shoulder")||noteContent.includes("tip")){shouldertipx = true;}
-       //if (noteContent.includes("greasy")||noteContent.includes("flush")||noteContent.includes("smell")||noteContent.includes("adour")||noteContent.includes("steato")||noteContent.includes("fatty")){steatorrhoeax = true;}
-       //if (noteContent.includes("bloat")){bloatingx = true;}
-       //if (noteContent.includes("itch")||noteContent.includes("prutitis")){itchingx = true;}
-       //if (noteContent.includes("gall")||noteContent.includes("stone")){prevgallx = true;}
-       //if (noteContent.includes("worse when")){makeitworsex = true;}
-       //if (noteContent.includes("better when")){makeitbetterx = true;}    
       
-
-       var darkurinereal1 = $('#darkurinereal1'); var darkurinereal2 = $('#darkurinereal2'); if (noteContent.includes("dark")||noteContent.includes("pale")){redstyles(darkurinereal1); greenstyles(darkurinereal2);}
-       var backpainreal1 = $('#backpainreal1'); var backpainreal2 = $('#backpainreal2'); if (noteContent.includes("back")){redstyles(backpainreal1); greenstyles(backpainreal2);}
-       var shouldertipreal1 = $('#shouldertipreal1'); var shouldertipreal2 = $('#shouldertipreal2'); if (noteContent.includes("shoulder")||noteContent.includes("tip")){redstyles(shouldertipreal1); greenstyles(shouldertipreal2);}
-       var steatorrhoeareal1 = $('#steatorrhoeareal1'); var steatorrhoeareal2 = $('#steatorrhoeareal2'); if (noteContent.includes("greasy")||noteContent.includes("flush")||noteContent.includes("smell")||noteContent.includes("adour")||noteContent.includes("steato")||noteContent.includes("fatty")){redstyles(steatorrhoeareal1); greenstyles(steatorrhoeareal2);}
-       var bloatingreal1 = $('#bloatingreal1'); var bloatingreal2 = $('#bloatingreal2'); if (noteContent.includes("bloat")){redstyles(bloatingreal1); greenstyles(bloatingreal2);}
-       var itchingreal1 = $('#itchingreal1'); var itchingreal2 = $('#itchingreal2'); if (noteContent.includes("itch")||noteContent.includes("prutitis")){redstyles(itchingreal1); greenstyles(itchingreal2);}
-       var prevgallreal1 = $('#prevgallreal1'); var prevgallreal2 = $('#prevgallreal2'); if (noteContent.includes("gall")||noteContent.includes("stone")){redstyles(prevgallreal1); greenstyles(prevgallreal2);}
-       var makeitworsereal1 = $('#makeitworsereal1'); var makeitworsereal2 = $('#makeitworsereal2'); if (noteContent.includes("worse when")){redstyles_aboveline(makeitworsereal1); greenstyles_aboveline(makeitworsereal2);}
-       var makeitbetterreal1 = $('#makeitbetterreal1'); var makeitbetterreal2 = $('#makeitbetterreal2'); if (noteContent.includes("better when")){redstyles(makeitbetterreal1); greenstyles(makeitbetterreal2);}     
-
-
-
-
+  
+     
   
       if(nameage_repeat == 0 && (noteContent.includes("name") && noteContent.includes("age"))) {
-        //readOutLoud("My name is Jason Miller and I am 40")
-        previousquestion = noteContent; nameage_repeat++;   response_question = "I'm Jason and am 40";
+        //readOutLoud("My name is Bill Holland and I am 22")
+        previousquestion = noteContent; nameage_repeat++;   response_question = "I'm Bill and am 22";
         document.getElementById("mp4_src").src = "videos/name+age.mp4"; allifsaction();}
       
+
+
       else if(age_repeat == 0 && (noteContent.includes("age")||noteContent.includes("old"))){
-        //readOutLoud("I'm 40 years old")
-        previousquestion = noteContent; age_repeat++;   response_question = "I'm 40";
+        //readOutLoud("I'm 22 years old")
+        previousquestion = noteContent; age_repeat++;   response_question = "I'm 22";
         document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}
   
       else if (oktospeak_repeat == 0 && (noteContent.includes("is it ok")||noteContent.includes("would it be ok")||noteContent.includes("talk to you")
@@ -1073,14 +1084,14 @@ if (isMobile) {
   
       else if (name_repeat == 0 && (noteContent.includes("your name")||noteContent.includes("full name"))) {
         /////////////////////////////////////////////////////////////////////////////////////////////
-        //My name is Jason Miller
-        previousquestion = noteContent; name_repeat++;  response_question = "I'm Jason";
-        document.getElementById("mp4_src").src = "videos/name.mp4"; allifsaction();}//name
+        //mp4video ='WIN_20230328_13_59_49_Pro.mp4';
+        previousquestion = noteContent; name_repeat++;  response_question = "I'm Jake";
+        document.getElementById("mp4_src").src = "videos/marcjevner.mp4"; allifsaction();}//name
   
       else if (call_repeat == 0 && (noteContent.includes("call")||noteContent.includes("address"))) {
-        //readOutLoud("Jason is fine");
-        previousquestion = noteContent; call_repeat++;  response_question = "Jason is fine";
-        document.getElementById("mp4_src").src = "videos/jasonisfine.mp4"; allifsaction();}//how would you like to be addressed as
+        //readOutLoud("Bill is fine");
+        previousquestion = noteContent; call_repeat++;  response_question = "Bill is fine";
+        document.getElementById("mp4_src").src = "videos/marcisfine.mp4"; allifsaction();}//how would you like to be addressed as
   
     /*  else if (noteContent.includes("age")||noteContent.includes("old")) {
         //readOutLoud("I'm 31");
@@ -1088,13 +1099,13 @@ if (isMobile) {
         document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}//age
       */
       else if (dob_repeat == 0 && (noteContent.includes("date of birth")||noteContent.includes("when")&&noteContent.includes("born"))) {
-        //readOutLoud("the 4th of June 1984");
-        previousquestion = noteContent; dob_repeat++;  response_question = "4th of June 1984";
+        //readOutLoud("the 1st of April 2004");
+        previousquestion = noteContent; dob_repeat++;  response_question = "1st of April 2004";
         document.getElementById("mp4_src").src = "videos/dob.mp4"; allifsaction();}//DOB
   
       else if (work_repeat == 0 &&(noteContent.includes("occupation")||noteContent.includes("job")||noteContent.includes("work"))) {
-        //readOutLoud("I work as a lawyer");
-        previousquestion = noteContent;   response_question = "I'm a lawyer";
+        //readOutLoud("I am unemployed");
+        previousquestion = noteContent;   response_question = "I'm unemployed";
         jobx = true; work_repeat ++; 
         document.getElementById("mp4_src").src = "videos/job.mp4"; allifsaction();}//job
       
@@ -1106,47 +1117,47 @@ if (isMobile) {
       else if (howareyou_repeat == 0 && (noteContent.includes("how are you")||noteContent.includes("how are things")||noteContent.includes("what about you"))) {
         //readOutLoud("I'm not feeling the best but I am ok");
         previousquestion = noteContent; howareyou_repeat++;  response_question = "I'm not feeling the best but I am ok";
-        document.getElementById("mp4_src").src = "videos/imnotfeelingthebest.mp4"; allifsaction();}//how are you?
+        document.getElementById("mp4_src").src = "videos/i'mnotfeelingthebest.mp4"; allifsaction();}//how are you?
   
   
   
       
   
       else if (alwayspain_repeat == 0 && (noteContent.includes("always there")&&noteContent.includes("come"))) {
-        //readOutLoud("The pain is not constantly always there, but instead I would say it comes and goes");
-        previousquestion = noteContent; alwayspain_repeat++;  response_question = "The pain comes and goes";
+        //readOutLoud("The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything");
+        previousquestion = noteContent; alwayspain_repeat++;  response_question = "The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
       else if (constant_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("come"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; constant_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything");
+        previousquestion = noteContent; constant_repeat++;  response_question = "The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
       else if (painconstant_repeat == 0 && (noteContent.includes("always there")&&noteContent.includes("intermittent"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; painconstant_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything");
+        previousquestion = noteContent; painconstant_repeat++;  response_question = "The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
       else if (intermittent_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("intermittent"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; intermittent_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything");
+        previousquestion = noteContent; intermittent_repeat++;  response_question = "The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
   
   
   
       else if (alwaysthere_repeat == 0 && (noteContent.includes("constant")||noteContent.includes("always there"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; alwaysthere_repeat++;  response_question = "The pain's not constant";
+        //readOutLoud("The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything");
+        previousquestion = noteContent; alwaysthere_repeat++;  response_question = "The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain constant
   
       else if (comeandgo_repeat == 0 && (noteContent.includes("intermittent")||noteContent.includes("come and go")||noteContent.includes("comes and go"))) {
-        //readOutLoud("The pain come and goes all the time");
-        previousquestion = noteContent; comeandgo_repeat++;  response_question = "The pain come and goes";
+        //readOutLoud("The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything");
+        previousquestion = noteContent; comeandgo_repeat++;  response_question = "The tiredness is constant to be honest. All day I feel really tired no matter what I do, whether it be walking or cooking or just going out I don't feel like I've got the energy to do anything";
         timecoursex = true;
         document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain intermittent
   
@@ -1159,15 +1170,13 @@ if (isMobile) {
           ||noteContent.includes("I help")||(noteContent.includes("you have any pain")&&!noteContent.includes("else"))
           ||noteContent.includes("i can do for you")||noteContent.includes("can i do for you")
           ||noteContent.includes("problem"))) {
-        //readOutLoud("This morning I felt this pain in my tummy a few hours after eating breakfast, but now this is becoming quite regular and it's starting to really affect my life");
-        previousquestion = noteContent;   response_question = "I've got abdominal pain this morning and now this has been going on for quite a long time, I'd say about 2 months and affecting my life";
+        //readOutLoud("Over the last few months I've been feeling quite down and tired, and I can't really put my finger as to why that is. I'm normally quite a happy person and I'm normally quite energetic, but recently I've found that everything I do I just feel like I am constantly exhausted even if I I'm not doing anything that's particularly tiresome. I feel like all my body joints are worn out and that I have no energy to move, as if they are lacking something I don't really know. For example for the last few days this is the first time I've come out of my accomodation and I've just been stuck in bed
+        previousquestion = noteContent;   response_question = "Last few months I've been feeling quite down and tired. I feel like I am constantly exhausted even if I I'm not doing anything that's particularly tiresome. Last few days this is 1st time I've come out of my accomodation and I've just been stuck in bed";
         painlocationrepeat ++;  
         painlocationx = true;
         onsetx = true;
         document.getElementById("mp4_src").src = "videos/vid-whatsbroughtyouin.mp4"; allifsaction();}//HOPC/whats made you come to the hospital/ why did you come to the hospital
       
-  
-  
   
   
   
@@ -1182,107 +1191,100 @@ if (isMobile) {
   
   
   
-  
-  
       else if (onsetrepeat == 0 &&(noteContent.includes("bit more")||noteContent.includes("tell me more")||noteContent.includes("tell me about"))&&(noteContent.includes("pain")||noteContent.includes("it"))) {
-        //readOutLoud("The pain is quite debilitating for me I feel, and it just keeps coming back so I thought I would come get it checked out.");
-        previousquestion = noteContent; onsetrepeat++;  response_question = "The pain is quite debilitating for me, and it keeps coming back so came to get it checked out";
+        //readOutLoud("When I'm at home I just feel like I can't do anything. I struggle to cook or clean and just getting around the house at all, and I also eel very cold all the time for some reason I don't know why. I know it's cold outside but I still have to put layers on even indoors. Hopefully this is just a phase and I get over it but it's really been something that's effected me");
+        previousquestion = noteContent; onsetrepeat++;  response_question = "When I'm at home I just feel like I can't do anything. I struggle to cook or clean and just getting around the house at all, and I also eel very cold all the time for some reason I don't know why. I know it's cold outside but I still have to put layers on even indoors. Hopefully this is just a phase and I get over it but it's really been something that's effected me";
         onsetx = true;
         
       document.getElementById("mp4_src").src = "videos/bitmore.mp4"; allifsaction();}//tell me a bit more
   
       else if (whathappened_repeat == 0 && (noteContent.includes("how")&&(noteContent.includes("pain")||noteContent.includes("it"))&&(noteContent.includes("develop")||noteContent.includes("start")||noteContent.includes("begin")||noteContent.includes("come")||noteContent.includes("brought"))
       ||noteContent.includes("what happen"))) {
-        //readOutLoud("The pain started around half an hour after I ate breakfast. I did eat a lot as I had a full english breakfast and so I thought it could've been related to the food");
-        previousquestion = noteContent; whathappened_repeat++;  response_question = "The pain started 30 mins after full english breakfast"; onsetx = true;
+        //readOutLoud("I reckon it's something that's started gradually over the last month, but I really started noticing it for the last 2 weeks or so.");
+        previousquestion = noteContent; whathappened_repeat++;  response_question = "I reckon it's something that's started gradually over the last month, but I really started noticing it for the last 2 weeks or so"; onsetx = true;
         document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}//how did you get the pain/how did it start
         
       //pain
       
-      else if (wherepainexactly_repeat == 0 && (noteContent.includes("where")&&(noteContent.includes("pain")||noteContent.includes("discomfort")||noteContent.includes("hurt"))&&!noteContent.includes("else")&&!noteContent.includes("somewhere")&&!noteContent.includes("anywhere")&&!noteContent.includes("everywhere")
-      )) {
-        //readOutLoud("The pain is in the upper right region of my tummy"); - DON'T REMOVE THE SPACE BEFORE 'WHERE' AS CAN BE 'ANYWHERE (ELSE)'FOR RADIATION OF PAIN
-        previousquestion = noteContent; wherepainexactly_repeat++;  response_question = "The pain's in the upper right region of my tummy";
-        painlocationx = true;
-  
-        document.getElementById("mp4_src").src = "videos/wherepain.mp4"; allifsaction();}//where is the pain
-      
+   /*
   
   
-  
-  
-  
-          
-     
       else if (describepain_repeat == 0 && (noteContent.includes("describe")||noteContent.includes("it feel like")
-          ||noteContent.includes("pain feel like"))) {
-        //readOutLoud("The pain feels like a sharp pain");
-        previousquestion = noteContent; describepain_repeat++;  response_question = "The pain feels like a sharp pain";
+          ||noteContent.includes("feels like"))) {
+        //readOutLoud("The headache feels like a throbbing relentless headache, kind of like a pulsating wave that's constantly pounding on my head");
+        previousquestion = noteContent; describepain_repeat++;  response_question = "The headache feels like a throbbing relentless headache, kind of like a pulsating wave that's constantly pounding on my head";
         characterx = true;
       document.getElementById("mp4_src").src = "videos/feelslikehorsekickedme.mp4"; allifsaction();}//describe the pain
       
-    
+    */
       
   
   ////
       
       
   
-  
-      else if (radiate_repeat == 0 && (noteContent.includes("radiate")||noteContent.includes("other pain")
-      ||(noteContent.includes("anywhere")||noteContent.includes("other"))&&(noteContent.includes("move")||noteContent.includes("go")))) {
-        //readOutLoud("now you mention it, I have also noticed that the pain goes to the middle of my tummy as well, and also a bit in the middle of my back too");
-        previousquestion = noteContent; radiate_repeat++;  response_question = "I have pain that goes to the middle of my tummy, and also a bit in the middle of my back";
-        radiatex = true;
-  
-        document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//does the pain radiate/move anywhere/does the pain move to other parts of the body
-      
+  /*
+     
       else if (ratethepain_repeat == 0 && (noteContent.includes("rate")&&(noteContent.includes("pain")||noteContent.includes("it")||noteContent.includes("sever"))
       ||noteContent.includes("severe")&&(noteContent.includes("pain")||noteContent.includes("it"))
       ||noteContent.includes("1-10")||noteContent.includes("1 to 10")||noteContent.includes("one to ten")||noteContent.includes("-10")
           ||noteContent.includes("out of 10")||noteContent.includes("out of ten"))) {
-        //readOutLoud("Honesty I would say the pain is probably around 7/10, and I normally have quite a high pain threshold");
-        previousquestion = noteContent; ratethepain_repeat++;  response_question = "The pain is 7/10 in severity";
+        //readOutLoud("Honestly, I would say the pain in my head feels like it's a 9 out of 10 in severity");
+        previousquestion = noteContent; ratethepain_repeat++;  response_question = "The headache is 9/10 in severity";
         ratepainx = true;
         document.getElementById("mp4_src").src = "videos/painis9outof10.mp4"; allifsaction();}//rate the pain
-      
+  */    
+ /*
       else if (makeitbetter_repeat == 0 && (noteContent.includes("make it better")||noteContent.includes("make the pain better")
-          ||noteContent.includes("makes it better")||noteContent.includes("makes the pain better")
+          ||noteContent.includes("makes it better")||noteContent.includes("makes the weakness better")
           ||noteContent.includes("relieve")||noteContent.includes("ease"))) {
-        //readOutLoud("Honestly, nothing makes the pain better, it just seems to ease off by itself after 30 minutes");
-        previousquestion = noteContent; makeitbetter_repeat++;  response_question = "nothing makes the pain better, it just eases off by itself after 30 mins";
+        //readOutLoud("I would say laying down cramped in my bed and taking paracetamol are the only things that slightly eases the headache");
+        previousquestion = noteContent; makeitbetter_repeat++;  response_question = "I would say laying down cramped in my bed and taking paracetamol are the only things that slightly eases the headache";
         makeitbetterx = true;
         document.getElementById("mp4_src").src = "videos/nothingmakesitbetter.mp4"; allifsaction();}//anything make it better/anything ease the pain
       
       else if (makeitworse_repeat == 0 && (noteContent.includes("make it worse")||noteContent.includes("exacerbate")
-          ||noteContent.includes("make the pain worse")||noteContent.includes("makes the pain worse")
+          ||noteContent.includes("make the weakness worse")||noteContent.includes("makes the weakness worse")
           ||noteContent.includes("makes it worse"))) {
-        //readOutLoud("Eating fatty meals like burgers or fish and chips makes the pain worse.");
-        previousquestion = noteContent; makeitworse_repeat++;  response_question = "Eating fatty meals, burgers, fish + chips makes the pain worse";
+        //readOutLoud("The headache is definitely worse when walking around or moving around. Like even just to come here to see you today was very difficult and needed a lot of persuasion from my wife");
+        previousquestion = noteContent; makeitworse_repeat++;  response_question = "The headache is definitely worse when walking around or moving around. Like even just to come here to see you today was very difficult and needed a lot of persuasion from my wife";
         makeitworsex = true;
       
         document.getElementById("mp4_src").src = "videos/anymovementmakesitworse.mp4"; allifsaction();}//anything make it worse
-      
-     
+    */  
+
+
+
       else if (whenstarted_repeat == 0 && ((noteContent.includes("how long")||noteContent.includes("start"))&&!noteContent.includes("smok")&&!noteContent.includes("alcohol")&&!noteContent.includes("drink"))) {
-        //readOutLoud("This pain started this morning after breakfast but stopped after 30 minutes");
-        previousquestion = noteContent; whenstarted_repeat++;  response_question = "This pain started this morning after breakfast but stopped after 30 mins";
-        document.getElementById("mp4_src").src = "videos/startedthismorning.mp4"; allifsaction();}//How long have you had the pain for/when did the pain start
+        //readOutLoud("SAME AS ABOVE CALLED HOWHAPPEN");
+        previousquestion = noteContent; whenstarted_repeat++;  response_question = "I reckon it's something that's started gradually over the last month, but I really started noticing it for the last 2 weeks or so";
+        document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}//How long have you had the pain for/when did the pain start
       
       else if (gottenworsethroughtime_repeat == 0 && (noteContent.includes("got worse")||noteContent.includes("gotten worse")
           ||noteContent.includes("gotten better")||noteContent.includes("got better")||noteContent.includes("sudden"))) {
-        //readOutLoud("The pain has not gotten worse since this morning, and actually is not too bad now");
-        previousquestion = noteContent; gottenworsethroughtime_repeat++;  response_question = "The pain has not gotten worse since this morning, and actually is not too bad now";
+        //readOutLoud("I feel like the fatigue and tiredness has gotten worse over time, but was slightly better today, and that's probably why I was able to call you today because otherwise I would not have had the energy Doctor");
+        previousquestion = noteContent; gottenworsethroughtime_repeat++;  response_question = "I feel like the fatigue and tiredness has gotten worse over time, but was slightly better today, and that's probably why I was able to call you today because otherwise I would not have had the energy Doctor";
         document.getElementById("mp4_src").src = "videos/painisgottenworseovertheday.mp4"; allifsaction();}//Has the pain gradually gotten worse/better
       
-      
-      
-      
-      else if(happenbefore_repeat == 0 && ((noteContent.includes("happen")||noteContent.includes("felt"))&& noteContent.includes("before"))){
-        //readOutLoud("This has now happened quite a few times actually and is happening more often recently");
-        previousquestion = noteContent; happenbefore_repeat++;  response_question = "This has now happened quite a few times actually and is happening more often recently";
+      else if (pastheart_repeat == 0 && ((noteContent.includes("fatigu")||noteContent.includes("tired"))&& noteContent.includes("past")||noteContent.includes("prev"))) {
+        //readOutLoud("I don't think I've ever had any similar episodes like this in the past to be honest. I can't think of any other time where I've felt this tired all the time. I have felt cold and things like that, but I've never felt constantly tired like this before");
+        previousquestion = noteContent; pastheart_repeat++;  response_question = "I don't think I've ever had any similar episodes like this in the past to be honest. I can't think of any other time where I've felt this tired all the time. I have felt cold and things like that, but I've never felt constantly tired like this before";
+        heartattacksx = true;
+        document.getElementById("mp4_src").src = "videos/noheartattacksinthepast.mp4"; allifsaction();}
+  
+        else if(happenbefore_repeat == 0 && ((noteContent.includes("happen")||noteContent.includes("felt"))&& noteContent.includes("before"))){
+        //readOutLoud("SAME AS THE ONE ABOVE");
+        previousquestion = noteContent; happenbefore_repeat++;  response_question = "I reckon it's something that's started gradually over the last month, but I really started noticing it for the last 2 weeks or so";
         happenbeforex = true;
-        document.getElementById("mp4_src").src = "videos/nothatsneverhappenedbefore.mp4"; allifsaction();}
+        document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}
+
+      else if(firstheartattack_repeat == 0 && ((noteContent.includes("tired")||noteContent.includes("fatig"))&& noteContent.includes("first"))){
+        //readOutLoud("SAME AS THE ONE ABOVE");
+        previousquestion = noteContent; firstheartattack_repeat++;  response_question = "I reckon it's something that's started gradually over the last month, but I really started noticing it for the last 2 weeks or so";
+        heartattacksx = true;
+        document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}
+  
+      
   
   
   
@@ -1291,41 +1293,39 @@ if (isMobile) {
   
       //rule out pain anywhere else
       else if (painin_repeat == 0 && ((noteContent.includes("have")||noteContent.includes("notice")||noteContent.includes("any"))&&(noteContent.includes("pain in")||noteContent.includes("pains in")))) {
-        //readOutLoud("I've mainly got pain in the upper right side of my abdomen, but also noticed in the middle of my abdomen and my back");
-        previousquestion = noteContent; painin_repeat++;  response_question = "I've mainly got pain in my upper right abdomen but also noticed in my back and upper abdomen";
+        //readOutLoud("I've not noticed any pain anywhere'");
+        previousquestion = noteContent; painin_repeat++;  response_question = "I've not noticed any pain anywhere";
         radiatex = true;
-        backpainx = true;
       document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//any pain in X (eg in the shoulders, in the side etc)
       
       //other symptoms    
       else if (othersymptoms_repeat == 0 && (noteContent.includes("symptoms")||noteContent.includes("come along with")
           ||noteContent.includes("anything else")||noteContent.includes("come with"))) {
-        //readOutLoud("I've also vomited once earlier today, but I've been feeling sick for the whole day");
-        previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I've also vomited once earlier today, but I've been feeling sick for the whole day";
+        //readOutLoud("I have also noticed that I have had way more dry skin than usual. I don't know if it's related at all, but I've had flaky skin from my scalp and really really dry hands. I've been using creams to help on my hands but it's still very dry. And I've also definitely felt like my muscles are very weak and achey, and quite stiff and I keep forgetting things that people tell me and I'm just thinking really slowly and its taking me a lot of time to process things");
+        previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I have also noticed that I have had way more dry skin than usual. I don't know if it's related at all, but I've had flaky skin from my scalp and really really dry hands. I've been using creams to help on my hands but it's still very dry. And I've also definitely felt like my muscles are very weak and achey, and quite stiff and I keep forgetting things that people tell me and I'm just thinking really slowly and its taking me a lot of time to process things";
         associatedsymptomsx = true;
         document.getElementById("mp4_src").src = "videos/sobbutcozofthepain.mp4"; allifsaction();}//any other Sx/does anything else come along with the pain
       
       else if (fever_repeat == 0 && (noteContent.includes("fever")||noteContent.includes("felt off")||noteContent.includes("felt yourself")
           ||noteContent.includes("feel")&&noteContent.includes("off")||noteContent.includes("a cold")||noteContent.includes("under the weather")
           ||noteContent.includes("temperature")&&noteContent.includes("high"))) {
-        //readOutLoud("Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently");
-        previousquestion = noteContent; fever_repeat++;  response_question = "Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently";
+        //readOutLoud("I've not noticed any recent fevers or felt off recently, but I do feel very very tired and I feel like I can't think at all, like as if I have a kind of 'brain fog' and I just can't seem to think or concentrate on anything");
+        previousquestion = noteContent; fever_repeat++;  response_question = "I've not noticed any recent fevers or felt off recently, but I do feel very very tired and I feel like I can't think at all, like as if I have a kind of 'brain fog' and I just can't seem to think or concentrate on anything";
         associatedsymptomsx = true;
         feverx = true;
         document.getElementById("mp4_src").src = "videos/fever.mp4"; allifsaction();}//fever
-      
+      /*
       else if (tired_repeat == 0 && ((noteContent.includes("tired")&&!noteContent.includes("of"))
       ||noteContent.includes("sore throat")||noteContent.includes("soar throat")||noteContent.includes("chills"))) {
-    //readOutLoud("No");
-    previousquestion = noteContent; tired_repeat++;  response_question = "No";
+    //readOutLoud("I've not noticed any recent fevers or felt off recently, but I do feel very very tired and I feel like I can't think at all, like as if I have a kind of 'brain fog' and I just can't seem to think or concentrate on anything");
+    previousquestion = noteContent; tired_repeat++;  response_question = "I've not had any fevers recently";
     associatedsymptomsx = true;
-    document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you feel tired all the time/any chills (it eliminates if you say 'do you feel tired of X')
-  
+    document.getElementById("mp4_src").src = "videos/fever.mp4"; allifsaction();}//do you feel tired all the time/any chills (it eliminates if you say 'do you feel tired of X')
+  */
       else if (nausea_repeat == 0 && (noteContent.includes("naus")||noteContent.includes("vomit"))) {
-        //readOutLoud("Yes, I vomited earlier on today");
-        previousquestion = noteContent; nausea_repeat++;  response_question = "Yes, I vomited earlier on today";
+        //readOutLoud("No");
+        previousquestion = noteContent; nausea_repeat++;  response_question = "No";
         associatedsymptomsx = true;
-        nauseax = true;
         document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any vomiting/nausea/nauseous
       
       else if (dizzy_repeat == 0 && (noteContent.includes("dizz")||noteContent.includes("faint")||(noteContent.includes("light")&&noteContent.includes("head")))) {
@@ -1363,7 +1363,6 @@ if (isMobile) {
         coughx = true;
         document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you bring up anything when you cough/vomit/ anything come out?
       
-      
       //SOB   
       else if (breathlessness_repeat == 0 && (noteContent.includes("short")||noteContent.includes("breathless")||noteContent.includes("breath")||noteContent.includes("dysp"))) {
         //readOutLoud("No");
@@ -1377,13 +1376,13 @@ if (isMobile) {
       else if (walkdistance_repeat == 0 && (noteContent.includes("whilst walk")||noteContent.includes("when you walk")
           ||noteContent.includes("whilst you walk")||noteContent.includes("when walk")||noteContent.includes("during walk")
           ||noteContent.includes("walk")&&(noteContent.includes("far")||noteContent.includes("how much")||noteContent.includes("stop")||noteContent.includes("until")))) {
-        //readOutLoud("I can walk about 200 metres no problem, but after that I get a bit short of breath");
-        previousquestion = noteContent; walkdistance_repeat++;  response_question = "I can walk about 200 metres no problem, but after that I get a bit short of breath";
+        //readOutLoud("Since I've had this persistent tiredness I've not been well enough to walk any kind of distance, and this is why I requested to speak to you over video call rather than in person. But normally when I'm well I normally try to exercise from time to time. I tend to run to the local park around once a week, especially when it's a nice day and when it's sunny outside.");
+        previousquestion = noteContent; walkdistance_repeat++;  response_question = "Since I've had this persistent tiredness I've not been well enough to walk any kind of distance, and this is why I requested to speak to you over video call rather than in person. But normally when I'm well I normally try to exercise from time to time. I tend to run to the local park around once a week, especially when it's a nice day and when it's sunny outside";
         walkdistancex = true;
         document.getElementById("mp4_src").src = "videos/icanwalk.mp4"; allifsaction();}//how far can you walk/when do you feel short of breath/ dyu get SOB whilst walking/when walking
-      
-        
-      
+    
+
+/*
       //Gastro
       else if (bloating_repeat == 0 && (noteContent.includes("bloat"))) {
         //readOutLoud("I haven't noticed any bloating");
@@ -1391,37 +1390,47 @@ if (isMobile) {
         associatedsymptomsx = true;
         document.getElementById("mp4_src").src = "videos/bloating.mp4"; allifsaction();}//bloating
       
-      else if (yellow_repeat == 0 && (noteContent.includes("yellow")||noteContent.includes("jaundice"))) {
-        //readOutLoud("I've not noticed any yellowing of the skin or of my eyes");
-        previousquestion = noteContent; yellow_repeat++;  response_question = "I've not noticed any yellowing of the skin or of my eyes'";
-        associatedsymptomsx = true;
-        jaundicex = true;
-        document.getElementById("mp4_src").src = "videos/yellowingofskin.mp4"; allifsaction();}//jaundice
+      
   
+  else if (confusion_repeat == 0 && (noteContent.includes("confus"))) {
+    //readOutLoud("I've not felt confused recently");
+    previousquestion = noteContent; confusion_repeat++;  response_question = "I've not felt confused recently";
+    associatedsymptomsx = true;
+    document.getElementById("mp4_src").src = "videos/confused.mp4"; allifsaction();}//confused/confusion
   
+ 
+  //ENT
+  else if (headaches_repeat == 0 && (noteContent.includes("headache"))) {
+    //readOutLoud("I've not been having any headaches");
+    previousquestion = noteContent; headaches_repeat++;  response_question = "I've not noticed any headaches";
+    associatedsymptomsx = true;
+    document.getElementById("mp4_src").src = "videos/headaches.mp4"; allifsaction();}//headache
   
+  //opthalmology    
+  else if (vision_repeat == 0 && (noteContent.includes("vision")||noteContent.includes("eye sight")||noteContent.includes("eye-sight")||noteContent.includes("changes in your eyes"))) {
+        //readOutLoud("I have noticed that before getting the headache I see these weird lights that flash in my eye sight and I see these zig-zag lines for about half an hour, and that's when I know that I am going to get the headache again");
+    previousquestion = noteContent; vision_repeat++;  response_question = "I have noticed that before getting the headache I see these weird lights that flash in my eye sight and I see these zig-zag lines for about half an hour, and that's when I know that I am going to get the headache again";
+    associatedsymptomsx = true;
+    document.getElementById("mp4_src").src = "videos/vision.mp4"; allifsaction();}//vision
   
-  
+  */
   
   
     //bowels+urine    
     else if (bowels_repeat == 0 && (noteContent.includes("bowels")||noteContent.includes("poo")
       ||noteContent.includes("stool")||noteContent.includes("back side")
       ||noteContent.includes("constipation")||noteContent.includes("diarrhoea")||noteContent.includes("runny"))) {
-    //readOutLoud("I've not noticed any changes in my bowels");
-    previousquestion = noteContent; bowels_repeat++;  response_question = "I've not noticed any changes";
+    //readOutLoud("I have noticed that I pass hard stools when I go to toilet actually, and this is probably been going on for a few weeks");
+    previousquestion = noteContent; bowels_repeat++;  response_question = "I have noticed that I pass hard stools when I go to toilet actually, and this is probably been going on for a few weeks";
     document.getElementById("mp4_src").src = "videos/changesinstools.mp4"; allifsaction();}//bowels
   
   else if (urine_repeat == 0 && (noteContent.includes("urin")||noteContent.includes("pee")
       ||noteContent.includes("piss")||noteContent.includes("toilet")
       ||noteContent.includes("bladder")||noteContent.includes("void"))) {
-    //readOutLoud("I've not noticed any changes in my urine");
+    //readOutLoud("I've not noticed any problems with passing urine");
     previousquestion = noteContent; urine_repeat++;  response_question = "I've not noticed any changes in my urine";
-    
-    if (noteContent.includes("dark")||noteContent.includes("pale")){darkurinex = true;}
-    
     document.getElementById("mp4_src").src = "videos/changesinurine.mp4"; allifsaction();}//urine/voiding
-  
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   //red flags   
   else if (weight_repeat == 0 && (noteContent.includes("weigh"))) {
     //readOutLoud("I've not noticed any weight loss to be honest");
@@ -1444,14 +1453,14 @@ if (isMobile) {
     //ICE
     else if (idea_repeat == 0 && (noteContent.includes("idea")||noteContent.includes("do you think")||noteContent.includes("do you think")&&((noteContent.includes("going on")
       ||noteContent.includes("reckon")||noteContent.includes("happening"))))) {
-    //readOutLoud("I think I might be having a bit of reflux, but I'm not too sure");
-    previousquestion = noteContent; idea_repeat++;  response_question = "I think I might be having a bit of reflux, but I'm not too sure";
+    //readOutLoud("I think it might just be a normal stress headache to be honest, but I wasn't sure, and so that's why I came in to see you");
+    previousquestion = noteContent; idea_repeat++;  response_question = "I think it might just be a normal stress headache to be honest, but I wasn't sure, and so that's why I came in to see you";
     ideasx = true;
     document.getElementById("mp4_src").src = "videos/ideas.mp4"; allifsaction();}//Ideas/what's your ideas of what's happening/what dyu think's happening/do you think it's cancer
   
   else if (concerns_repeat == 0 && (noteContent.includes("concern")||noteContent.includes("worr")||noteContent.includes("worry")||noteContent.includes("scar"))) {
-    //readOutLoud("I'm really worried that the pain keeps coming back all the time");
-    previousquestion = noteContent; concerns_repeat++;  response_question = "I'm really worried that the pain keeps coming back all the time";
+    //readOutLoud("I'm really worried that maybe it could be a cancer because these headaches have been coming on and off for a few months now");
+    previousquestion = noteContent; concerns_repeat++;  response_question = "I'm really worried that i got brain cancer";
     concernsx = true;
     document.getElementById("mp4_src").src = "videos/concerns.mp4"; allifsaction();}//Concerns/anything scaring you
   
@@ -1466,32 +1475,45 @@ if (isMobile) {
   
   
   //PMHx+FHx+allergies+meds   
- 
-///  
-  else if (familyheart_repeat == 0 && (noteContent.includes("family")||noteContent.includes("run in the"))) {
-    //readOutLoud("My dad and my uncle both have high blood pressure");
-    previousquestion = noteContent; familyheart_repeat++;  response_question = "My dad and my uncle both have high blood pressure";
+  else if (FH_repeat == 0 && (noteContent.includes("family")&&(noteContent.includes("heart")||noteContent.includes("cardi")||noteContent.includes("stroke")))) {
+    //readOutLoud("I know my mum has pre-diabetes but I don't think my family have any other medical conditions");
+    previousquestion = noteContent; FH_repeat++;  response_question = "I know my mum has pre-diabetes but I don't think my family have any other medical conditions";
     familyhistoryx = true;
-    document.getElementById("mp4_src").src = "videos/familyhistory.mp4"; allifsaction();}//FHx
-  
+    document.getElementById("mp4_src").src = "videos/cardiacfamilyhistory.mp4"; allifsaction();}//heart problems in the family
   
   
   else if (pmhx_repeat == 0 && (!noteContent.includes("famil")&&!noteContent.includes("ask")&&(noteContent.includes("anything else")||noteContent.includes("other problem")||noteContent.includes("other condition"))
   ||(noteContent.includes("medical")&&(noteContent.includes("problem")||noteContent.includes("condition")||noteContent.includes("issue"))))) {
-    //readOutLoud("I have high cholesterol and my blood pressure is on the high side. I'm also prediabetic as well.");
-    previousquestion = noteContent; pmhx_repeat++;  response_question = "I have high cholesterol and my blood pressure is on the high side. I'm also prediabetic as well";
+    //readOutLoud("I don't suffer from any medical conditions");
+    previousquestion = noteContent; pmhx_repeat++;  response_question = "I don't suffer from any medical conditions";
     pmhx = true;
     document.getElementById("mp4_src").src = "videos/pmhx.mp4"; allifsaction();}//PMHx / suffere from anything else (you also want to rule out is there anything else you want to ask me)
   
-      
- 
+    /*  else if (strokepast_repeat == 0 && (noteContent.includes("stroke")&&noteContent.includes("past"))) {
+        //readOutLoud("I've not had any strokes in the past");
+        previousquestion = noteContent; strokepast_repeat++;  response_question = "I've not had any strokes in the past";
+        pmhx = true;
+        document.getElementById("mp4_src").src = "videos/ihadastrokeafewyearsago.mp4"; allifsaction();}//PMHx
+  
+  else if (otherhistory_repeat == 0 && (noteContent.includes("diabet")&&!noteContent.includes("family"))) {
+    //readOutLoud("I've recently been diagnosed with pre-diabetes, and they've given me tips on how to improve my lifestyle to try and prevent me from getting diabetes.");
+    previousquestion = noteContent; otherhistory_repeat++;  response_question = "I have pre-diabetes, and was given tips on how to improve my lifestyle";
+    diabetesx = true;
+    document.getElementById("mp4_src").src = "videos/recentlydxoftype2diabetes.mp4"; allifsaction();}//PMHx diabetes. not family
   
   
+  
       
-
+  else if (bpfamily_repeat == 0 && (noteContent.includes("blood pressure")&&!noteContent.includes("family"))) {
+    //readOutLoud("My blood pressure is slightly high when I came in last time to the GP");
+    previousquestion = noteContent; bpfamily_repeat++;  response_question = "My blood pressure is slightly high when I came in last time to the GP";
+    hypertensionx = true;
+    document.getElementById("mp4_src").src = "videos/bloodpressurequitehighbutnomeds.mp4"; allifsaction();}//PMHx hypertension. not family
+  
+  */
   
   else if (surgery_repeat == 0 && (noteContent.includes("surger")||noteContent.includes("operat"))) {
-    //readOutLoud("I've not had any surgeries in the past");
+    //readOutLoud("I've not had any surgeries");
     previousquestion = noteContent; surgery_repeat++;  response_question = "I've not had any surgeries";
     surgeriesx = true;
     document.getElementById("mp4_src").src = "videos/surgeries.mp4"; allifsaction();}//Any surgeries
@@ -1504,31 +1526,29 @@ if (isMobile) {
     document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//FHx
   
   else if (takeforpain_repeat == 0 && (noteContent.includes("do you take anything for")||noteContent.includes("paracetamol")||noteContent.includes("pain relief")||noteContent.includes("relie")&&noteContent.includes("pain"))) {
-    //readOutLoud("I take paracetamol, but it doesn't work");
-    previousquestion = noteContent; takeforpain_repeat++;  response_question = "I take paracetomol but it doesn't work";
+    //readOutLoud("I have been taking paracetamol regularly and put warm compresses on my forehead but they don't really seem to help");
+    previousquestion = noteContent; takeforpain_repeat++;  response_question = "I have been taking paracetamol regularly and put warm compresses on my forehead but they don't really seem to help";
     medstestx = true;
     document.getElementById("mp4_src").src = "videos/itakeparacetamolbutdoesntwork.mp4"; allifsaction();}//Do you take anything for the pain? + does it work
   
   else if (illicitdrugs_repeat == 0 && (noteContent.includes("meds")||noteContent.includes("medication")||noteContent.includes("drugs")&&!noteContent.includes("illicit")&&!noteContent.includes("illegal"))) {
-    //readOutLoud("I only take Ramipril 1.25 milligrams once a day for my blood pressure");
-    previousquestion = noteContent; illicitdrugs_repeat++;  response_question = "I take ramipril for high BP";
+    //readOutLoud("I don't take any regular medications");
+    previousquestion = noteContent; illicitdrugs_repeat++;  response_question = "I don't take any regular medications";
     medstestx = true;
     document.getElementById("mp4_src").src = "videos/medicationsaspirin.mp4"; allifsaction();}//meds
   
   
   //social Hx
   
-  
   else if (howmuchsmoke_repeat == 0 && (noteContent.includes("smok")||noteContent.includes("how much do you smoke"))) {
-    //readOutLoud("I smoke around 15 cigarettes every day and i started when i was 15");
-    previousquestion = noteContent; howmuchsmoke_repeat++;  response_question = "i smoke 15 cigarettes a day + started when i was 15";
+    //readOutLoud("I haven't ever smoked");
+    previousquestion = noteContent; howmuchsmoke_repeat++;  response_question = "I haven't ever smoked";
     smokingx = true;
     document.getElementById("mp4_src").src = "videos/smoke.mp4"; allifsaction();}//smoking
   
-  
   else if(drinkingalcohol_repeat == 0 && (noteContent.includes("drink")||noteContent.includes("alcohol")||noteContent.includes("how much do you drink"))){
-    //readOutLoud("I drink about half a bottle of wine every day + started as a teenager");
-    previousquestion = noteContent; drinkingalcohol_repeat++;  response_question = "i drink about half a bottle of wine per day";
+    //readOutLoud("I drink drink any alcohol to be honest, my dad always said told me that there is no point poisoning your mind so I listened to him");
+    previousquestion = noteContent; drinkingalcohol_repeat++;  response_question = "I drink drink any alcohol to be honest, my dad always said told me that there is no point poisoning your mind so I listened to him";
     alcoholx = true;
     document.getElementById("mp4_src").src = "videos/alcohol.mp4"; allifsaction();}//alcohol
   
@@ -1541,13 +1561,14 @@ if (isMobile) {
     //readOutLoud("No");
     previousquestion = noteContent; overthecounter_repeat++;  response_question = "no";
     document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//OTC drugs/have you been taking any drugs not given by the Dr
-  
-  else if (exercise_repeat == 0 && (noteContent.includes("exercise")||noteContent.includes("go on walk")||noteContent.includes("active")
+
+    else if (exercise_repeat == 0 && (noteContent.includes("exercise")||noteContent.includes("go on walk")||noteContent.includes("active")
   ||noteContent.includes("sport")||noteContent.includes("physical"))){
-    //readOutLoud("I try and do exercise from time to time like going on walks with my dog and sometimes play badminton with my friends");
-    previousquestion = noteContent; exercise_repeat++;  response_question = "I try do exercise like going on walks with my dog and play badminton";
+        //readOutLoud("SAME AS THE WALKING ONE QUITE A FEW ABOVE!!!!!!!!!!!!!!!!!!!!!!!!! --> When I have the headache come on I can't walk or do any exercise, but when I'm well I normally do a lot of sport. I like to run quite a lot and go maybe twice a week, I've even got a half marathon that I've been training for so I am quite keen on running");
+    previousquestion = noteContent; exercise_repeat++;  response_question = "When I have the headache come on I can't walk or do any exercise, but when I'm well I normally do a lot of sport. I like to run quite a lot and go maybe twice a week, I've even got a half marathon that I've been training for so I am quite keen on running";
+
     physicalactivityx = true;
-    document.getElementById("mp4_src").src = "videos/exercise.mp4"; allifsaction();}//exercise/do you keep active
+    document.getElementById("mp4_src").src = "videos/idontreallyespeciallycozigetsobsoavoidwalking.mp4"; allifsaction();}//exercise/do you keep active
   
   ////
   
@@ -1561,19 +1582,20 @@ if (isMobile) {
   
   
   //home situation    
-  else if (livewithathome_repeat == 0 && (noteContent.includes("at home")||noteContent.includes("live with"))){
-    //readOutLoud("I live alone in a flat in the city");
-    previousquestion = noteContent; livewithathome_repeat++;  response_question = "i live alone in a flat";
-    homesituationx = true;
-    document.getElementById("mp4_src").src = "videos/livingsituation.mp4"; allifsaction();}//who's at home/who lives at home/who dyu live with
   
   else if (bungalo_repeat == 0 && (noteContent.includes("bungalo")||noteContent.includes("house")||noteContent.includes("appartment")
-      ||noteContent.includes("live in")||noteContent.includes("you live")||noteContent.includes("living situation")||noteContent.includes("housing situation"))){
-    //readOutLoud("I live in a little flat in the city");
-    previousquestion = noteContent; bungalo_repeat++;  response_question = "i live in little flat in the city";
+      ||noteContent.includes("live in")||noteContent.includes("live with")||noteContent.includes("at home")||noteContent.includes("you live")||noteContent.includes("living situation")||noteContent.includes("housing situation"))){
+    //readOutLoud("I live with my wife in a little flat in the city");
+    previousquestion = noteContent; bungalo_repeat++;  response_question = "i live with wife in little flat in the city";
     homesituationx = true;
-    document.getElementById("mp4_src").src = "videos/livingsituation.mp4"; allifsaction();}//where dyu live/dyu live in a flat etc
+    document.getElementById("mp4_src").src = "videos/iliveinaflatinthecity.mp4"; allifsaction();}//where dyu live/dyu live in a flat etc
   
+  else if (hithere_repeat == 0 && ((noteContent.includes("hello")||noteContent.toLowerCase() === "hi."||noteContent.toLowerCase() === "hi"||noteContent.toLowerCase() === "hey"
+  ||noteContent.toLowerCase() === "hey."||noteContent.includes("greeting")
+  ||noteContent.includes("hey there")||noteContent.includes("hi there")||noteContent.includes("hiya"))&&!noteContent.includes("children"))){
+    //readOutLoud("Hiya there");
+    previousquestion = noteContent; hithere_repeat++;  response_question = "hiya there";
+    document.getElementById("mp4_src").src = "videos/hiyathere.mp4"; allifsaction();}
   
   /*
       else if ((noteContent.includes("good")||noteContent.includes("ok")||noteContent.includes("alright"))&&(noteContent.includes("i'm")||noteContent.includes("i am"))) {
@@ -1584,13 +1606,6 @@ if (isMobile) {
           }}//I'm good thank you (in response to how are you)
   */
   
-          else if (hithere_repeat == 0 && ((noteContent.includes("hello")||noteContent.toLowerCase() === "hi."||noteContent.toLowerCase() === "hi"||noteContent.toLowerCase() === "hey"
-          ||noteContent.toLowerCase() === "hey."||noteContent.includes("greeting")
-          ||noteContent.includes("hey there")||noteContent.includes("hi there")||noteContent.includes("hiya"))&&!noteContent.includes("children"))){
-            //readOutLoud("Hiya there");
-            previousquestion = noteContent; hithere_repeat++;  response_question = "hiya there";
-            document.getElementById("mp4_src").src = "videos/hiyathere.mp4"; allifsaction();}
-          
   
   
   
@@ -1605,8 +1620,7 @@ if (isMobile) {
   
       else {
         
-        if (noteContent.includes("dark")||noteContent.includes("pale")){darkurinex = true;}
-
+  
   
 
 
@@ -1615,9 +1629,8 @@ if (isMobile) {
 
 
 
-
-const generateResponse = async (input) => {
-  const response = await fetch("https://oscesimstrial1.onrender.com/api/TUTOR2ndcase", {
+            const generateResponse = async (input) => {
+  const response = await fetch("https://oscesimstrial1.onrender.com/api/4thcase", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ 
@@ -1638,10 +1651,11 @@ const generateResponse = async (input) => {
 
 /*      THE OFFICIAL VERSION THAT WORKS WITHOUT RENDER SERVER AND JUST LOALLY!!!!!!!!!
 
-        
+
+
       //const prompt = "You are Jill, a 50 year old female with pain. The pain started yesterday at 3pm and is located on the upper right side of your tummy region. It is worse when bending down. You smoke 20 cigarettes per day, have 2 children, and do not take drugs. You are currently taking paracetamol for the pain. Imagine you are in a consultation room and the doctor is asking you questions, and you are Jill for all of the next questions that we ask in this thread. Do not give any more information than what the doctor asked for. Make it seem like Jill is not very smart and occasionally asks questions to the doctor. Question: What is your name?, Answer: My name is Jill";
       //const prompt = "you are jill, a 50 year old female. with pain. started yesterday at 3pm. located on the upper right side of your tummy region. that is worse when bending down. You smoke 20 cigarettes per day. you have 2 children. and don't take drugs. You take paracetamol for the pain. Imagine you are in a consultation room and the doctor is asking you questions and you are jill for all of the next questions Do not give any more information than what the doctor asked for. Input:"
-      const prompt = "you're Jason, a 40 year old male. with right upper quadrant sharp pain that comes + goes for last 2 months + happened this morning. You're in a consultation room & the Dr is asking you questions. Answer as Jason"
+      const prompt = "you're John, a 31 year old male. with new right sided arm + leg weakness over last 3 hrs with facial droop + slurred speech. You're in a consultation room & the Dr is asking you questions. Answer as John"
   
       //require('dotenv').config();
   
@@ -1698,9 +1712,8 @@ const generateResponse = async (input) => {
     }
   
     return generatedText;
-    
   };
-      
+     
   */
 
 
@@ -1718,6 +1731,7 @@ const generateResponse = async (input) => {
 
 
 
+  
   /*
   const handleUserInput = async (noteContent) => {
             const response = await generateResponse(noteContent);
@@ -1770,97 +1784,88 @@ const generateResponse = async (input) => {
 
 
 
-
-
-
 //for the video without speaking
-document.getElementById('inbetweenVideo').style.display = 'unset'; 
-const inbetweenVideo = document.getElementById('inbetweenVideo');
-inbetweenVideo.load();
-inbetweenVideo.onloadedmetadata = () => {
-  inbetweenVideo.muted = true;
-  inbetweenVideo.play();
-}
-document.getElementById("inbetweenmp4_src").src = "videos/silentvideo.mp4";
-
-
-
-document.getElementById('mutedVideo').style.display = 'unset';  
-const gptvideo = document.getElementById('mutedVideo');
+  document.getElementById('inbetweenVideo').style.display = 'unset'; 
+  const inbetweenVideo = document.getElementById('inbetweenVideo');
+  inbetweenVideo.load();
+  inbetweenVideo.onloadedmetadata = () => {
+    inbetweenVideo.muted = true;
+    inbetweenVideo.play();
+  }
+  document.getElementById("inbetweenmp4_src").src = "videos/silentvideo.mp4";
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-const handleUserInput = async (noteContent) => {
-  const responsePromise = generateResponse(noteContent);
-  const videoPromise = new Promise((resolve) => {
-    inbetweenVideo.onloadedmetadata = () => {
-      inbetweenVideo.muted = true;
-
-      inbetweenVideo.play();
-      resolve();
-
-    };
-    ////////////////////is for playing the muted video///////////////////
-    document.getElementById('loadingcircle').style.display = 'unset';
-    document.getElementById('errormsg').style.display = 'unset';
-
-    document.getElementById("mutedmp4_src").src = "videos/bitmore.mp4";
-    
-    
-   
-
-
-    setTimeout(() => {
-      inbetweenVideo.load(); inbetweenVideo.loop = true;
+  document.getElementById('mutedVideo').style.display = 'unset';  
+  const gptvideo = document.getElementById('mutedVideo');
+  
+  
+  const handleUserInput = async (noteContent) => {
+    const responsePromise = generateResponse(noteContent);
+    const videoPromise = new Promise((resolve) => {
+      inbetweenVideo.onloadedmetadata = () => {
+        inbetweenVideo.muted = true;
+  
+        inbetweenVideo.play();
+        resolve();
+  
+      };
+      ////////////////////is for playing the muted video///////////////////
+      document.getElementById('loadingcircle').style.display = 'unset';
+      document.getElementById('errormsg').style.display = 'unset';
+  
+      document.getElementById("mutedmp4_src").src = "videos/bitmore.mp4";
       
-  }, 1);
-
-
-
-
-    gptvideo.onended =  function(e) {
-      recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';   document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; actionTriggered = false;
       
-      document.getElementById('myVideo').style.display = 'unset';
-      document.getElementById('mutedVideo').style.display = 'none';
-      document.getElementById('errormsg').style.display = 'none';
-      document.getElementById('messagebeforeacceptingmic').style.display = 'unset';
+     
 
-    };
+
+      setTimeout(() => {
+        inbetweenVideo.load(); inbetweenVideo.loop = true;
+        //document.getElementById('loadingcircle').style.display = 'none';
+    /*  
+      setTimeout(() => {
+        gptvideo.currentTime = gptvideo.duration; // Skip to the end of the video
+      }, 7500);//will force stop video ater 7.5secs
+  */
+    }, 1);
+  
+  
+  
+  
+      gptvideo.onended =  function(e) {
+        recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';   document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; actionTriggered = false;
+        
+        document.getElementById('myVideo').style.display = 'unset';
+        document.getElementById('mutedVideo').style.display = 'none';
+        document.getElementById('errormsg').style.display = 'none';
+        document.getElementById('messagebeforeacceptingmic').style.display = 'unset';
+  
+      };
+    
+  
+    });
+    await Promise.all([responsePromise, videoPromise]);
+    const response = await responsePromise;
+    document.getElementById('chatgpt-response').innerText = 'Previous question: ' + previousquestion  + '\n' + 'Response to previous question:' + response_question  + '\n' + 'question: ' + response + '\n' + '\n' + noteContent ; //was just 'prompt' before. Update the content of the element with ID 'chatgpt-response' REMOVE THIS!!!!
   
 
-  });
-  await Promise.all([responsePromise, videoPromise]);
-  const response = await responsePromise;
-  document.getElementById('chatgpt-response').innerText = 'Previous question: ' + previousquestion  + '\n' + 'Response to previous question:' + response_question  + '\n' + 'question: ' + response + '\n' + '\n' + noteContent ; // Update the content of the element with ID 'chatgpt-response' REMOVE THIS!!!!
-
-  /*
-  const synth = window.speechSynthesis;
-  const utterance = new SpeechSynthesisUtterance(response);
-*/
 
 
+    
 
 
-
-
-
-  const text11L = response;
-
-// Call the Eleven Labs API for text-to-speech
-fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
+    /*
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(response);
+  */
+  
+      const text11L = response;
+  
+  fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -1874,8 +1879,7 @@ fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
     }
     return response.blob();
 })
-
-.then(blob => {
+  .then(blob => {
     
   if (!audio) {
   audio = new Audio();
@@ -1930,31 +1934,33 @@ audio.load();
   });
 });
 
-
-
-
-
-/*
-  utterance.onend = () => {
-
-    const gptvideo = document.getElementById('mutedVideo');
-    gptvideo.pause(); // Pause the video after the speech synthesis finishes
-    //gptvideo.volume = 1;
-    recognition.start();   document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
-    document.getElementById('myVideo').style.display = 'unset';
-    document.getElementById('mutedVideo').style.display = 'none';
-    
-    //not too sure about this below - (added this in BEFORE testing it with chat gpt)
-    actionTriggered = false;
-
+  
+  
+  
+  
+  /*
+    utterance.onend = () => {
+  
+      const gptvideo = document.getElementById('mutedVideo');
+      gptvideo.pause(); // Pause the video after the speech synthesis finishes
+      //gptvideo.volume = 1;
+      recognition.start();   document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
+      document.getElementById('myVideo').style.display = 'unset';
+      document.getElementById('mutedVideo').style.display = 'none';
+      
+      //not too sure about this below - (added this in BEFORE testing it with chat gpt)
+      actionTriggered = false;
+  
+    };
+    synth.speak(utterance);
+  */
+  
+  
+  
+    previousquestion = noteContent; response_question = response;//is to put what the previous question was into chatgpt
   };
-  synth.speak(utterance);
-*/
-
-
-
-  previousquestion = noteContent; response_question = response;//is to put what the previous question was into chatgpt
-};  
+  
+  
   
   
   
@@ -1964,7 +1970,6 @@ audio.load();
   
   const userInput = noteContent;
   handleUserInput(userInput);
-  
   
   response_question = generatedText;
   };//end of the else statement
@@ -2144,75 +2149,44 @@ audio.load();
   
   
   /*Final year questions:*/
+   
+  var subarachnoidreal1 = $('#subarachnoidreal1'); var subarachnoidreal2 = $('#subarachnoidreal2');
+  if (subarachnoidx === true){
+  redstyles(subarachnoidreal1); greenstyles(subarachnoidreal2);
+  }
   
-  var dizzinessreal1 = $('#dizzinessreal1'); var dizzinessreal2 = $('#dizzinessreal2');
-  if (dizzinessx === true){
-  redstyles(dizzinessreal1); greenstyles(dizzinessreal2);
+  var redflagreal1 = $('#redflagreal1'); var redflagreal2 = $('#redflagreal2');
+  if (redflagx === true){
+  redstyles(redflagreal1); greenstyles(redflagreal2); 
+  }
+  
+  var photophobiareal1 = $('#photophobiareal1'); var photophobiareal2 = $('#photophobiareal2');
+  if (photophobiax === true){
+  redstyles(photophobiareal1); greenstyles(photophobiareal2); 
   }
 
-  var feverreal1 = $('#feverreal1'); var feverreal2 = $('#feverreal2');
-  if (feverx === true){
-  redstyles(feverreal1); greenstyles(feverreal2);
+  var phonophobiareal1 = $('#phonophobiareal1'); var phonophobiareal2 = $('#phonophobiareal2');
+  if (phonophobiax === true){
+  redstyles(phonophobiareal1); greenstyles(phonophobiareal2); 
   }
 
-  var weightreal1 = $('#weightreal1'); var weightreal2 = $('#weightreal2');
-  if (weightx === true){
-  redstyles(weightreal1); greenstyles(weightreal2);
-  }
-
-  var appetitereal1 = $('#appetitereal1'); var appetitereal2 = $('#appetitereal2');
-  if (appetitex === true){
-  redstyles(appetitereal1); greenstyles(appetitereal2);
-  }
-  
-  var jaundicereal1 = $('#jaundicereal1'); var jaundicereal2 = $('#jaundicereal2');
-  if (jaundicex === true){
-  redstyles(jaundicereal1); greenstyles(jaundicereal2);
-  }
-  
-  var darkurinereal1 = $('#darkurinereal1'); var darkurinereal2 = $('#darkurinereal2');
-  if (darkurinex === true){
-  redstyles(darkurinereal1); greenstyles(darkurinereal2);
-  }
-  
   var nauseareal1 = $('#nauseareal1'); var nauseareal2 = $('#nauseareal2');
   if (nauseax === true){
-  redstyles(nauseareal1); greenstyles(nauseareal2);
+  redstyles(nauseareal1); greenstyles(nauseareal2); 
   }
-  
-  var backpainreal1 = $('#backpainreal1'); var backpainreal2 = $('#backpainreal2');
-  if (backpainx === true){
-  redstyles(backpainreal1); greenstyles(backpainreal2);
-  }
-  
-  var shouldertipreal1 = $('#shouldertipreal1'); var shouldertipreal2 = $('#shouldertipreal2');
-  if (shouldertipx === true){
-  redstyles(shouldertipreal1); greenstyles(shouldertipreal2);
-  }
-  
-  var steatorrhoeareal1 = $('#steatorrhoeareal1'); var steatorrhoeareal2 = $('#steatorrhoeareal2');
-  if (steatorrhoeax === true){
-  redstyles(steatorrhoeareal1); greenstyles(steatorrhoeareal2);
-  }
-  
-  var bloatingreal1 = $('#bloatingreal1'); var bloatingreal2 = $('#bloatingreal2');
-  if (bloatingx === true){
-  redstyles(bloatingreal1); greenstyles(bloatingreal2);
-  }
-    
-  var itchingreal1 = $('#itchingreal1'); var itchingreal2 = $('#itchingreal2');
-  if (itchingx === true){
-  redstyles(itchingreal1); greenstyles(itchingreal2);
-  }
-  
-  var prevgallreal1 = $('#prevgallreal1'); var prevgallreal2 = $('#prevgallreal2');
-  if (prevgallx === true){
-  redstyles(prevgallreal1); greenstyles(prevgallreal2);
-  }
-   
-  
-  
 
+  var visionreal1 = $('#visionreal1'); var visionreal2 = $('#visionreal2');
+  if (visionx === true){
+  redstyles(visionreal1); greenstyles(visionreal2); 
+  }
+
+  var injuryreal1 = $('#injuryreal1'); var injuryreal2 = $('#injuryreal2');
+  if (injuryx === true){
+  redstyles(injuryreal1); greenstyles(injuryreal2); 
+  }
+  
+  
+  
   
   
   function redstyles(element){
@@ -3333,8 +3307,7 @@ audio.load();
   /*-----------------------------
           Examinations
    ------------------------------*/
-   let examinations_silence = false;
-
+  let examinations_silence = false;
   
    try {
     var SpeechRecognition_examinations = window.SpeechRecognition_examinations || window.webkitSpeechRecognition;
@@ -3366,7 +3339,7 @@ audio.load();
     var transcript_examinations = event.results[current_examinations][0].transcript;
    
     var mobileRepeatBug_examinations = (current_examinations == 1 && transcript_examinations == event.results[0][0].transcript_examinations);
-   
+
     if(!mobileRepeatBug_examinations) {
   
       if (noteexaminations === 'N/A') {
@@ -3388,24 +3361,18 @@ audio.load();
   $('#start-record-btn-for-examinations').on('click', function(e) {
     if (examinationsContent.length) {
       examinationsContent += ' ';
+      
     }
     recognition_examinations.start();
     examinations_silence = false;
+
     
   
     
     
-    
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
     });
   
     examinationstextarea.on('input', function() {
@@ -3417,6 +3384,7 @@ audio.load();
   $('#save-note-btn-for-examinations,#move-onto-questions-btn_examinations').on('click', function(e) {
   recognition_examinations.stop();
   examinations_silence = true;
+
   
   
   
@@ -3440,27 +3408,36 @@ audio.load();
   
     var examinationsfinal = $('#examinationsfinal');
     examinationsfinal.text(noteexaminations);
+    examinationsfinal = noteexaminations.toLowerCase();
     $('#examinationsfinal1').html($('#examinationsfinal').html());
   
   
   
   
-  
+    var cranialexamx = false;
+    if(noteexaminations.includes("nerve")||examinationsfinal.includes("cran")||examinationsfinal.includes("cry")){ 
+      cranialexamx = true;
+    }
+    var cranialexamreal1 = $('#cranialexamreal1'); var cranialexamreal2 = $('#cranialexamreal2');
+    if (cranialexamx === true){
+    redstyles_aboveline(cranialexamreal1); greenstyles_aboveline(cranialexamreal2);
+    }
   
   //mark your examination
   var cardioexamx = false;
-  if(noteexaminations.includes("abdo")||examinationsfinal.includes("tumm")||examinationsfinal.includes("stomach")){ 
+  if(noteexaminations.includes("neuro")||examinationsfinal.includes("limb")||examinationsfinal.includes("logic")||examinationsfinal.includes("upper")||examinationsfinal.includes("lower")||examinationsfinal.includes("cerebel")){ 
     cardioexamx = true;
   }
-  
-  
+
   var cardioexamreal1 = $('#cardioexamreal1'); var cardioexamreal2 = $('#cardioexamreal2');
   if (cardioexamx === true){
   redstyles_aboveline(cardioexamreal1); greenstyles_aboveline(cardioexamreal2);
   }
   
   
-  
+
+
+
   function redstyles(element){
     element.css({'visibility': 'hidden'});}
   
@@ -3483,7 +3460,7 @@ audio.load();
     document.getElementById('summary').style.display = 'unset';
   
     recognition_examinations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/summary.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
+    document.getElementById("mp4_src").src = "videos/summary.mp4"; document.getElementById("myVideo").load();
     document.getElementById('myVideo').onended = function(e) {
     recognition1.start();     document.getElementById('messagebeforeacceptingmic_summary').style.display = 'unset'; 
     document.getElementById('save-note-btn-for-summary').style.display = 'unset';     
@@ -3508,7 +3485,7 @@ audio.load();
   let greg_examinations = 0;
   document.addEventListener("keydown", function (event) {
     if (event.key === "Enter" && micisworkingexaminations.style.display === 'unset' && greg_examinations==0) {//&& myVideo.ended  
-      document.getElementById("save-note-btn-for-examinations").click(); greg_examinations++; examinations_silence = false;
+      document.getElementById("save-note-btn-for-examinations").click(); greg_examinations++; examinations_silence == false;
       }   });
   
   
@@ -3525,19 +3502,22 @@ audio.load();
   });
   });
   
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-recognition_examinations.onend= function (){
-  if (examinations_silence == false){
-    recognition_examinations.start()
-  }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
   
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  recognition_examinations.onend= function (){
+    if (examinations_silence == false){
+      document.getElementById('silencemessage').style.display = 'unset';
+      //readOutLoud("Go");
+      recognition_examinations.start()
+    }
+  }
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   /*-----------------------------
           Summary
    ------------------------------*/
-  var summary_silence = false;
+   let summary_silence = false;
+
   
    try {
     var SpeechRecognition1 = window.SpeechRecognition1 || window.webkitSpeechRecognition;
@@ -3589,8 +3569,8 @@ recognition_examinations.onend= function (){
     if (summaryContent.length) {
       summaryContent += ' ';
     }
-    recognition1.start();
-    summary_silence = false;
+    recognition1.start();summary_silence = false;
+    
     });
   
     summarytextarea.on('input', function() {
@@ -3598,8 +3578,8 @@ recognition_examinations.onend= function (){
       })
   
   $('#save-note-btn-for-summary,#move-onto-questions-btn_summary').on('click', function(e) {
-    recognition1.stop();
-    summary_silence = true;
+    recognition1.stop();summary_silence = true;
+    
     
   
     setTimeout(function() {
@@ -3635,10 +3615,7 @@ recognition_examinations.onend= function (){
       gender_summaryx = true;
     }
   
-    var description_summaryx = false;
-    if(summaryreview.includes("elephant")||summaryreview.includes("heavy")||summaryreview.includes("press")||summaryreview.includes("intense")){ 
-      description_summaryx = true;
-    }
+    
   
     var duration_summaryx = false;
     if(summaryreview.includes("day")||summaryreview.includes("morning")||summaryreview.includes("recent")||summaryreview.includes("week")||summaryreview.includes("month")||summaryreview.includes("hour")||summaryreview.includes("min")||summaryreview.includes("second")){ 
@@ -3668,10 +3645,7 @@ recognition_examinations.onend= function (){
   redstyles(gender_summaryreal1); greenstyles(gender_summaryreal2);
   }
   
-  var description_summaryreal1 = $('#description_summaryreal1'); var description_summaryreal2 = $('#description_summaryreal2');
-  if (description_summaryx === true){
-  redstyles(description_summaryreal1); greenstyles(description_summaryreal2);
-  }
+  
   
   var duration_summaryreal1 = $('#duration_summaryreal1'); var duration_summaryreal2 = $('#duration_summaryreal2');
   if (duration_summaryx === true){
@@ -3715,7 +3689,7 @@ recognition_examinations.onend= function (){
     document.getElementById('differentials').style.display = 'unset';
   
     recognition1.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-     document.getElementById("mp4_src").src = "videos/differential.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
+     document.getElementById("mp4_src").src = "videos/differential.mp4"; document.getElementById("myVideo").load();
     document.getElementById('myVideo').onended = function(e) {
       recognition_differentials.start();     document.getElementById('messagebeforeacceptingmic_differentials').style.display = 'unset';
     document.getElementById('save-note-btn-for-differentials').style.display = 'unset'; 
@@ -3755,28 +3729,29 @@ recognition_examinations.onend= function (){
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-recognition1.onend= function (){
-  if (summary_silence == false){
-    recognition1.start()
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  recognition1.onend= function (){
+    if (summary_silence == false){
+      recognition1.start()
+    }
   }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   /*-----------------------------
           Differentials
    ------------------------------*/
-  var differentials_silence = false;
+   let differentials_silence = false;
+
   
    try {
     var SpeechRecognition_differentials = window.SpeechRecognition_differentials || window.webkitSpeechRecognition;
@@ -3831,8 +3806,7 @@ recognition1.onend= function (){
     if (differentialsContent.length) {
       differentialsContent += ' ';
     }
-    recognition_differentials.start();
-    differentials_silence = false;
+    recognition_differentials.start(); differentials_silence = false;
     });
   
     differentialstextarea.on('input', function() {
@@ -3842,8 +3816,8 @@ recognition1.onend= function (){
   
   
   $('#save-note-btn-for-differentials,#move-onto-questions-btn_differentials').on('click', function(e) {
-  recognition_differentials.stop();
-  differentials_silence = true;
+  recognition_differentials.stop(); differentials_silence = true;
+  
   
   
     setTimeout(function() {
@@ -3867,62 +3841,67 @@ recognition1.onend= function (){
   
   
   
-    var gallstones_differentialsx = false;
-    if(differentialsfinal.includes("gall")||differentialsfinal.includes("stone")||differentialsfinal.includes("cystitis")||differentialsfinal.includes("bladder")||differentialsfinal.includes("gitis")){ 
-      gallstones_differentialsx = true;
+    var stroke_differentialsx = false;
+    if(differentialsfinal.includes("stroke")||differentialsfinal.includes("ischaem")){ 
+      stroke_differentialsx = true;
   
     }
   
-    var pancreatitis_differentialsx = false;
-    if(differentialsfinal.includes("pan")){ 
-      pancreatitis_differentialsx = true;
+    var angina_differentialsx = false;
+    if(differentialsfinal.includes("haemo")||differentialsfinal.includes("agic")||differentialsfinal.includes("bleed")){ 
+      angina_differentialsx = true;
     }
   
-    var hepatitis_differentialsx = false;
-    if(differentialsfinal.includes("hepa")||differentialsfinal.includes("liver")||differentialsfinal.includes("cir")){ 
-      hepatitis_differentialsx = true;
+    var tia_differentialsx = false;
+    if(differentialsfinal.includes("tia")||differentialsfinal.includes("transemic")||differentialsfinal.includes("attack")||differentialsfinal.includes("tea")){ 
+      tia_differentialsx = true;
+    }
+
+    var sol_differentialsx = false;
+    if(differentialsfinal.includes("tumour")||differentialsfinal.includes("mass")||differentialsfinal.includes("cancer")||differentialsfinal.includes("sol")||differentialsfinal.includes("space")||differentialsfinal.includes("lesion")){ 
+      sol_differentialsx = true;
     }
     
-    var gastroenteritis_differentialsx = false;
-    if(differentialsfinal.includes("gastro")||differentialsfinal.includes("enteritis")||differentialsfinal.includes("poison")||!differentialsfinal.includes("gastro oesop")||!differentialsfinal.includes("gastro eso")){ 
-      gastroenteritis_differentialsx = true;
-    }
+    
   
-    var gord_differentialsx = false;
-    if(differentialsfinal.includes("gord")||differentialsfinal.includes("gastro oesop")||differentialsfinal.includes("reflux")||differentialsfinal.includes("heart burn")||differentialsfinal.includes("heartburn")||differentialsfinal.includes("gerd")){ 
-      gord_differentialsx = true;
+    var tod_differentialsx = false;
+    if(differentialsfinal.includes("paralysis")||differentialsfinal.includes("tod")||differentialsfinal.includes("ictal")||differentialsfinal.includes("per")){ 
+      tod_differentialsx = true;
     }
     
    
     
   //////////////////////////////////////////////////////
   
-  var gallstones_differentialsreal1 = $('#gallstones_differentialsreal1'); var gallstones_differentialsreal2 = $('#gallstones_differentialsreal2');
-  if (gallstones_differentialsx === true){
-  redstyles(gallstones_differentialsreal1); greenstyles(gallstones_differentialsreal2);
+  var stroke_differentialsreal1 = $('#stroke_differentialsreal1'); var stroke_differentialsreal2 = $('#stroke_differentialsreal2');
+  if (stroke_differentialsx === true){
+  redstyles(stroke_differentialsreal1); greenstyles(stroke_differentialsreal2);
   }
   
-  var pancreatitis_differentialsreal1 = $('#pancreatitis_differentialsreal1'); var pancreatitis_differentialsreal2 = $('#pancreatitis_differentialsreal2');
-  if (pancreatitis_differentialsx === true){
-  redstyles(pancreatitis_differentialsreal1); greenstyles(pancreatitis_differentialsreal2);
+  var angina_differentialsreal1 = $('#angina_differentialsreal1'); var angina_differentialsreal2 = $('#angina_differentialsreal2');
+  if (angina_differentialsx === true){
+  redstyles(angina_differentialsreal1); greenstyles(angina_differentialsreal2);
   }
   
-  var hepatitis_differentialsreal1 = $('#hepatitis_differentialsreal1'); var hepatitis_differentialsreal2 = $('#hepatitis_differentialsreal2');
-  if (hepatitis_differentialsx === true){
-  redstyles_aboveline(hepatitis_differentialsreal1); greenstyles_aboveline(hepatitis_differentialsreal2);
+  var tia_differentialsreal1 = $('#tia_differentialsreal1'); var tia_differentialsreal2 = $('#tia_differentialsreal2');
+  if (tia_differentialsx === true){
+  redstyles(tia_differentialsreal1); greenstyles(tia_differentialsreal2);
+  }
+
+  var sol_differentialsreal1 = $('#sol_differentialsreal1'); var sol_differentialsreal2 = $('#sol_differentialsreal2');
+  if (sol_differentialsx === true){
+  redstyles_aboveline(sol_differentialsreal1); greenstyles_aboveline(sol_differentialsreal2);
   }//aboveline
   
-  var gastroenteritis_differentialsreal1 = $('#gastroenteritis_differentialsreal1'); var gastroenteritis_differentialsreal2 = $('#gastroenteritis_differentialsreal2');
-  if (gastroenteritis_differentialsx === true){
-  redstyles(gastroenteritis_differentialsreal1); greenstyles(gastroenteritis_differentialsreal2);
+  
+  
+  var tod_differentialsreal1 = $('#tod_differentialsreal1'); var tod_differentialsreal2 = $('#tod_differentialsreal2');
+  if (tod_differentialsx === true){
+  redstyles(tod_differentialsreal1); greenstyles(tod_differentialsreal2);
   }
   
-  var gord_differentialsreal1 = $('#gord_differentialsreal1'); var gord_differentialsreal2 = $('#gord_differentialsreal2');
-  if (gord_differentialsx === true){
-  redstyles(gord_differentialsreal1); greenstyles(gord_differentialsreal2);
-  }
+
   
- 
   
   
   
@@ -3949,7 +3928,7 @@ recognition1.onend= function (){
     document.getElementById('investigations').style.display = 'unset';
   
     recognition_differentials.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/investigations.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
+    document.getElementById("mp4_src").src = "videos/investigations.mp4"; document.getElementById("myVideo").load();
     document.getElementById('myVideo').onended = function(e) {
     recognition_investigations.start();     document.getElementById('messagebeforeacceptingmic_investigations').style.display = 'unset';
     document.getElementById('save-note-btn-for-investigations').style.display = 'unset';
@@ -3988,16 +3967,16 @@ recognition1.onend= function (){
   });
   
   
-  
-  
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-recognition_differentials.onend= function (){
-  if (differentials_silence == false){
-    recognition_differentials.start()
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  recognition_differentials.onend= function (){
+    if (differentials_silence == false){
+      recognition_differentials.start()
+    }
   }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  
+  
   
   
   
@@ -4005,7 +3984,8 @@ recognition_differentials.onend= function (){
   /*-----------------------------
           Investigations
    ------------------------------*/
-  var investigations_silence = false;
+   let investigations_silence = false;
+
   
    try {
     var SpeechRecognition_investigations = window.SpeechRecognition_investigations || window.webkitSpeechRecognition;
@@ -4060,8 +4040,7 @@ recognition_differentials.onend= function (){
     if (investigationsContent.length) {
       investigationsContent += ' ';
     }
-    recognition_investigations.start();
-    investigations_silence = false;
+    recognition_investigations.start(); investigations_silence = false;
     });
   
     investigationstextarea.on('input', function() {
@@ -4071,8 +4050,8 @@ recognition_differentials.onend= function (){
   
   
   $('#save-note-btn-for-investigations,#move-onto-questions-btn_investigations').on('click', function(e) {
-  recognition_investigations.stop();
-  investigations_silence = true;
+  recognition_investigations.stop(); investigations_silence = true;
+  
   
   
     setTimeout(function() {
@@ -4089,129 +4068,86 @@ recognition_differentials.onend= function (){
     $('#investigationsfinal1').html($('#investigationsfinal').html());
   
   
-  
-  
-    var bedsideobs_investigationsx = false;
-    if(investigationsfinal.includes("temp")||investigationsfinal.includes("bed")||investigationsfinal.includes("side")||investigationsfinal.includes("obs")||investigationsfinal.includes("respiratory")||investigationsfinal.includes("rate")||investigationsfinal.includes("glucose")||investigationsfinal.includes("blood pressure")||investigationsfinal.includes("tachy")){ 
-      bedsideobs_investigationsx = true;
-    }
+    
 
-    var urinalysis_investigationsx = false;
-    if(investigationsfinal.includes("urin")||investigationsfinal.includes("dip")||investigationsfinal.includes("mc")||investigationsfinal.includes("empty")){ 
-      urinalysis_investigationsx = true;
+    var fast_investigationsx = false;
+    if(investigationsfinal.includes("fast")||investigationsfinal.includes("rosier")||investigationsfinal.includes("ros")){ 
+      fast_investigationsx = true;
     }
-
+  
     var ecg_investigationsx = false;
-    if(investigationsfinal.includes("electro")||investigationsfinal.includes("ecg")||investigationsfinal.includes("gram")||investigationsfinal.includes("cardio")){ 
+    if(investigationsfinal.includes("electro")||investigationsfinal.includes("ecg")||investigationsfinal.includes("gram")||investigationsfinal.includes("holter")||investigationsfinal.includes("24")||investigationsfinal.includes("twenty")){ 
       ecg_investigationsx = true;
     }
   
-  
-    var vbg_investigationsx = false;
-    if(investigationsfinal.includes("gas")||investigationsfinal.includes("venous")||investigationsfinal.includes("arter")){ 
-      vbg_investigationsx = true;
-    }
     
-    var culture_investigationsx = false;
-    if(investigationsfinal.includes("culture")){ 
-      culture_investigationsx = true;
+    var glucose_investigationsx = false;
+    if(investigationsfinal.includes("glucose")||investigationsfinal.includes("sugar")||investigationsfinal.includes("gly")){ 
+      glucose_investigationsx = true;
     }
   
-    var lft_investigationsx = false;
-    if(investigationsfinal.includes("lft")||investigationsfinal.includes("liver")||investigationsfinal.includes("function")||investigationsfinal.includes("bili")){ 
-      lft_investigationsx = true;
-    }
-
-    var amylase_investigationsx = false;
-    if(investigationsfinal.includes("amylase")||investigationsfinal.includes("lip")||investigationsfinal.includes("enzyme")||investigationsfinal.includes("pancreatic")){ 
-      amylase_investigationsx = true;
-    }
-
     var normalbloods_investigationsx = false;
-    if(investigationsfinal.includes("blood")||investigationsfinal.includes("fbc")||investigationsfinal.includes("full")||investigationsfinal.includes("urea")||investigationsfinal.includes("crp")||investigationsfinal.includes("esr")||investigationsfinal.includes("haem")||investigationsfinal.includes("hb")||investigationsfinal.includes("white cell")||investigationsfinal.includes("wcc")){ 
+    if(investigationsfinal.includes("blood")||investigationsfinal.includes("fbc")||investigationsfinal.includes("full")||investigationsfinal.includes("urea")||investigationsfinal.includes("liver")||investigationsfinal.includes("crp")||investigationsfinal.includes("lft")){ 
       normalbloods_investigationsx = true;
     }
+
+    var ct_investigationsx = false;
+    if(investigationsfinal.includes("head")||investigationsfinal.includes("ct")||investigationsfinal.includes("see")||investigationsfinal.includes("computer")||investigationsfinal.includes("topo")||investigationsfinal.includes("tea")){ 
+      ct_investigationsx = true;
+    }
   
-    var special_investigationsx = false;
-    if(investigationsfinal.includes("hep")||investigationsfinal.includes("itis")||investigationsfinal.includes("ana")||investigationsfinal.includes("ama")||investigationsfinal.includes("anti")||investigationsfinal.includes("immunog")||investigationsfinal.includes("igg")||investigationsfinal.includes("igm")||investigationsfinal.includes("hcv")||investigationsfinal.includes("antibod")||investigationsfinal.includes("liver screen")){ 
-      special_investigationsx = true;
+    var angio_investigationsx = false;
+    if(investigationsfinal.includes("angio")||investigationsfinal.includes("mri")||investigationsfinal.includes("mra")||investigationsfinal.includes("magnetic")||investigationsfinal.includes("resonance")||investigationsfinal.includes("angel")){ 
+      angio_investigationsx = true;
     }
     
-    var abdoUSS_investigationsx = false;
-    if(investigationsfinal.includes("abdo")||investigationsfinal.includes("ultra")||investigationsfinal.includes("sound")){ 
-      abdoUSS_investigationsx = true;
+    var echo_investigationsx = false;
+    if(investigationsfinal.includes("echo")||investigationsfinal.includes("cardiogram")||investigationsfinal.includes("electro")||investigationsfinal.includes("gram")||investigationsfinal.includes("ecco")){ 
+      echo_investigationsx = true;
     }
   
-    var CT_investigationsx = false;
-    if(investigationsfinal.includes("ct")||investigationsfinal.includes("see")||investigationsfinal.includes("computer")||investigationsfinal.includes("topo")||investigationsfinal.includes("tea")||investigationsfinal.includes("sea")){ 
-      CT_investigationsx = true;
-    }
-  
-    var MRCP_investigationsx = false;
-    if(investigationsfinal.includes("cp")||investigationsfinal.includes("magnet")||investigationsfinal.includes("resonan")||investigationsfinal.includes("cholang")||investigationsfinal.includes("tography")||investigationsfinal.includes("endosc")||investigationsfinal.includes("retro")||investigationsfinal.includes("pee")||investigationsfinal.includes("pea")){ 
-      MRCP_investigationsx = true;
-    }
   //////////////////////////////////////////////////////
   
-  var bedsideobs_investigationsreal1 = $('#bedsideobs_investigationsreal1'); var bedsideobs_investigationsreal2 = $('#bedsideobs_investigationsreal2');
-  if (bedsideobs_investigationsx === true){
-  redstyles(bedsideobs_investigationsreal1); greenstyles(bedsideobs_investigationsreal2);
-  }
-  
-  var urinalysis_investigationsreal1 = $('#urinalysis_investigationsreal1'); var urinalysis_investigationsreal2 = $('#urinalysis_investigationsreal2');
-  if (urinalysis_investigationsx === true){
-  redstyles(urinalysis_investigationsreal1); greenstyles(urinalysis_investigationsreal2);
+  var fast_investigationsreal1 = $('#fast_investigationsreal1'); var fast_investigationsreal2 = $('#fast_investigationsreal2');
+  if (fast_investigationsx === true){
+  redstyles(fast_investigationsreal1); greenstyles(fast_investigationsreal2);
   }
   
   var ecg_investigationsreal1 = $('#ecg_investigationsreal1'); var ecg_investigationsreal2 = $('#ecg_investigationsreal2');
   if (ecg_investigationsx === true){
   redstyles(ecg_investigationsreal1); greenstyles(ecg_investigationsreal2);
   }
-    
-  var vbg_investigationsreal1 = $('#vbg_investigationsreal1'); var vbg_investigationsreal2 = $('#vbg_investigationsreal2');
-  if (vbg_investigationsx === true){
-  redstyles(vbg_investigationsreal1); greenstyles(vbg_investigationsreal2);
+  
+  
+  
+  var glucose_investigationsreal1 = $('#glucose_investigationsreal1'); var glucose_investigationsreal2 = $('#glucose_investigationsreal2');
+  if (glucose_investigationsx === true){
+  redstyles(glucose_investigationsreal1); greenstyles(glucose_investigationsreal2);
   }
   
-  var culture_investigationsreal1 = $('#culture_investigationsreal1'); var culture_investigationsreal2 = $('#culture_investigationsreal2');
-  if (culture_investigationsx === true){
-  redstyles(culture_investigationsreal1); greenstyles(culture_investigationsreal2);
-  }
-  
-  var lft_investigationsreal1 = $('#lft_investigationsreal1'); var lft_investigationsreal2 = $('#lft_investigationsreal2');
-  if (lft_investigationsx === true){
-  redstyles(lft_investigationsreal1); greenstyles(lft_investigationsreal2);
-  }
-
-  var amylase_investigationsreal1 = $('#amylase_investigationsreal1'); var amylase_investigationsreal2 = $('#amylase_investigationsreal2');
-  if (amylase_investigationsx === true){
-  redstyles(amylase_investigationsreal1); greenstyles(amylase_investigationsreal2);
-  }
-
   var normalbloods_investigationsreal1 = $('#normalbloods_investigationsreal1'); var normalbloods_investigationsreal2 = $('#normalbloods_investigationsreal2');
   if (normalbloods_investigationsx === true){
   redstyles(normalbloods_investigationsreal1); greenstyles(normalbloods_investigationsreal2);
   }
+
+  var ct_investigationsreal1 = $('#ct_investigationsreal1'); var ct_investigationsreal2 = $('#ct_investigationsreal2');
+  if (ct_investigationsx === true){
+  redstyles(ct_investigationsreal1); greenstyles(ct_investigationsreal2);
+  }
   
-  var special_investigationsreal1 = $('#special_investigationsreal1'); var special_investigationsreal2 = $('#special_investigationsreal2');
-  if (special_investigationsx === true){
-  redstyles_aboveline(special_investigationsreal1); greenstyles_aboveline(special_investigationsreal2);
+  var angio_investigationsreal1 = $('#angio_investigationsreal1'); var angio_investigationsreal2 = $('#angio_investigationsreal2');
+  if (angio_investigationsx === true){
+  redstyles(angio_investigationsreal1); greenstyles(angio_investigationsreal2);
   }
-
-  var abdoUSS_investigationsreal1 = $('#abdoUSS_investigationsreal1'); var abdoUSS_investigationsreal2 = $('#abdoUSS_investigationsreal2');
-  if (abdoUSS_investigationsx === true){
-  redstyles_aboveline(abdoUSS_investigationsreal1); greenstyles_aboveline(abdoUSS_investigationsreal2);
+  
+  
+  
+  
+  var echo_investigationsreal1 = $('#echo_investigationsreal1'); var echo_investigationsreal2 = $('#echo_investigationsreal2');
+  if (echo_investigationsx === true){
+  redstyles(echo_investigationsreal1); greenstyles(echo_investigationsreal2);
   }
-
-  var CT_investigationsreal1 = $('#CT_investigationsreal1'); var CT_investigationsreal2 = $('#CT_investigationsreal2');
-  if (CT_investigationsx === true){
-  redstyles_aboveline(CT_investigationsreal1); greenstyles_aboveline(CT_investigationsreal2);
-  }
-
-  var MRCP_investigationsreal1 = $('#MRCP_investigationsreal1'); var MRCP_investigationsreal2 = $('#MRCP_investigationsreal2');
-  if (MRCP_investigationsx === true){
-  redstyles_aboveline(MRCP_investigationsreal1); greenstyles_aboveline(MRCP_investigationsreal2);
-  }
+  
   
   
   
@@ -4237,7 +4173,7 @@ recognition_differentials.onend= function (){
     document.getElementById('riskfactors').style.display = 'unset';
   
     recognition_investigations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
+    document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load();
     document.getElementById('myVideo').onended = function(e) {
     recognition_riskfactors.start();     document.getElementById('messagebeforeacceptingmic_riskfactors').style.display = 'unset';
     document.getElementById('save-note-btn-for-riskfactors').style.display = 'unset';
@@ -4275,24 +4211,25 @@ recognition_differentials.onend= function (){
   });
   
   
-  
-  
-  
-  
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-recognition_investigations.onend= function (){
-  if (investigations_silence == false){
-    recognition_investigations.start()
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  recognition_investigations.onend= function (){
+    if (investigations_silence == false){
+      recognition_investigations.start()
+    }
   }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  
+  
+  
+  
   
   
   /*-----------------------------
           Riskfactors
    ------------------------------*/
-  var riskfactors_silence = false;
+   let riskfactors_silence = false;
+
   
    try {
     var SpeechRecognition_riskfactors = window.SpeechRecognition_riskfactors || window.webkitSpeechRecognition;
@@ -4347,8 +4284,7 @@ recognition_investigations.onend= function (){
     if (riskfactorsContent.length) {
       riskfactorsContent += ' ';
     }
-    recognition_riskfactors.start();
-    riskfactors_silence = false;
+    recognition_riskfactors.start(); riskfactors_silence = false;
     });
   
     riskfactorstextarea.on('input', function() {
@@ -4357,8 +4293,8 @@ recognition_investigations.onend= function (){
   
     
   $('#save-note-btn-for-riskfactors,#move-onto-questions-btn_riskfactors').on('click', function(e) {
-  recognition_riskfactors.stop();
-  riskfactors_silence = true;
+  recognition_riskfactors.stop(); riskfactors_silence = true;
+  
   
   
     setTimeout(function() {
@@ -4385,36 +4321,36 @@ recognition_investigations.onend= function (){
     if(riskfactorsfinal.includes("age")||riskfactorsfinal.includes("old")||riskfactorsfinal.includes("year")){ 
       age_riskfactorsx = true;
     }
-  
+
     var FH_riskfactorsx = false;
     if(riskfactorsfinal.includes("famil")){ 
       FH_riskfactorsx = true;
     }
-  
+   
     var ethnicity_riskfactorsx = false;
     if(riskfactorsfinal.includes("ethnic")||riskfactorsfinal.includes("background")||riskfactorsfinal.includes("ancestry")||riskfactorsfinal.includes("rac")||riskfactorsfinal.includes("origin")||riskfactorsfinal.includes("asian")||riskfactorsfinal.includes("india")||riskfactorsfinal.includes("bangla")||riskfactorsfinal.includes("pak")||
     (riskfactorsfinal.includes("from")&&riskfactorsfinal.includes("where"))){ 
       ethnicity_riskfactorsx = true;
     }
-  
-    var sex_riskfactorsx = false;
-    if(riskfactorsfinal.includes("sex")||riskfactorsfinal.includes("gender")||riskfactorsfinal.includes("male")){ 
-      sex_riskfactorsx = true;
+
+    var male_riskfactorsx = false;
+    if(riskfactorsfinal.includes("male")||riskfactorsfinal.includes("gender")||riskfactorsfinal.includes("sex")||riskfactorsfinal.includes("boy")||riskfactorsfinal.includes("guy")){ 
+      male_riskfactorsx = true;
     }
-  
-    var highcholesterol_riskfactorsx = false;
-    if(riskfactorsfinal.includes("cholesterol")||riskfactorsfinal.includes("chol")||riskfactorsfinal.includes("col")||riskfactorsfinal.includes("lipid")||riskfactorsfinal.includes("lipo")||riskfactorsfinal.includes("athero")){ 
-      highcholesterol_riskfactorsx = true;
+    
+    var stroke_riskfactorsx = false;
+    if(riskfactorsfinal.includes("stroke")||riskfactorsfinal.includes("tia")||riskfactorsfinal.includes("transem")||riskfactorsfinal.includes("ischaemi")){ 
+      stroke_riskfactorsx = true;
     }
-  
-    var obesity_riskfactorsx = false;
-  if(riskfactorsfinal.includes("fat")||riskfactorsfinal.includes("obesity")||riskfactorsfinal.includes("bmi")||riskfactorsfinal.includes("body mass")||riskfactorsfinal.includes("index")||riskfactorsfinal.includes("weight")||riskfactorsfinal.includes("obes")){ 
-      obesity_riskfactorsx = true;
+
+    var pmhx_riskfactorsx = false;
+    if(riskfactorsfinal.includes("diabet")||riskfactorsfinal.includes("tension")||riskfactorsfinal.includes("af")||riskfactorsfinal.includes("atrial")||riskfactorsfinal.includes("fibril")||riskfactorsfinal.includes("cholesterol")||riskfactorsfinal.includes("arter")||riskfactorsfinal.includes("peripheral")||riskfactorsfinal.includes("heart")||riskfactorsfinal.includes("sleep")){ 
+      pmhx_riskfactorsx = true;
     }
-  
-    var unhealthydiet_riskfactorsx = false;
-    if(riskfactorsfinal.includes("diet")||riskfactorsfinal.includes("food")||riskfactorsfinal.includes("eat")||riskfactorsfinal.includes("nutritio")||riskfactorsfinal.includes("calo")){ 
-      unhealthydiet_riskfactorsx = true;
+
+    var lifestyle_riskfactorsx = false; 
+    if(riskfactorsfinal.includes("smok")||riskfactorsfinal.includes("alcohol")||riskfactorsfinal.includes("physical")||riskfactorsfinal.includes("obes")||riskfactorsfinal.includes("fat")||riskfactorsfinal.includes("diet")||riskfactorsfinal.includes("unhealthy")||riskfactorsfinal.includes("lifestyle")){ 
+      lifestyle_riskfactorsx = true;
     }
   
   
@@ -4429,32 +4365,34 @@ recognition_investigations.onend= function (){
   if (FH_riskfactorsx === true){
   redstyles(FH_riskfactorsreal1); greenstyles(FH_riskfactorsreal2);
   }
-  
+ 
   var ethnicity_riskfactorsreal1 = $('#ethnicity_riskfactorsreal1'); var ethnicity_riskfactorsreal2 = $('#ethnicity_riskfactorsreal2');
   if (ethnicity_riskfactorsx === true){
   redstyles(ethnicity_riskfactorsreal1); greenstyles(ethnicity_riskfactorsreal2);
   }
-  
-  var sex_riskfactorsreal1 = $('#sex_riskfactorsreal1'); var sex_riskfactorsreal2 = $('#sex_riskfactorsreal2');
-  if (sex_riskfactorsx === true){
-  redstyles(sex_riskfactorsreal1); greenstyles(sex_riskfactorsreal2);
-  }
-  
-  var highcholesterol_riskfactorsreal1 = $('#highcholesterol_riskfactorsreal1'); var highcholesterol_riskfactorsreal2 = $('#highcholesterol_riskfactorsreal2');
-  if (highcholesterol_riskfactorsx === true){
-  redstyles(highcholesterol_riskfactorsreal1); greenstyles(highcholesterol_riskfactorsreal2);
-  }
-  
-  var obesity_riskfactorsreal1 = $('#obesity_riskfactorsreal1'); var obesity_riskfactorsreal2 = $('#obesity_riskfactorsreal2');
-  if (obesity_riskfactorsx === true){
-  redstyles(obesity_riskfactorsreal1); greenstyles(obesity_riskfactorsreal2);
-  }
-  
-  var unhealthydiet_riskfactorsreal1 = $('#unhealthydiet_riskfactorsreal1'); var unhealthydiet_riskfactorsreal2 = $('#unhealthydiet_riskfactorsreal2');
-  if (unhealthydiet_riskfactorsx === true){
-  redstyles(unhealthydiet_riskfactorsreal1); greenstyles(unhealthydiet_riskfactorsreal2);
+
+  var male_riskfactorsreal1 = $('#male_riskfactorsreal1'); var male_riskfactorsreal2 = $('#male_riskfactorsreal2');
+  if (male_riskfactorsx === true){
+  redstyles(male_riskfactorsreal1); greenstyles(male_riskfactorsreal2);
   }
 
+  var stroke_riskfactorsreal1 = $('#stroke_riskfactorsreal1'); var stroke_riskfactorsreal2 = $('#stroke_riskfactorsreal2');
+  if (stroke_riskfactorsx === true){
+  redstyles(stroke_riskfactorsreal1); greenstyles(stroke_riskfactorsreal2);
+  }
+  
+  
+  
+  var pmhx_riskfactorsreal1 = $('#pmhx_riskfactorsreal1'); var pmhx_riskfactorsreal2 = $('#pmhx_riskfactorsreal2');
+  if (pmhx_riskfactorsx === true){
+  redstyles(pmhx_riskfactorsreal1); greenstyles(pmhx_riskfactorsreal2);
+  }
+  
+  var lifestyle_riskfactorsreal1 = $('#lifestyle_riskfactorsreal1'); var lifestyle_riskfactorsreal2 = $('#lifestyle_riskfactorsreal2');
+  if (lifestyle_riskfactorsx === true){
+  redstyles(lifestyle_riskfactorsreal1); greenstyles(lifestyle_riskfactorsreal2);
+  }
+  
   
   function redstyles(element){
     element.css({'visibility': 'hidden'});}
@@ -4485,7 +4423,7 @@ recognition_investigations.onend= function (){
     document.getElementById('treatments').style.display = 'unset';
   
     recognition_riskfactors.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/management.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
+    document.getElementById("mp4_src").src = "videos/management.mp4"; document.getElementById("myVideo").load();
     document.getElementById('myVideo').onended = function(e) {
     recognition_treatments.start();     document.getElementById('messagebeforeacceptingmic_treatments').style.display = 'unset';
     document.getElementById('save-note-btn-for-treatments').style.display = 'unset';
@@ -4528,16 +4466,16 @@ recognition_investigations.onend= function (){
   
   
   
-   
-  
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-recognition_riskfactors.onend= function (){
-  if (riskfactors_silence == false){
-    recognition_riskfactors.start()
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  recognition_riskfactors.onend= function (){
+    if (riskfactors_silence == false){
+      recognition_riskfactors.start()
+    }
   }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  
+  
   
   
   
@@ -4545,7 +4483,8 @@ recognition_riskfactors.onend= function (){
   /*-----------------------------
           Treatments
    ------------------------------*/
-  var treatments_silence = false;
+   let treatments_silence = false;
+
   
    try {
     var SpeechRecognition_treatments = window.SpeechRecognition_treatments || window.webkitSpeechRecognition;
@@ -4602,8 +4541,7 @@ recognition_riskfactors.onend= function (){
     if (treatmentsContent.length) {
       treatmentsContent += ' ';
     }
-    recognition_treatments.start();
-    treatments_silence = false;
+    recognition_treatments.start(); treatments_silence = false;
     });
   
     treatmentstextarea.on('input', function() {
@@ -4613,8 +4551,8 @@ recognition_riskfactors.onend= function (){
   
   
   $('#save-note-btn-for-treatments').on('click', function(e) {
-  recognition_treatments.stop();
-  treatments_silence = true;
+  recognition_treatments.stop(); treatments_silence = true;
+  
   
     setTimeout(function() {
   
@@ -4636,90 +4574,113 @@ recognition_riskfactors.onend= function (){
     
   
   
-  
-  
-  
-    var analgesia_treatmentsx = false;
-    if(treatmentsfinal.includes("analgesia")||treatmentsfinal.includes("paracet")||treatmentsfinal.includes("pain relief")||treatmentsfinal.includes("morph")||treatmentsfinal.includes("ibuprof")||treatmentsfinal.includes("cod")||treatmentsfinal.includes("edge")){ 
-      analgesia_treatmentsx = true;
+    var antiplatelet_treatmentsx = false;
+    if(treatmentsfinal.includes("aspirin")||treatmentsfinal.includes("three")||treatmentsfinal.includes("300")||treatmentsfinal.includes("hundred")||treatmentsfinal.includes("platelet")){ 
+      antiplatelet_treatmentsx = true;
     }
   
-    var fluids_treatmentsx = false;
-    if(treatmentsfinal.includes("fluid")||treatmentsfinal.includes("iv")||treatmentsfinal.includes("intraven")||treatmentsfinal.includes("water")||treatmentsfinal.includes("oral")){ 
-      fluids_treatmentsx = true;
+    var thrombolysis_treatmentsx = false;
+    if(treatmentsfinal.includes("thrombo")||treatmentsfinal.includes("lysis")){ 
+      thrombolysis_treatmentsx = true;
     }
   
-    var abx_treatmentsx = false;
-    if(treatmentsfinal.includes("antib")||treatmentsfinal.includes("bacteria")||treatmentsfinal.includes("abx")){ 
-      abx_treatmentsx = true;
+    var thrombectomy_treatmentsx = false;
+    if(treatmentsfinal.includes("thrombe")||treatmentsfinal.includes("tomy")||treatmentsfinal.includes("endovascular")||treatmentsfinal.includes("back")||treatmentsfinal.includes("beck")){ 
+      thrombectomy_treatmentsx = true;
     }
   
-    var antiemetics_treatmentsx = false;
-    if(treatmentsfinal.includes("emetic")||treatmentsfinal.includes("nausea")||treatmentsfinal.includes("vomit")||treatmentsfinal.includes("ondan")||treatmentsfinal.includes("cycl")||treatmentsfinal.includes("metha")||treatmentsfinal.includes("chlorper")){ 
-      antiemetics_treatmentsx = true;
+    var bp_treatmentsx = false;
+    if(treatmentsfinal.includes("pressure")||treatmentsfinal.includes("bp")||treatmentsfinal.includes("hypertension")){ 
+      bp_treatmentsx = true;
     }
   
-    var cholecystectomy_treatmentsx = false;
-    if(treatmentsfinal.includes("cystectomy")||treatmentsfinal.includes("surg")||treatmentsfinal.includes("remov")||treatmentsfinal.includes("gall bladder")){ 
-      cholecystectomy_treatmentsx = true;
+    var glucose_treatmentsx = false;
+    if(treatmentsfinal.includes("glucose")||treatmentsfinal.includes("sugar")||treatmentsfinal.includes("oxygen")||treatmentsfinal.includes("o2")||treatmentsfinal.includes("hypox")){ 
+      glucose_treatmentsx = true;
     }
   
-    var ercp_treatmentsx = false;
-    if(treatmentsfinal.includes("cp")||treatmentsfinal.includes("magnet")||treatmentsfinal.includes("resonan")||treatmentsfinal.includes("cholang")||treatmentsfinal.includes("tography")||treatmentsfinal.includes("endosc")||treatmentsfinal.includes("retro")||treatmentsfinal.includes("pee")||treatmentsfinal.includes("pea")){ 
-      ercp_treatmentsx = true;
+    var stroketeam_treatmentsx = false;
+    if(treatmentsfinal.includes("senior")||treatmentsfinal.includes("special")||treatmentsfinal.includes("team")||treatmentsfinal.includes("mdt")||treatmentsfinal.includes("multi")||treatmentsfinal.includes("refer")){ 
+      stroketeam_treatmentsx = true;
     }
   
-    var cardiologyreferral_treatmentsx = false;
-    if(treatmentsfinal.includes("refer")||treatmentsfinal.includes("admit")||treatmentsfinal.includes("hpb")||treatmentsfinal.includes("multi dis")||treatmentsfinal.includes("disciplin")||treatmentsfinal.includes("mdt")||treatmentsfinal.includes("hepato")||treatmentsfinal.includes("biliary team")||treatmentsfinal.includes("general surg")||treatmentsfinal.includes("gen surg")||treatmentsfinal.includes("speciali")||treatmentsfinal.includes("specialt")){ 
-      cardiologyreferral_treatmentsx = true;
+    var swallow_treatmentsx = false;
+    if(treatmentsfinal.includes("swallow")||treatmentsfinal.includes("phagia")||treatmentsfinal.includes("odino")||treatmentsfinal.includes("chew")||treatmentsfinal.includes("feed")||treatmentsfinal.includes("salt")||treatmentsfinal.includes("speech")||treatmentsfinal.includes("language")){ 
+      swallow_treatmentsx = true;
+    }
+  
+    var endarterectomy_treatmentsx = false;
+    if(treatmentsfinal.includes("end")||treatmentsfinal.includes("art")||treatmentsfinal.includes("erectomy")||treatmentsfinal.includes("carotid")){ 
+      endarterectomy_treatmentsx = true;
     }
   
     var lifestyle_treatmentsx = false;
-    if(treatmentsfinal.includes("life")||treatmentsfinal.includes("routine")||treatmentsfinal.includes("habit")||treatmentsfinal.includes("health pract")||treatmentsfinal.includes("behav")||treatmentsfinal.includes("cultur")||treatmentsfinal.includes("exercise")||treatmentsfinal.includes("diet")||treatmentsfinal.includes("alcohol")||treatmentsfinal.includes("smok")||treatmentsfinal.includes("weight")){ 
+    if(treatmentsfinal.includes("lifestyle")||treatmentsfinal.includes("smok")||treatmentsfinal.includes("diet")||treatmentsfinal.includes("exercise")||treatmentsfinal.includes("alcohol")||treatmentsfinal.includes("healthy")){ 
       lifestyle_treatmentsx = true;
     }
   
-    var udca_treatmentsx = false;
-    if(treatmentsfinal.includes("urso")||treatmentsfinal.includes("deoxy")||treatmentsfinal.includes("lic acid")||treatmentsfinal.includes("udca")){ 
-      udca_treatmentsx = true;
+    var daptlongterm_treatmentsx = false;
+    if(treatmentsfinal.includes("clopi")||treatmentsfinal.includes("grel")||treatmentsfinal.includes("dual")||treatmentsfinal.includes("dual anti")||treatmentsfinal.includes("seven")||treatmentsfinal.includes("75")){ 
+      daptlongterm_treatmentsx = true;
     }
+  
+    var statin_treatmentsx = false;
+    if(treatmentsfinal.includes("stat")){ 
+      statin_treatmentsx = true;
+    }
+  
+    var rehab_treatmentsx = false;
+    if(treatmentsfinal.includes("rehab")||treatmentsfinal.includes("pt")||treatmentsfinal.includes("ot")||treatmentsfinal.includes("physio")||treatmentsfinal.includes("occupation")||treatmentsfinal.includes("therapy")||treatmentsfinal.includes("psych")||treatmentsfinal.includes("speech")){ 
+      rehab_treatmentsx = true;
+    }
+  
+    var driving_treatmentsx = false;
+    if(treatmentsfinal.includes("car")||treatmentsfinal.includes("driv")||treatmentsfinal.includes("ride")){ 
+      driving_treatmentsx = true;
+    }
+  
     
   
   //////////////////////////////////////////////////////
   
-  var analgesia_treatmentsreal1 = $('#analgesia_treatmentsreal1'); var analgesia_treatmentsreal2 = $('#analgesia_treatmentsreal2');
-  if (analgesia_treatmentsx === true){
-  redstyles(analgesia_treatmentsreal1); greenstyles(analgesia_treatmentsreal2);
+  var antiplatelet_treatmentsreal1 = $('#antiplatelet_treatmentsreal1'); var antiplatelet_treatmentsreal2 = $('#antiplatelet_treatmentsreal2');
+  if (antiplatelet_treatmentsx === true){
+  redstyles(antiplatelet_treatmentsreal1); greenstyles(antiplatelet_treatmentsreal2);
   }
   
-  var fluids_treatmentsreal1 = $('#fluids_treatmentsreal1'); var fluids_treatmentsreal2 = $('#fluids_treatmentsreal2');
-  if (fluids_treatmentsx === true){
-  redstyles(fluids_treatmentsreal1); greenstyles(fluids_treatmentsreal2);
+  var thrombolysis_treatmentsreal1 = $('#thrombolysis_treatmentsreal1'); var thrombolysis_treatmentsreal2 = $('#thrombolysis_treatmentsreal2');
+  if (thrombolysis_treatmentsx === true){
+  redstyles(thrombolysis_treatmentsreal1); greenstyles(thrombolysis_treatmentsreal2);
   }
   
-  var abx_treatmentsreal1 = $('#abx_treatmentsreal1'); var abx_treatmentsreal2 = $('#abx_treatmentsreal2');
-  if (abx_treatmentsx === true){
-  redstyles(abx_treatmentsreal1); greenstyles(abx_treatmentsreal2);
+  var thrombectomy_treatmentsreal1 = $('#thrombectomy_treatmentsreal1'); var thrombectomy_treatmentsreal2 = $('#thrombectomy_treatmentsreal2');
+  if (thrombectomy_treatmentsx === true){
+  redstyles(thrombectomy_treatmentsreal1); greenstyles(thrombectomy_treatmentsreal2);
   }
   
-  var antiemetics_treatmentsreal1 = $('#antiemetics_treatmentsreal1'); var antiemetics_treatmentsreal2 = $('#antiemetics_treatmentsreal2');
-  if (antiemetics_treatmentsx === true){
-  redstyles(antiemetics_treatmentsreal1); greenstyles(antiemetics_treatmentsreal2);
+  var bp_treatmentsreal1 = $('#bp_treatmentsreal1'); var bp_treatmentsreal2 = $('#bp_treatmentsreal2');
+  if (bp_treatmentsx === true){
+  redstyles(bp_treatmentsreal1); greenstyles(bp_treatmentsreal2);
   }
   
-  var cholecystectomy_treatmentsreal1 = $('#cholecystectomy_treatmentsreal1'); var cholecystectomy_treatmentsreal2 = $('#cholecystectomy_treatmentsreal2');
-  if (cholecystectomy_treatmentsx === true){
-  redstyles(cholecystectomy_treatmentsreal1); greenstyles(cholecystectomy_treatmentsreal2);
+  var glucose_treatmentsreal1 = $('#glucose_treatmentsreal1'); var glucose_treatmentsreal2 = $('#glucose_treatmentsreal2');
+  if (glucose_treatmentsx === true){
+  redstyles(glucose_treatmentsreal1); greenstyles(glucose_treatmentsreal2);
   }
   
-  var ercp_treatmentsreal1 = $('#ercp_treatmentsreal1'); var ercp_treatmentsreal2 = $('#ercp_treatmentsreal2');
-  if (ercp_treatmentsx === true){
-  redstyles(ercp_treatmentsreal1); greenstyles(ercp_treatmentsreal2);
+  var stroketeam_treatmentsreal1 = $('#stroketeam_treatmentsreal1'); var stroketeam_treatmentsreal2 = $('#stroketeam_treatmentsreal2');
+  if (stroketeam_treatmentsx === true){
+  redstyles(stroketeam_treatmentsreal1); greenstyles(stroketeam_treatmentsreal2);
   }
   
-  var cardiologyreferral_treatmentsreal1 = $('#cardiologyreferral_treatmentsreal1'); var cardiologyreferral_treatmentsreal2 = $('#cardiologyreferral_treatmentsreal2');
-  if (cardiologyreferral_treatmentsx === true){
-  redstyles(cardiologyreferral_treatmentsreal1); greenstyles(cardiologyreferral_treatmentsreal2);
+  var swallow_treatmentsreal1 = $('#swallow_treatmentsreal1'); var swallow_treatmentsreal2 = $('#swallow_treatmentsreal2');
+  if (swallow_treatmentsx === true){
+  redstyles(swallow_treatmentsreal1); greenstyles(swallow_treatmentsreal2);
+  }
+  
+  var endarterectomy_treatmentsreal1 = $('#endarterectomy_treatmentsreal1'); var endarterectomy_treatmentsreal2 = $('#endarterectomy_treatmentsreal2');
+  if (endarterectomy_treatmentsx === true){
+  redstyles(endarterectomy_treatmentsreal1); greenstyles(endarterectomy_treatmentsreal2);
   }
   
   var lifestyle_treatmentsreal1 = $('#lifestyle_treatmentsreal1'); var lifestyle_treatmentsreal2 = $('#lifestyle_treatmentsreal2');
@@ -4727,9 +4688,44 @@ recognition_riskfactors.onend= function (){
   redstyles(lifestyle_treatmentsreal1); greenstyles(lifestyle_treatmentsreal2);
   }
   
-  var udca_treatmentsreal1 = $('#udca_treatmentsreal1'); var udca_treatmentsreal2 = $('#udca_treatmentsreal2');
-  if (udca_treatmentsx === true){
-  redstyles(udca_treatmentsreal1); greenstyles(udca_treatmentsreal2);
+  var daptlongterm_treatmentsreal1 = $('#daptlongterm_treatmentsreal1'); var daptlongterm_treatmentsreal2 = $('#daptlongterm_treatmentsreal2');
+  if (daptlongterm_treatmentsx === true){
+  redstyles(daptlongterm_treatmentsreal1); greenstyles(daptlongterm_treatmentsreal2);
+  }
+  
+  var complications_treatmentsreal1 = $('#complications_treatmentsreal1'); var complications_treatmentsreal2 = $('#complications_treatmentsreal2');
+  if (complications_treatmentsx === true){
+  redstyles(complications_treatmentsreal1); greenstyles(complications_treatmentsreal2);
+  }
+  
+  var HFnurse_treatmentsreal1 = $('#HFnurse_treatmentsreal1'); var HFnurse_treatmentsreal2 = $('#HFnurse_treatmentsreal2');
+  if (HFnurse_treatmentsx === true){
+  redstyles(HFnurse_treatmentsreal1); greenstyles(HFnurse_treatmentsreal2);
+  }
+  
+  var lifestyle_treatmentsreal1 = $('#lifestyle_treatmentsreal1'); var lifestyle_treatmentsreal2 = $('#lifestyle_treatmentsreal2');
+  if (lifestyle_treatmentsx === true){
+  redstyles(lifestyle_treatmentsreal1); greenstyles(lifestyle_treatmentsreal2);
+  }
+  
+  var daptlongterm_treatmentsreal1 = $('#daptlongterm_treatmentsreal1'); var daptlongterm_treatmentsreal2 = $('#daptlongterm_treatmentsreal2');
+  if (daptlongterm_treatmentsx === true){
+  redstyles(daptlongterm_treatmentsreal1); greenstyles(daptlongterm_treatmentsreal2);
+  }
+  
+  var statin_treatmentsreal1 = $('#statin_treatmentsreal1'); var statin_treatmentsreal2 = $('#statin_treatmentsreal2');
+  if (statin_treatmentsx === true){
+  redstyles(statin_treatmentsreal1); greenstyles(statin_treatmentsreal2);
+  }
+  
+  var rehab_treatmentsreal1 = $('#rehab_treatmentsreal1'); var rehab_treatmentsreal2 = $('#rehab_treatmentsreal2');
+  if (rehab_treatmentsx === true){
+  redstyles(rehab_treatmentsreal1); greenstyles(rehab_treatmentsreal2);
+  }
+  
+  var driving_treatmentsreal1 = $('#driving_treatmentsreal1'); var driving_treatmentsreal2 = $('#driving_treatmentsreal2');
+  if (driving_treatmentsx === true){
+  redstyles_aboveline(driving_treatmentsreal1); greenstyles_aboveline(driving_treatmentsreal2);
   }
   
   
@@ -4803,17 +4799,17 @@ recognition_riskfactors.onend= function (){
   
   
   
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-recognition_treatments.onend= function (){
-  if (treatments_silence == false){
-    recognition_treatments.start()
+  
+  
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  recognition_treatments.onend= function (){
+    if (treatments_silence == false){
+      recognition_treatments.start()
+    }
   }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  
-  
-  
   
   
   
@@ -5677,13 +5673,7 @@ recognition_treatments.onend= function (){
   
   
   
-
-
-
-
-
-
-
+ 
 
 
   navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
@@ -5714,19 +5704,25 @@ recognition_treatments.onend= function (){
   
     updateGlow();
   }).catch(error => console.error(error));
+    
+    
+    
+    
+  
+  
+  
 
-  
 
 
 
 
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   
   const WWWEBItitles = document.querySelector('WWWEBItitles');
   const evenbetterifgeneral = document.querySelector('evenbetterifgeneral');
@@ -5958,4 +5954,3 @@ recognition_treatments.onend= function (){
   */
   
 
- 
