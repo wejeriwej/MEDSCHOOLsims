@@ -1617,20 +1617,26 @@ if (isMobile) {
 
 
 const generateResponse = async (input) => {
+  // 🧠 Get or create session ID
+  let sessionId = localStorage.getItem("sessionId");
+
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem("sessionId", sessionId);
+  }
+
   const response = await fetch("https://oscesimstrial1.onrender.com/api/TUTOR2ndcase", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ 
       input: input,
-      previousquestion: previousquestion,
-      response_question: response_question })
+      sessionId: sessionId
+    })
   });
 
   const data = await response.json();
   return data.content;
 };
-
-
 
 
 
@@ -1844,7 +1850,7 @@ const handleUserInput = async (noteContent) => {
   });
   await Promise.all([responsePromise, videoPromise]);
   const response = await responsePromise;
-  document.getElementById('chatgpt-response').innerText = 'Previous question: ' + previousquestion  + '\n' + 'Response to previous question:' + response_question  + '\n' + 'question: ' + response + '\n' + '\n' + noteContent ; // Update the content of the element with ID 'chatgpt-response' REMOVE THIS!!!!
+  document.getElementById('chatgpt-response').innerText = 'Your previous question' + previousquestion  + '\n' + 'The response of the candidate to the previous question:' + response_question  + '\n' + 'Candidate response: ' + response + '\n' + '\n' + noteContent ; // Update the content of the element with ID 'chatgpt-response' REMOVE THIS!!!!
 
   /*
   const synth = window.speechSynthesis;

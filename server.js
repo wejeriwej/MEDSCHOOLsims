@@ -249,10 +249,53 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 app.post("/api/TUTOR2ndcase", async (req, res) => {
-  const { input, previousquestion, response_question } = req.body;
+  const { input, sessionId } = req.body;
+
+  if (!sessionId) {
+    return res.status(400).json({ error: "sessionId required" });
+  }
 
   try {
+    const db = admin.firestore();
+    const docRef = db.collection("conversations").doc(sessionId);
+    const doc = await docRef.get();
 
+    let messages;
+
+    // 🧠 1. Load or initialize conversation
+    if (!doc.exists) {
+      messages = [
+        {
+          role: "system",
+          content: `
+You are a medical school interviewer.
+- Ask one question at a time
+- Respond naturally to the applicant’s answer
+- Always ask a follow-up question
+- Keep responses concise
+`
+        }
+      ];
+    } else {
+      messages = doc.data().messages || [];
+    }
+
+    // 👤 2. Add user message
+    messages.push({
+      role: "user",
+      content: input
+    });
+
+    // ✂️ 3. Trim messages (keep cost low)
+    const MAX_MESSAGES = 12;
+    if (messages.length > MAX_MESSAGES) {
+      messages = [
+        messages[0], // keep system prompt
+        ...messages.slice(-MAX_MESSAGES)
+      ];
+    }
+
+    // 🤖 4. Call OpenAI
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -260,30 +303,35 @@ app.post("/api/TUTOR2ndcase", async (req, res) => {
         "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo", //gpt-4o-mini
-        messages: [
-          { role: "system", content: "You're conducting an interview & you're the interviewer. The question that you asked was: Why do you want to become a Doctor?" },
-          { role: "user", content: `Interviewee's response to your previous question: ${previousquestion || "N/A"}
-                                    Your previous question: ${response_question || "N/A"}
-                                    This is the response of the applicant: ${input}
-                                    Create a follow-up question to ask the applicant:` },
-        ],
-        temperature: 0.1,
-        max_tokens: 25,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0
+        model: "gpt-4o-mini", // 🔥 upgrade from 3.5
+        messages: messages,
+        temperature: 0.3,
+        max_tokens: 80
       }),
     });
 
     const data = await response.json();
-    res.json({ content: data.choices[0].message.content.trim() });
+    const reply = data.choices[0].message.content.trim();
+
+    // 🤖 5. Save assistant reply
+    messages.push({
+      role: "assistant",
+      content: reply
+    });
+
+    // 💾 6. Save to Firestore
+    await docRef.set({
+      messages,
+      updatedAt: new Date()
+    });
+
+    res.json({ content: reply });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to connect to OpenAI" });
   }
 });
-
 
 
 
