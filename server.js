@@ -33,6 +33,21 @@ app.use(cors({
 
 
 
+
+
+
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+// 🔥 Fix newline issue automatically
+serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+
+
 //app.use(cors()); // Allow requests from your web page
 
 /*
@@ -320,7 +335,17 @@ You are a medical school interviewer.
     });
 
     // 💾 6. Save to Firestore
-    await docRef.set({
+ /*  try {
+  await docRef.set({
+    messages,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  });
+  console.log("✅ Firestore write success:", sessionId);
+} catch (err) {
+  console.error("❌ Firestore write failed:", err);
+}
+*/
+ await docRef.set({
       messages,
       updatedAt: new Date()
     });
