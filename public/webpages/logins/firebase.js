@@ -1,11 +1,12 @@
 // Your Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyAP4K83hBlIEW_2fPdMSAIpYDKGLYO3Sjo",
-  authDomain: "oscereal-706d4.firebaseapp.com",
-  projectId: "oscereal-706d4",
-  storageBucket: "oscereal-706d4.firebasestorage.app",
-  messagingSenderId: "170410147985",
-  appId: "1:170410147985:web:c1c83b71f47f794dff7f30"
+  apiKey: "AIzaSyA1YesaUZxtmjY0Gbq_sj8YKhEyLvUZwY4",
+  authDomain: "medschoolsims.firebaseapp.com",
+  projectId: "medschoolsims",
+  storageBucket: "medschoolsims.firebasestorage.app",
+  messagingSenderId: "11403063542",
+  appId: "1:11403063542:web:5e0104cb6011afcff93cd7",
+  measurementId: "G-186P20FY7F"
 };
 
 // Initialize Firebase app
