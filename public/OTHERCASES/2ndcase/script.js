@@ -1625,7 +1625,7 @@ const generateResponse = async (input) => {
     localStorage.setItem("sessionId", sessionId);
   }
 
-  const response = await fetch("https://oscesimstrial1.onrender.com/api/TUTOR2ndcase", {
+  const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ 
