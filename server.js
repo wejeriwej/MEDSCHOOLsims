@@ -248,12 +248,42 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 
+app.get("/api/history", verifyFirebaseUser, async (req, res) => {
+  try {
+    const snapshot = await admin
+      .firestore()
+      .collection("users")
+      .doc(req.uid)
+      .collection("history")
+      .orderBy("createdAt", "desc")
+      .get();
+
+    const history = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    res.json(history);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch history" });
+  }
+});
 
 
 
 
 
-app.post("/api/TUTOR2ndcase", async (req, res) => {
+
+
+
+
+
+
+
+
+
+app.post("/api/TUTOR2ndcase", verifyFirebaseUser, async (req, res) => {
   console.log("🚀 TUTOR2ndcase endpoint hit");
   console.log("📦 BODY:", req.body); // 👈 ADD THIS
 
@@ -291,18 +321,23 @@ You are a medical school admissions assessor.
 Based on the full interview conversation:
 
 1. Give an overall score out of 10
-2. Provide a short overall assessment
-3. List 2 strengths
-4. List 2 areas for improvement
+2. Provide an overall assessment in 2nd person + be specific + reason for score. Be ruthless + harsh in the assessment.
+3. List some of the strengths
+4. List areas for improvement + go in detail
 
 Format EXACTLY like:
 
-Score: X/10
+Score: **X/10**
+
 Overall: ...
-Strengths:
+
+**Strengths:**
 - ...
 - ...
-Improvements:
+
+**Improvements:**
+- ...
+- ...
 - ...
 - ...
 `
@@ -327,6 +362,24 @@ Improvements:
       const data = await response.json();
       const evaluation = data.choices[0].message.content.trim();
 
+
+
+
+// Extract score from evaluation text
+const scoreMatch = evaluation.match(/Score:\s*(\d+)\/10/);
+const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
+
+// Save to user's history
+await admin.firestore().collection("users").doc(doc.data().userId).collection("history").add({
+  sessionId,
+  evaluation,
+  score,
+  createdAt: admin.firestore.FieldValue.serverTimestamp()
+});
+
+
+
+
       await docRef.update({
         evaluation,
         completed: true,
@@ -334,6 +387,11 @@ Improvements:
       });
 
       return res.json({ evaluation });
+
+
+
+
+
     }
 
     // =========================
@@ -397,6 +455,7 @@ You are a medical school interviewer.
 
     await docRef.set({
       messages,
+      userId: req.uid, // 👈 Stores UserID in conversation
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     });
 

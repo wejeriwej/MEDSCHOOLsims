@@ -1679,9 +1679,14 @@ const generateResponse = async (input) => {
     localStorage.setItem("sessionId", sessionId);
   }
 
-  const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const token = await auth.currentUser.getIdToken();
+
+const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
+  method: "POST",
+  headers: { 
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token
+  },
     body: JSON.stringify({ 
       input: input,
       sessionId: sessionId
@@ -1697,6 +1702,38 @@ const generateResponse = async (input) => {
 
 
 
+async function loadDashboard() {
+  const token = await auth.currentUser.getIdToken();
+
+  const res = await fetch("https://medschoolsims-1.onrender.com/api/history", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  const data = await res.json();
+
+  displayDashboard(data);
+}
+
+
+function displayDashboard(data) {
+  const container = document.getElementById("dashboard");
+
+  container.innerHTML = "";
+
+  data.forEach(item => {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <h3>Score: ${item.score}/10</h3>
+      <p>${item.evaluation}</p>
+      <hr/>
+    `;
+
+    container.appendChild(div);
+  });
+}
 
 
 
