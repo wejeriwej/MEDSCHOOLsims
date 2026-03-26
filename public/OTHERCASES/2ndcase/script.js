@@ -186,7 +186,13 @@ if (isMobile) {
   
   }*/
   
-  
+  let sessionId = localStorage.getItem("sessionId");
+
+if (!sessionId) {
+  sessionId = crypto.randomUUID();
+  localStorage.setItem("sessionId", sessionId);
+}
+
 
 async function initialstopConsultation() {
 //This part is just to go to the ext part of the 'examinations' + questions
@@ -211,6 +217,7 @@ async function initialstopConsultation() {
         sessionId: sessionId, // make sure this exists globally
         endSession: true
       })
+      
     });
 
     const data = await response.json();
@@ -223,6 +230,10 @@ async function initialstopConsultation() {
   } catch (err) {
     console.error("❌ Error ending session:", err);
   }
+  console.log("🛑 Ending session with ID:", sessionId);
+if (endSession === true) {
+  console.log("✅ endSession TRUE detected");
+}
 }
 
 
@@ -1661,7 +1672,7 @@ async function initialstopConsultation() {
 
 const generateResponse = async (input) => {
   // 🧠 Get or create session ID
-  let sessionId = localStorage.getItem("sessionId");
+  //let sessionId = localStorage.getItem("sessionId");
 
   if (!sessionId) {
     sessionId = crypto.randomUUID();

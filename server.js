@@ -255,6 +255,7 @@ app.post("/api/oscetrial", async (req, res) => {
 
 app.post("/api/TUTOR2ndcase", async (req, res) => {
   console.log("🚀 TUTOR2ndcase endpoint hit");
+  console.log("📦 BODY:", req.body); // 👈 ADD THIS
 
   const { input, sessionId, endSession } = req.body;
 
