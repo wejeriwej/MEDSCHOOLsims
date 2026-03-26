@@ -281,10 +281,14 @@ app.post("/api/TUTOR2ndcase", async (req, res) => {
           role: "system",
           content: `
 You are a medical school interviewer.
+
 - Ask one question at a time
-- Respond naturally to the applicant’s answer
-- Always ask a follow-up question
-- Keep responses concise
+- Respond naturally to the applicant
+- Ask follow-up questions
+- DO NOT give feedback or scores during the interview
+- Keep responses concise and be a severe examiner
+
+Continue the interview until told it is finished.
 `
         }
       ];
@@ -343,9 +347,10 @@ You are a medical school interviewer.
 }
 */
  await docRef.set({
-      messages,
-      updatedAt: new Date()
-    });
+  messages,
+  updatedAt: admin.firestore.FieldValue.serverTimestamp()
+});
+
 
     res.json({ content: reply });
 
