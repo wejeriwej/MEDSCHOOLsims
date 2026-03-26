@@ -37,15 +37,15 @@ app.use(cors({
 
 
 
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-
-// 🔥 Fix newline issue automatically
-serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+  })
 });
 
+console.log("KEY START:", process.env.FIREBASE_PRIVATE_KEY.slice(0, 30));
 
 
 //app.use(cors()); // Allow requests from your web page
@@ -264,6 +264,7 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 app.post("/api/TUTOR2ndcase", async (req, res) => {
+  console.log("🚀 TUTOR2ndcase endpoint hit");
   const { input, sessionId } = req.body;
 
   if (!sessionId) {
@@ -716,11 +717,11 @@ app.post("/api/voicezak", async (req, res) => {
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-admin.initializeApp({
+/*admin.initializeApp({
   credential: admin.credential.cert(
     JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
   )
-});
+});*/
 
 
 
