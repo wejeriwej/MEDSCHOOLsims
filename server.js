@@ -253,28 +253,96 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 
-
-
-
-
-
-
 app.post("/api/TUTOR2ndcase", async (req, res) => {
   console.log("🚀 TUTOR2ndcase endpoint hit");
-  const { input, sessionId } = req.body;
+
+  const { input, sessionId, endSession } = req.body;
 
   if (!sessionId) {
     return res.status(400).json({ error: "sessionId required" });
   }
 
+  const db = admin.firestore();
+  const docRef = db.collection("conversations").doc(sessionId);
+
   try {
-    const db = admin.firestore();
-    const docRef = db.collection("conversations").doc(sessionId);
+
+    // =========================
+    // 🛑 END SESSION (EVALUATION)
+    // =========================
+    if (endSession) {
+      console.log("🛑 Ending session:", sessionId);
+
+      const doc = await docRef.get();
+
+      if (!doc.exists) {
+        return res.status(400).json({ error: "No session found" });
+      }
+
+      const messages = doc.data().messages || [];
+
+      const evaluationMessages = [
+        {
+          role: "system",
+          content: `
+You are a medical school admissions assessor.
+
+Based on the full interview conversation:
+
+1. Give an overall score out of 10
+2. Provide a short overall assessment
+3. List 2 strengths
+4. List 2 areas for improvement
+
+Format EXACTLY like:
+
+Score: X/10
+Overall: ...
+Strengths:
+- ...
+- ...
+Improvements:
+- ...
+- ...
+`
+        },
+        ...messages
+      ];
+
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: evaluationMessages,
+          temperature: 0.3,
+          max_tokens: 200
+        }),
+      });
+
+      const data = await response.json();
+      const evaluation = data.choices[0].message.content.trim();
+
+      await docRef.update({
+        evaluation,
+        completed: true,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      return res.json({ evaluation });
+    }
+
+    // =========================
+    // 💬 NORMAL INTERVIEW FLOW
+    // =========================
+
     const doc = await docRef.get();
 
     let messages;
 
-    // 🧠 1. Load or initialize conversation
     if (!doc.exists) {
       messages = [
         {
@@ -283,12 +351,10 @@ app.post("/api/TUTOR2ndcase", async (req, res) => {
 You are a medical school interviewer.
 
 - Ask one question at a time
-- Respond naturally to the applicant
+- Respond naturally
 - Ask follow-up questions
-- DO NOT give feedback or scores during the interview
-- Keep responses concise and be a severe examiner
-
-Continue the interview until told it is finished.
+- DO NOT give feedback during interview
+- Keep responses concise + ask hard questions + be a severe examiner
 `
         }
       ];
@@ -296,22 +362,16 @@ Continue the interview until told it is finished.
       messages = doc.data().messages || [];
     }
 
-    // 👤 2. Add user message
     messages.push({
       role: "user",
       content: input
     });
-
-    // ✂️ 3. Trim messages (keep cost low)
+/*
     const MAX_MESSAGES = 12;
     if (messages.length > MAX_MESSAGES) {
-      messages = [
-        messages[0], // keep system prompt
-        ...messages.slice(-MAX_MESSAGES)
-      ];
+      messages = [messages[0], ...messages.slice(-MAX_MESSAGES)];
     }
-
-    // 🤖 4. Call OpenAI
+*/
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -319,8 +379,8 @@ Continue the interview until told it is finished.
         "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini", // 🔥 upgrade from 3.5
-        messages: messages,
+        model: "gpt-4o-mini",
+        messages,
         temperature: 0.3,
         max_tokens: 80
       }),
@@ -329,36 +389,24 @@ Continue the interview until told it is finished.
     const data = await response.json();
     const reply = data.choices[0].message.content.trim();
 
-    // 🤖 5. Save assistant reply
     messages.push({
       role: "assistant",
       content: reply
     });
 
-    // 💾 6. Save to Firestore
- /*  try {
-  await docRef.set({
-    messages,
-    updatedAt: admin.firestore.FieldValue.serverTimestamp()
-  });
-  console.log("✅ Firestore write success:", sessionId);
-} catch (err) {
-  console.error("❌ Firestore write failed:", err);
-}
-*/
- await docRef.set({
-  messages,
-  updatedAt: admin.firestore.FieldValue.serverTimestamp()
-});
-
+    await docRef.set({
+      messages,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
 
     res.json({ content: reply });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to connect to OpenAI" });
+    res.status(500).json({ error: "Server error" });
   }
 });
+
 
 
 
