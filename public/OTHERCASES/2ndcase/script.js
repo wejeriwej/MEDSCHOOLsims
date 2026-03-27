@@ -196,44 +196,46 @@ if (!sessionId) {
 
 async function initialstopConsultation() {
 //This part is just to go to the ext part of the 'examinations' + questions
-   document.getElementById('move-onto-questions-btn').style.display = 'unset';//this button goes to the first question
-    document.getElementById('end-consultation-btn').style.display = 'unset';
   
-    recognition.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
-    document.getElementById('pause-countdown').style.display = 'none';
-    document.getElementById('countdown-value').style.display = 'none';
-    silentmsg = true;
-    messagebeforeacceptingmic.style.display = 'none';
+  document.getElementById('move-onto-questions-btn').style.display = 'unset';
+  document.getElementById('end-consultation-btn').style.display = 'unset';
+  recognition.stop();
+  document.getElementById('replayButton').style.display = 'none';
+  document.getElementById('stop-consultation-btn').style.display = 'none';
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('executeButton').style.display = 'none';
+  document.getElementById('pause-countdown').style.display = 'none';
+  document.getElementById('countdown-value').style.display = 'none';
+  silentmsg = true;
+  messagebeforeacceptingmic.style.display = 'none';
 //
 
-
   try {
+    const token = await auth.currentUser.getIdToken(); // ✅ ADD THIS
+
     const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token // ✅ ADD THIS
       },
       body: JSON.stringify({
-        sessionId: sessionId, // make sure this exists globally
+        sessionId: sessionId,
         endSession: true
       })
-      
     });
 
     const data = await response.json();
 
     console.log("📊 Evaluation:", data.evaluation);
 
-    // 🔥 Show it on screen
     document.getElementById("evaluationBox").innerText = data.evaluation;
-//REMEMBER THAT THE CHATGPT RESPONSE IS IN THE DIV CALLED evaluationBox!!!!
+
   } catch (err) {
     console.error("❌ Error ending session:", err);
   }
+
   console.log("🛑 Ending session with ID:", sessionId);
-if (endSession === true) {
-  console.log("✅ endSession TRUE detected");
-}
 }
 
 
