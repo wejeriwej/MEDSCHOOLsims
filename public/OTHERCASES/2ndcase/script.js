@@ -87,7 +87,7 @@ async function loadDashboard() {
 
 */
 
-//try {
+try {
   try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
@@ -300,7 +300,7 @@ async function initialstopConsultation() {
   messagebeforeacceptingmic.style.display = 'none';
 //
 
- /* try {
+  try {
     const token = await auth.currentUser.getIdToken(); // ✅ ADD THIS
 
     const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
@@ -323,7 +323,7 @@ async function initialstopConsultation() {
 
   } catch (err) {
     console.error("❌ Error ending session:", err);
-  }*/
+  }
 
   console.log("🛑 Ending session with ID:", sessionId);
 }
@@ -6024,6 +6024,6 @@ if (WWWEBItitles && evenbetterifgeneral) {
   */
   
 
- /*} catch (e) {
+ } catch (e) {
   console.error("Script crashed:", e);
-}*/
+}

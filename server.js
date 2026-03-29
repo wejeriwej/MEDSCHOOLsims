@@ -33,36 +33,7 @@ app.use(cors({
 
 
 
-//app.use(cors()); // Allow requests from your web page
 
-/*
-app.post(
-  "/api/stripe-webhook",
-  express.raw({ type: "application/json" }),
-  async (req, res) => {
-    const event = req.body;
-
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object;
-
-      const snapshot = await admin
-        .firestore()
-        .collection("users")
-        .where("email", "==", session.customer_email)
-        .get();
-
-      snapshot.forEach(doc => {
-        doc.ref.update({
-          plan: "pro",
-          subscriptionStatus: "active"
-        });
-      });
-    }
-
-    res.json({ received: true });
-  }
-);
-*/
 
 app.post(
   "/api/stripe-webhook",
@@ -237,6 +208,27 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 
+app.get("/api/history", verifyFirebaseUser, async (req, res) => {
+  try {
+    const snapshot = await admin
+      .firestore()
+      .collection("users")
+      .doc(req.uid)
+      .collection("history")
+      .orderBy("createdAt", "desc")
+      .get();
+
+    const history = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    res.json(history);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch history" });
+  }
+});
 
 
 
@@ -248,44 +240,157 @@ app.post("/api/oscetrial", async (req, res) => {
 
 
 
-app.post("/api/2ndcase", async (req, res) => {
-  const { input, previousquestion, response_question } = req.body;
+
+
+
+app.post("/api/TUTOR2ndcase", verifyFirebaseUser, async (req, res) => {
+  console.log("🚀 TUTOR2ndcase endpoint hit");
+  console.log("📦 BODY:", req.body); // 👈 ADD THIS
+
+  const { input, sessionId, endSession } = req.body;
+
+  if (!sessionId) {
+    return res.status(400).json({ error: "sessionId required" });
+  }
+
+  const db = admin.firestore();
+  const docRef = db.collection("conversations").doc(sessionId);
 
   try {
-    /*const completeSentence = async (responseText) => {
-      // Loop until we have a sentence-ending punctuation mark
-      while (!(responseText.endsWith('.') || responseText.endsWith('!') || responseText.endsWith('?'))) {
-        // Make a request to complete the sentence
-        const additionalResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo", // or another model, like "gpt-4"
-            messages: [
-              { role: "system", content: "you're Jason, a 40 year old male. with right upper quadrant sharp pain that comes + goes for last 2 months + happened this morning. You're in a consultation room & the Dr is asking you questions. Answer as Jason" },
-              { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
-                                          Your previous response: ${response_question || "N/A"}
-                                          New Dr question: ${input}
-                                          Jason's answer: ${responseText}` },
-            ],
-            temperature: 0.1,
-            max_tokens: 20, // Allow a bit more tokens for completion
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0
-          }),
-        });
 
-        const data = await additionalResponse.json();
-        responseText += ' ' + data.choices[0].message.content.trim(); // Add the extra tokens
+    // =========================
+    // 🛑 END SESSION (EVALUATION)
+    // =========================
+    if (endSession) {
+      console.log("🛑 Ending session:", sessionId);
+
+      const doc = await docRef.get();
+
+      if (!doc.exists) {
+        return res.status(400).json({ error: "No session found" });
       }
-      return responseText.trim();
-    };
+
+      const messages = doc.data().messages || [];
+
+      const evaluationMessages = [
+        {
+          role: "system",
+          content: `
+You are a medical school admissions assessor.
+
+Based on the full interview conversation:
+
+1. Give an overall score out of 10
+2. Provide an overall assessment in 2nd person + be specific + reason for score. Be ruthless + harsh in the assessment.
+3. List some of the strengths
+4. List areas for improvement + go in detail
+
+Format EXACTLY like:
+
+Score: **X/10**
+
+Overall: ...
+
+**Strengths:**
+- ...
+- ...
+
+**Improvements:**
+- ...
+- ...
+- ...
+- ...
+`
+        },
+        ...messages
+      ];
+
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: evaluationMessages,
+          temperature: 0.3,
+          max_tokens: 200
+        }),
+      });
+
+      const data = await response.json();
+      const evaluation = data.choices[0].message.content.trim();
+
+
+
+
+// Extract score from evaluation text
+const scoreMatch = evaluation.match(/Score:\s*(\d+)\/10/);
+const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
+
+// Save to user's history
+await admin.firestore().collection("users").doc(doc.data().userId).collection("history").add({
+  sessionId,
+  evaluation,
+  score,
+  createdAt: admin.firestore.FieldValue.serverTimestamp()
+});
+
+
+
+
+      await docRef.update({
+        evaluation,
+        completed: true,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      return res.json({ evaluation });
+
+
+
+
+
+    }
+
+    // =========================
+    // 💬 NORMAL INTERVIEW FLOW
+    // =========================
+
+    const doc = await docRef.get();
+
+    let messages;
+
+    if (!doc.exists) {
+      messages = [
+        {
+          role: "system",
+          content: `
+You are a medical school interviewer.
+
+- Ask one question at a time
+- Respond naturally
+- Ask follow-up questions
+- DO NOT give feedback during interview
+- Keep responses concise + ask hard questions + be a severe examiner
+`
+        }
+      ];
+    } else {
+      messages = doc.data().messages || [];
+    }
+
+    messages.push({
+      role: "user",
+      content: input
+    });
+/*
+    const MAX_MESSAGES = 12;
+    if (messages.length > MAX_MESSAGES) {
+      messages = [messages[0], ...messages.slice(-MAX_MESSAGES)];
+    }
 */
-    // Initial request to OpenAI 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -293,27 +398,32 @@ app.post("/api/2ndcase", async (req, res) => {
         "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo", //gpt-4o-mini
-        messages: [
-          { role: "system", content: "you're Jason, a 40 year old male. with right upper quadrant sharp pain that comes + goes for last 2 months + happened this morning. You're in a consultation room & the Dr is asking you questions. Answer as Jason be minimal max 1 sentence" },
-          { role: "user", content: `Previous Dr question: ${previousquestion || "N/A"}
-                                    Your previous response: ${response_question || "N/A"}
-                                    New Dr question: ${input}
-                                    Jason's answer:` },
-        ],
-        temperature: 0.1,
-        max_tokens: 25,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0
+        model: "gpt-4o-mini",
+        messages,
+        temperature: 0.3,
+        max_tokens: 80
       }),
     });
 
     const data = await response.json();
-    res.json({ content: data.choices[0].message.content.trim() });
+    const reply = data.choices[0].message.content.trim();
+
+    messages.push({
+      role: "assistant",
+      content: reply
+    });
+
+    await docRef.set({
+      messages,
+      userId: req.uid, // 👈 Stores UserID in conversation
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    res.json({ content: reply });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to connect to OpenAI" });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -676,11 +786,11 @@ app.post("/api/voicezak", async (req, res) => {
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-admin.initializeApp({
+/*admin.initializeApp({
   credential: admin.credential.cert(
     JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
   )
-});
+});*/
 
 
 
