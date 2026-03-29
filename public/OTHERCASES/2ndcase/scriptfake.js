@@ -1,4 +1,94 @@
+/*function displayDashboard(data) {
+  const container = document.getElementById("dashboard");
+  container.innerHTML = "";
+
+  if (!data || data.length === 0) {
+    container.innerHTML = "<p>No previous feedback found.</p>";
+    return;
+  }
+
+  data.forEach(item => {
+    const evaluation = item.evaluation;
+
+    // Extract sections using regex
+    const scoreMatch = evaluation.match(/Score:\s*(.*)/i);
+    const overallMatch = evaluation.match(/Overall:\s*([\s\S]*?)\n(\*\*Strengths:\*\*|$)/i);
+    const strengthsMatch = evaluation.match(/\*\*Strengths:\*\*\s*([\s\S]*?)\n(\*\*Improvements:\*\*|$)/i);
+    const improvementsMatch = evaluation.match(/\*\*Improvements:\*\*\s*([\s\S]*)/i);
+
+    const score = scoreMatch ? scoreMatch[1].trim() : "N/A";
+    const overall = overallMatch ? overallMatch[1].trim() : "";
+    const strengths = strengthsMatch ? strengthsMatch[1].trim().split(/\n|-/).filter(s => s.trim() !== "") : [];
+    const improvements = improvementsMatch ? improvementsMatch[1].trim().split(/\n|-/).filter(s => s.trim() !== "") : [];
+
+    const div = document.createElement("div");
+    div.className = "feedback-item";
+    div.style = `
+      border: 1px solid #ddd; 
+      border-radius: 12px; 
+      padding: 20px; 
+      margin-bottom: 25px; 
+      background: linear-gradient(to bottom right, #fefefe, #f5f5f5);
+      box-shadow: 3px 3px 12px rgba(0,0,0,0.08);
+      font-family: Arial, sans-serif;
+    `;
+
+    const highlightKeywords = text => {
+      // Make key words stand out
+      return text
+        .replace(/\b(critical|must improve|highly recommended|excellent|outstanding)\b/gi,
+          '<strong style="color:#d9534f;">$1</strong>')
+        .replace(/\b(good|well done|strength|positive)\b/gi,
+          '<strong style="color:#28a745;">$1</strong>');
+    };
+
+    div.innerHTML = `
+      <h2 style="margin-top:0; color:#222; font-size:1.8em; border-bottom:2px solid #0077cc; padding-bottom:5px;">
+        Score: <span style="color:#0077cc;">${score}</span>
+      </h2>
+      <div style="margin:15px 0;">
+        <h3 style="margin-bottom:5px; color:#555;">Overall Assessment</h3>
+        <p style="line-height:1.5;">${highlightKeywords(overall).replace(/\n/g, "<br>")}</p>
+      </div>
+      <div style="margin-bottom:15px;">
+        <h3 style="margin-bottom:5px; color:#555;">✅ Strengths</h3>
+        <ul style="line-height:1.5; color:#155724; font-weight:500;">
+          ${strengths.map(s => `<li>${highlightKeywords(s)}</li>`).join("")}
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-bottom:5px; color:#555;">❌ Improvements</h3>
+        <ul style="line-height:1.5; color:#721c24; font-weight:500;">
+          ${improvements.map(s => `<li>${highlightKeywords(s)}</li>`).join("")}
+        </ul>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+
+
+
+async function loadDashboard() {
+  const token = await auth.currentUser.getIdToken();
+
+  const res = await fetch("https://medschoolsims-1.onrender.com/api/history", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  const data = await res.json();
+
+  displayDashboard(data);
+}
+
+*/
+
 try {
+  try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
   }
@@ -8,7 +98,20 @@ try {
     $('.app').hide();
   }
   
-  
+  //THIS IS ACTIONED FOR THOSE THAT ARE LOGGED IN!!!!
+document.addEventListener("DOMContentLoaded", () => {
+  const authStatus = document.getElementById("authStatus");
+
+  if (!authStatus) return; // page doesn't need it
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      authStatus.innerText = `Hello, ${user.email}`;
+    } else {
+      authStatus.innerText = "Not logged in";
+    }
+  });
+});
   
   
   var noteTextarea = $('#note-textarea');
@@ -23,6 +126,47 @@ try {
   let emptyif = document.getElementById('emptyif');
   
   
+
+// Fire-and-forget warmup request to render to prevent cold starts
+fetch("https://oscesimstrial1.onrender.com/health", {
+  method: "GET",
+  mode: "no-cors"
+}).catch(() => {});
+
+
+/*------
+THIS PART IS FOR THE 11LABS AUDIO AS IT NEEDS TO BE OUTSIDE ALL OF THE BRACKETS IN THE IF STATEMENTS!!
+  --------*/
+
+let audio = null; // global audio instance
+
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+if (isMobile) {
+  document.addEventListener(
+    "touchstart",
+    () => {
+      if (!audio) {
+        audio = new Audio();
+        audio.setAttribute("playsinline", "");
+        audio.setAttribute("webkit-playsinline", "");
+
+        audio.muted = true;
+        audio.play().catch(() => {});
+        audio.pause();
+        audio.muted = false;
+
+        console.log("🔓 Mobile audio unlocked");
+      }
+    },
+    { once: true }
+  );
+}
+
+
+
+
+
   
   
   // Get all notes from previous sessions and display them.
@@ -119,7 +263,7 @@ try {
     
   
   } 
-  
+  /*
   function initialstopConsultation(){
     document.getElementById('move-onto-questions-btn').style.display = 'unset';//this button goes to the first question
     document.getElementById('end-consultation-btn').style.display = 'unset';
@@ -130,13 +274,69 @@ try {
     silentmsg = true;
     messagebeforeacceptingmic.style.display = 'none';
   
+  }*/
   
+  let sessionId = localStorage.getItem("sessionId");
+
+if (!sessionId) {
+  sessionId = crypto.randomUUID();
+  localStorage.setItem("sessionId", sessionId);
+}
+
+
+async function initialstopConsultation() {
+//This part is just to go to the ext part of the 'examinations' + questions
   
-   
-  
+  document.getElementById('move-onto-questions-btn').style.display = 'unset';
+  document.getElementById('end-consultation-btn').style.display = 'unset';
+  recognition.stop();
+  document.getElementById('replayButton').style.display = 'none';
+  document.getElementById('stop-consultation-btn').style.display = 'none';
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('executeButton').style.display = 'none';
+  document.getElementById('pause-countdown').style.display = 'none';
+  document.getElementById('countdown-value').style.display = 'none';
+  silentmsg = true;
+  messagebeforeacceptingmic.style.display = 'none';
+//
+
+  try {
+    const token = await auth.currentUser.getIdToken(); // ✅ ADD THIS
+
+    const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token // ✅ ADD THIS
+      },
+      body: JSON.stringify({
+        sessionId: sessionId,
+        endSession: true
+      })
+    });
+
+    const data = await response.json();
+
+    console.log("📊 Evaluation:", data.evaluation);
+
+    document.getElementById("evaluationBox").innerText = data.evaluation;
+
+  } catch (err) {
+    console.error("❌ Error ending session:", err);
   }
-  
-  
+
+  console.log("🛑 Ending session with ID:", sessionId);
+}
+
+
+
+
+
+
+
+
+
+
   
   //this one is to go straight to the 'review section'
   function endConsultation(){
@@ -162,8 +362,35 @@ try {
     document.getElementById('logoduringconsultation').style.display = 'none';
     document.getElementById('myVideo').style.display = 'none';
   
+  //FOR THE YELLOW WARNING FADE IN AND OUT:
+  const message = document.getElementById('audio-warning');
+  message.style.display = 'block';
+
+  // Trigger fade-in (1 second)
+  setTimeout(() => {
+    message.style.opacity = 1;
+  }, 10); // small timeout to ensure CSS is applied
+
+  // After 1s fade-in + 3s visible = 4s, start fade-out (2 seconds)
+  setTimeout(() => {
+    message.style.transition = 'opacity 2s ease'; // change fade-out duration
+    message.style.opacity = 0;
+  }, 6000);
+
+  // After total duration (1+3+2=6s), hide the element
+  setTimeout(() => {
+    message.style.display = 'none';
+  }, 10000);
   
-  
+
+
+
+
+
+
+
+
+
   /*------
   THIS NEXT PART IS JUST TO MAKE THE ENDCONSULTATION BUTTON STILL SUBMIT THE ANSWER
   --------*/
@@ -276,8 +503,9 @@ try {
   
   
     
-    document.getElementById('myVideo').style.display = 'unset'; document.getElementById("mp4_src").src = "videos/examinations.mp4"; document.getElementById("myVideo").load();
-    
+      document.getElementById('myVideo').style.display = 'unset'; document.getElementById("mp4_src").src = "videos/examinations.mp4"; document.getElementById("myVideo").load();
+
+
     document.getElementById('myVideo').onended = function(e) {
       //messagebeforeacceptingmic.style.display = 'unset'; micisworking.style.display = 'unset';
     recognition_examinations.start();     document.getElementById('messagebeforeacceptingmic_examinations').style.display = 'unset';
@@ -337,7 +565,7 @@ try {
   
     recognition_investigations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
     document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load();
-    document.getElementById('myVideo').onended = function(e) {
+    document.getElementById('myVideo').onended = function(e) {//!!
     recognition_riskfactors.start();     // document.getElementById('stop-consultation-btn').style.display = 'unset';
     document.getElementById('save-note-btn-for-riskfactors').style.display = 'unset';
     }
@@ -1217,7 +1445,7 @@ try {
       
       //other symptoms    
       else if (othersymptoms_repeat == 0 && (noteContent.includes("symptoms")||noteContent.includes("come along with")
-          ||noteContent.includes("experience anything else")||noteContent.includes("come with"))) {
+          ||noteContent.includes("anything else")||noteContent.includes("come with"))) {
         //readOutLoud("I've also vomited once earlier today, but I've been feeling sick for the whole day");
         previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I've also vomited once earlier today, but I've been feeling sick for the whole day";
         associatedsymptomsx = true;
@@ -1227,7 +1455,7 @@ try {
           ||noteContent.includes("feel")&&noteContent.includes("off")||noteContent.includes("a cold")||noteContent.includes("under the weather")
           ||noteContent.includes("temperature")&&noteContent.includes("high"))) {
         //readOutLoud("Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently");
-        previousquestion = noteContent; fever_repeat++;  response_question = "No";
+        previousquestion = noteContent; fever_repeat++;  response_question = "Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently";
         associatedsymptomsx = true;
         feverx = true;
         document.getElementById("mp4_src").src = "videos/fever.mp4"; allifsaction();}//fever
@@ -1241,7 +1469,7 @@ try {
   
       else if (nausea_repeat == 0 && (noteContent.includes("naus")||noteContent.includes("vomit"))) {
         //readOutLoud("Yes, I vomited earlier on today");
-        previousquestion = noteContent; nausea_repeat++;  response_question = "No";
+        previousquestion = noteContent; nausea_repeat++;  response_question = "Yes, I vomited earlier on today";
         associatedsymptomsx = true;
         nauseax = true;
         document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any vomiting/nausea/nauseous
@@ -1535,18 +1763,46 @@ try {
 
 
 const generateResponse = async (input) => {
-  const response = await fetch("https://oscesimstrial1.onrender.com/api/2ndcase", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  // 🧠 Get or create session ID
+  //let sessionId = localStorage.getItem("sessionId");
+
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem("sessionId", sessionId);
+  }
+
+  const token = await auth.currentUser.getIdToken();
+
+const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
+  method: "POST",
+  headers: { 
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token
+  },
     body: JSON.stringify({ 
       input: input,
-      previousquestion: previousquestion,
-      response_question: response_question })
+      sessionId: sessionId
+    })
   });
 
   const data = await response.json();
   return data.content;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1703,11 +1959,21 @@ document.getElementById("inbetweenmp4_src").src = "videos/silentvideo.mp4";
 
 
 
-
-
-
 document.getElementById('mutedVideo').style.display = 'unset';  
 const gptvideo = document.getElementById('mutedVideo');
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const handleUserInput = async (noteContent) => {
@@ -1732,12 +1998,7 @@ const handleUserInput = async (noteContent) => {
 
     setTimeout(() => {
       inbetweenVideo.load(); inbetweenVideo.loop = true;
-      //document.getElementById('loadingcircle').style.display = 'none';
-  /*  
-    setTimeout(() => {
-      gptvideo.currentTime = gptvideo.duration; // Skip to the end of the video
-    }, 7500);//will force stop video ater 7.5secs
-*/
+      
   }, 1);
 
 
@@ -1757,12 +2018,13 @@ const handleUserInput = async (noteContent) => {
   });
   await Promise.all([responsePromise, videoPromise]);
   const response = await responsePromise;
-  document.getElementById('chatgpt-response').innerText = 'Previous question: ' + previousquestion  + '\n' + 'Response to previous question:' + response_question  + '\n' + 'question: ' + response + '\n' + '\n' + noteContent ; // Update the content of the element with ID 'chatgpt-response' REMOVE THIS!!!!
+  document.getElementById('chatgpt-response').innerText = 'Your previous question' + previousquestion  + '\n' + 'The response of the candidate to the previous question:' + response_question  + '\n' + 'Candidate response: ' + response + '\n' + '\n' + noteContent ; // Update the content of the element with ID 'chatgpt-response' REMOVE THIS!!!!
 
   /*
   const synth = window.speechSynthesis;
   const utterance = new SpeechSynthesisUtterance(response);
 */
+
 
 
 
@@ -1788,63 +2050,59 @@ fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
 })
 
 .then(blob => {
-    const url = window.URL.createObjectURL(blob);
-    const audio = new Audio(url);
-
-
-    const gptvideo = document.getElementById('mutedVideo');
-    gptvideo.style.display = 'unset';
-    gptvideo.muted = true;
-    gptvideo.play();
-
     
+  if (!audio) {
+  audio = new Audio();
+  audio.setAttribute("playsinline", "");
+  audio.setAttribute("webkit-playsinline", "");
+}
 
-    audio.onplay = () => {
-        // Stop silent video once voice starts
-        document.getElementById('inbetweenVideo').style.display = 'none';//for the video without speaking
-        silentVideo.pause();
-        silentVideo.style.display = 'none';
-
-        // Start muted video
-        const gptvideo = document.getElementById('mutedVideo');
-        gptvideo.style.display = 'unset';
-        gptvideo.muted = true;
-        gptvideo.play();gptvideo.load();
-    };
+const url = URL.createObjectURL(blob);
+audio.src = url;
+audio.load();
 
 
+  
+  audio.onended = () => {
+    const gptvideo = document.getElementById('mutedVideo');
+    gptvideo.pause();
 
-    audio.onended = () => {
-        const gptvideo = document.getElementById('mutedVideo');
-        gptvideo.pause(); // Pause the video after the audio finishes
-        recognition.start();   
-        document.getElementById('stop-consultation-btn').style.display = 'unset'; 
-        document.getElementById('executeButton').style.display = 'unset';
-        document.getElementById('myVideo').style.display = 'unset';
-        document.getElementById('mutedVideo').style.display = 'none';
-        messagebeforeacceptingmic.style.display = 'unset';
-        document.getElementById('errormsg').style.display = 'none';
+    recognition.start();
+    document.getElementById('stop-consultation-btn').style.display = 'unset';
+    document.getElementById('executeButton').style.display = 'unset';
+    document.getElementById('myVideo').style.display = 'unset';
+    document.getElementById('mutedVideo').style.display = 'none';
+    messagebeforeacceptingmic.style.display = 'unset';
+    document.getElementById('errormsg').style.display = 'none';
 
+    actionTriggered = false;
+  };
 
-        // Reset action trigger flag
-        actionTriggered = false;
-    };
+          const gptvideo = document.getElementById('mutedVideo');//get the muted talking video loaded
+          gptvideo.muted = true;gptvideo.load();
 
-    audio.play(); // Play the audio
+  // Attach events BEFORE play
+  audio.onplay = () => {
+    document.getElementById('loadingcircle').style.display = 'none';
+    document.getElementById('errormsg').style.display = 'none';
 
-    audio.onplay = () => {
-      document.getElementById('loadingcircle').style.display = 'none';
-      document.getElementById('errormsg').style.display = 'none';
+    // Stop silent video
+    document.getElementById('inbetweenVideo').style.display = 'none';
+    silentVideo.pause();
+    silentVideo.style.display = 'none';
 
-      inbetweenVideo.loop = false;
-      inbetweenVideo.style.display = 'none';//for the video without speaking
-       
-      const gptvideo = document.getElementById('mutedVideo');
-      gptvideo.style.display = 'unset';
-      gptvideo.muted = true;
-      gptvideo.play();gptvideo.load();
-  }
-})
+    // Start muted talking video
+    gptvideo.style.display = 'unset';
+    gptvideo.play();
+  };
+
+  
+
+  // Now play (safe for desktop + mobile)
+  audio.play().catch(err => {
+    console.error("Audio play blocked:", err);
+  });
+});
 
 
 
@@ -3399,7 +3657,7 @@ fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
     document.getElementById('summary').style.display = 'unset';
   
     recognition_examinations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/summary.mp4"; document.getElementById("myVideo").load();
+    document.getElementById("mp4_src").src = "videos/summary.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
     document.getElementById('myVideo').onended = function(e) {
     recognition1.start();     document.getElementById('messagebeforeacceptingmic_summary').style.display = 'unset'; 
     document.getElementById('save-note-btn-for-summary').style.display = 'unset';     
@@ -3631,7 +3889,7 @@ recognition_examinations.onend= function (){
     document.getElementById('differentials').style.display = 'unset';
   
     recognition1.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-     document.getElementById("mp4_src").src = "videos/differential.mp4"; document.getElementById("myVideo").load();
+     document.getElementById("mp4_src").src = "videos/differential.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
     document.getElementById('myVideo').onended = function(e) {
       recognition_differentials.start();     document.getElementById('messagebeforeacceptingmic_differentials').style.display = 'unset';
     document.getElementById('save-note-btn-for-differentials').style.display = 'unset'; 
@@ -3865,7 +4123,7 @@ recognition1.onend= function (){
     document.getElementById('investigations').style.display = 'unset';
   
     recognition_differentials.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/investigations.mp4"; document.getElementById("myVideo").load();
+    document.getElementById("mp4_src").src = "videos/investigations.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
     document.getElementById('myVideo').onended = function(e) {
     recognition_investigations.start();     document.getElementById('messagebeforeacceptingmic_investigations').style.display = 'unset';
     document.getElementById('save-note-btn-for-investigations').style.display = 'unset';
@@ -4153,7 +4411,7 @@ recognition_differentials.onend= function (){
     document.getElementById('riskfactors').style.display = 'unset';
   
     recognition_investigations.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load();
+    document.getElementById("mp4_src").src = "videos/riskfactors.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
     document.getElementById('myVideo').onended = function(e) {
     recognition_riskfactors.start();     document.getElementById('messagebeforeacceptingmic_riskfactors').style.display = 'unset';
     document.getElementById('save-note-btn-for-riskfactors').style.display = 'unset';
@@ -4401,7 +4659,7 @@ recognition_investigations.onend= function (){
     document.getElementById('treatments').style.display = 'unset';
   
     recognition_riskfactors.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
-    document.getElementById("mp4_src").src = "videos/management.mp4"; document.getElementById("myVideo").load();
+    document.getElementById("mp4_src").src = "videos/management.mp4"; document.getElementById("myVideo").load(); document.getElementById("myVideo").muted = false;
     document.getElementById('myVideo').onended = function(e) {
     recognition_treatments.start();     document.getElementById('messagebeforeacceptingmic_treatments').style.display = 'unset';
     document.getElementById('save-note-btn-for-treatments').style.display = 'unset';
@@ -5475,121 +5733,6 @@ recognition_treatments.onend= function (){
   
   
   
-  /*-----------------------------
-          Quiz
-   ------------------------------*/
-  
-  
-  window.onload = function () {
-    
-    var questionArea = document.getElementsByClassName('questions')[0],
-        answerArea   = document.getElementsByClassName('answers')[0],
-        checker      = document.getElementsByClassName('checker')[0],
-        current      = 0,
-    
-       // An object that holds all the questions + possible answers.
-       // In the array --> last digit gives the right answer position
-        allQuestions = {
-          'If a patient with ST elevation MI was one and a half hours away from the nearest PCI center, what would you do?' : ['- Cardiovert them', '- Send them to PCI', '- Wait till the on call cardiologist comes along', 1],
-          
-          'What dose of aspirin should a patient be started on after having had an MI?' : ['- 200mg', '- 500mg' , '- 800mg', 2],
-          
-          'What is the first line investigation of angina? ' : ['- It is a clinical diagnosis', '- Chest X ray', '- ECG', 0],
-  
-  
-        };
-        
-    function loadQuestion(curr) {
-    // This function loads all the question into the questionArea
-    // It grabs the current question based on the 'current'-variable
-    
-      var question = Object.keys(allQuestions)[curr];
-      
-      questionArea.innerHTML = '';
-      questionArea.innerHTML = question;    
-    }
-    
-    function loadAnswers(curr) {
-    // This function loads all the possible answers of the given question
-    // It grabs the needed answer-array with the help of the current-variable
-    // Every answer is added with an 'onclick'-function
-    
-      var answers = allQuestions[Object.keys(allQuestions)[curr]];
-      
-      answerArea.innerHTML = '';
-      
-      for (var i = 0; i < answers.length -1; i += 1) {
-        var createDiv = document.createElement('div'),
-            text = document.createTextNode(answers[i]);
-        
-        createDiv.appendChild(text);      
-        createDiv.addEventListener("click", checkAnswer(i, answers));
-        
-        
-        answerArea.appendChild(createDiv);
-      }
-    }
-    
-    function checkAnswer(i, arr) {
-      // This is the function that will run, when clicked on one of the answers
-      // Check if givenAnswer is sams as the correct one
-      // After this, check if it's the last question:
-      // If it is: empty the answerArea and let them know it's done.
-      
-      return function () {
-        var givenAnswer = i,
-            correctAnswer = arr[arr.length-1];
-        
-        if (givenAnswer === correctAnswer) {
-          addChecker(true);             
-        } else {
-          addChecker(false);                        
-        }
-        
-        if (current < Object.keys(allQuestions).length -1) {
-          current += 1;
-          
-          loadQuestion(current);
-          loadAnswers(current);
-        } else {
-          questionArea.innerHTML = 'Review:' + '<br />' + '<br />' +'Q1:'+ '<br />' +'If the patient is less than 1.5hrs away from PCI, then take them to PCI' + '<br />' + '<br />' + 
-          'Q2:' + '<br />' + '800mg is the dose of aspirin you give after an MI' + '<br />' + '<br />' +
-          'Q3:'+ '<br />' + 'The first line investigation for angina is a clinical diagnosis';
-          answerArea.innerHTML = '';
-        }
-                                
-      };
-    }
-    
-    function addChecker(bool) {
-    // This function adds a div element to the page
-    // Used to see if it was correct or false
-    
-      var createDiv = document.createElement('div'),
-          txt       = document.createTextNode(current + 1);
-      
-      createDiv.appendChild(txt);
-      
-      if (bool) {
-        
-        createDiv.className += 'correct';
-        checker.appendChild(createDiv);
-      } else {
-        createDiv.className += 'false';
-        checker.appendChild(createDiv);
-      }
-    }
-    
-    
-    // Start the quiz right away
-    loadQuestion(current);
-    loadAnswers(current);
-    
-  };
-  
-  
-  
-  
   
   
   
@@ -5647,7 +5790,14 @@ recognition_treatments.onend= function (){
   const WWWEBItitles = document.querySelector('WWWEBItitles');
   const evenbetterifgeneral = document.querySelector('evenbetterifgeneral');
   
+if (WWWEBItitles && evenbetterifgeneral) {
   WWWEBItitles.style.height = getComputedStyle(evenbetterifgeneral).height;
+} else {
+  console.error("❌ Missing elements for height sync", {
+    WWWEBItitles,
+    evenbetterifgeneral
+  });
+}
   
   
   
@@ -5873,3 +6023,7 @@ recognition_treatments.onend= function (){
   
   */
   
+
+ } catch (e) {
+  console.error("Script crashed:", e);
+}

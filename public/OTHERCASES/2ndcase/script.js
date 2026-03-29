@@ -1,4 +1,94 @@
+/*function displayDashboard(data) {
+  const container = document.getElementById("dashboard");
+  container.innerHTML = "";
+
+  if (!data || data.length === 0) {
+    container.innerHTML = "<p>No previous feedback found.</p>";
+    return;
+  }
+
+  data.forEach(item => {
+    const evaluation = item.evaluation;
+
+    // Extract sections using regex
+    const scoreMatch = evaluation.match(/Score:\s*(.*)/i);
+    const overallMatch = evaluation.match(/Overall:\s*([\s\S]*?)\n(\*\*Strengths:\*\*|$)/i);
+    const strengthsMatch = evaluation.match(/\*\*Strengths:\*\*\s*([\s\S]*?)\n(\*\*Improvements:\*\*|$)/i);
+    const improvementsMatch = evaluation.match(/\*\*Improvements:\*\*\s*([\s\S]*)/i);
+
+    const score = scoreMatch ? scoreMatch[1].trim() : "N/A";
+    const overall = overallMatch ? overallMatch[1].trim() : "";
+    const strengths = strengthsMatch ? strengthsMatch[1].trim().split(/\n|-/).filter(s => s.trim() !== "") : [];
+    const improvements = improvementsMatch ? improvementsMatch[1].trim().split(/\n|-/).filter(s => s.trim() !== "") : [];
+
+    const div = document.createElement("div");
+    div.className = "feedback-item";
+    div.style = `
+      border: 1px solid #ddd; 
+      border-radius: 12px; 
+      padding: 20px; 
+      margin-bottom: 25px; 
+      background: linear-gradient(to bottom right, #fefefe, #f5f5f5);
+      box-shadow: 3px 3px 12px rgba(0,0,0,0.08);
+      font-family: Arial, sans-serif;
+    `;
+
+    const highlightKeywords = text => {
+      // Make key words stand out
+      return text
+        .replace(/\b(critical|must improve|highly recommended|excellent|outstanding)\b/gi,
+          '<strong style="color:#d9534f;">$1</strong>')
+        .replace(/\b(good|well done|strength|positive)\b/gi,
+          '<strong style="color:#28a745;">$1</strong>');
+    };
+
+    div.innerHTML = `
+      <h2 style="margin-top:0; color:#222; font-size:1.8em; border-bottom:2px solid #0077cc; padding-bottom:5px;">
+        Score: <span style="color:#0077cc;">${score}</span>
+      </h2>
+      <div style="margin:15px 0;">
+        <h3 style="margin-bottom:5px; color:#555;">Overall Assessment</h3>
+        <p style="line-height:1.5;">${highlightKeywords(overall).replace(/\n/g, "<br>")}</p>
+      </div>
+      <div style="margin-bottom:15px;">
+        <h3 style="margin-bottom:5px; color:#555;">✅ Strengths</h3>
+        <ul style="line-height:1.5; color:#155724; font-weight:500;">
+          ${strengths.map(s => `<li>${highlightKeywords(s)}</li>`).join("")}
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-bottom:5px; color:#555;">❌ Improvements</h3>
+        <ul style="line-height:1.5; color:#721c24; font-weight:500;">
+          ${improvements.map(s => `<li>${highlightKeywords(s)}</li>`).join("")}
+        </ul>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+
+
+
+async function loadDashboard() {
+  const token = await auth.currentUser.getIdToken();
+
+  const res = await fetch("https://medschoolsims-1.onrender.com/api/history", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  const data = await res.json();
+
+  displayDashboard(data);
+}
+
+*/
+
 try {
+  try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
   }
@@ -1704,38 +1794,7 @@ const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndc
 
 
 
-async function loadDashboard() {
-  const token = await auth.currentUser.getIdToken();
 
-  const res = await fetch("https://medschoolsims-1.onrender.com/api/history", {
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  });
-
-  const data = await res.json();
-
-  displayDashboard(data);
-}
-
-
-function displayDashboard(data) {
-  const container = document.getElementById("dashboard");
-
-  container.innerHTML = "";
-
-  data.forEach(item => {
-    const div = document.createElement("div");
-
-    div.innerHTML = `
-      <h3>Score: ${item.score}/10</h3>
-      <p>${item.evaluation}</p>
-      <hr/>
-    `;
-
-    container.appendChild(div);
-  });
-}
 
 
 
@@ -5674,121 +5733,6 @@ recognition_treatments.onend= function (){
   
   
   
-  /*-----------------------------
-          Quiz
-   ------------------------------*/
-  
-  
-  window.onload = function () {
-    
-    var questionArea = document.getElementsByClassName('questions')[0],
-        answerArea   = document.getElementsByClassName('answers')[0],
-        checker      = document.getElementsByClassName('checker')[0],
-        current      = 0,
-    
-       // An object that holds all the questions + possible answers.
-       // In the array --> last digit gives the right answer position
-        allQuestions = {
-          'If a patient with ST elevation MI was one and a half hours away from the nearest PCI center, what would you do?' : ['- Cardiovert them', '- Send them to PCI', '- Wait till the on call cardiologist comes along', 1],
-          
-          'What dose of aspirin should a patient be started on after having had an MI?' : ['- 200mg', '- 500mg' , '- 800mg', 2],
-          
-          'What is the first line investigation of angina? ' : ['- It is a clinical diagnosis', '- Chest X ray', '- ECG', 0],
-  
-  
-        };
-        
-    function loadQuestion(curr) {
-    // This function loads all the question into the questionArea
-    // It grabs the current question based on the 'current'-variable
-    
-      var question = Object.keys(allQuestions)[curr];
-      
-      questionArea.innerHTML = '';
-      questionArea.innerHTML = question;    
-    }
-    
-    function loadAnswers(curr) {
-    // This function loads all the possible answers of the given question
-    // It grabs the needed answer-array with the help of the current-variable
-    // Every answer is added with an 'onclick'-function
-    
-      var answers = allQuestions[Object.keys(allQuestions)[curr]];
-      
-      answerArea.innerHTML = '';
-      
-      for (var i = 0; i < answers.length -1; i += 1) {
-        var createDiv = document.createElement('div'),
-            text = document.createTextNode(answers[i]);
-        
-        createDiv.appendChild(text);      
-        createDiv.addEventListener("click", checkAnswer(i, answers));
-        
-        
-        answerArea.appendChild(createDiv);
-      }
-    }
-    
-    function checkAnswer(i, arr) {
-      // This is the function that will run, when clicked on one of the answers
-      // Check if givenAnswer is sams as the correct one
-      // After this, check if it's the last question:
-      // If it is: empty the answerArea and let them know it's done.
-      
-      return function () {
-        var givenAnswer = i,
-            correctAnswer = arr[arr.length-1];
-        
-        if (givenAnswer === correctAnswer) {
-          addChecker(true);             
-        } else {
-          addChecker(false);                        
-        }
-        
-        if (current < Object.keys(allQuestions).length -1) {
-          current += 1;
-          
-          loadQuestion(current);
-          loadAnswers(current);
-        } else {
-          questionArea.innerHTML = 'Review:' + '<br />' + '<br />' +'Q1:'+ '<br />' +'If the patient is less than 1.5hrs away from PCI, then take them to PCI' + '<br />' + '<br />' + 
-          'Q2:' + '<br />' + '800mg is the dose of aspirin you give after an MI' + '<br />' + '<br />' +
-          'Q3:'+ '<br />' + 'The first line investigation for angina is a clinical diagnosis';
-          answerArea.innerHTML = '';
-        }
-                                
-      };
-    }
-    
-    function addChecker(bool) {
-    // This function adds a div element to the page
-    // Used to see if it was correct or false
-    
-      var createDiv = document.createElement('div'),
-          txt       = document.createTextNode(current + 1);
-      
-      createDiv.appendChild(txt);
-      
-      if (bool) {
-        
-        createDiv.className += 'correct';
-        checker.appendChild(createDiv);
-      } else {
-        createDiv.className += 'false';
-        checker.appendChild(createDiv);
-      }
-    }
-    
-    
-    // Start the quiz right away
-    loadQuestion(current);
-    loadAnswers(current);
-    
-  };
-  
-  
-  
-  
   
   
   
@@ -5846,7 +5790,14 @@ recognition_treatments.onend= function (){
   const WWWEBItitles = document.querySelector('WWWEBItitles');
   const evenbetterifgeneral = document.querySelector('evenbetterifgeneral');
   
+if (WWWEBItitles && evenbetterifgeneral) {
   WWWEBItitles.style.height = getComputedStyle(evenbetterifgeneral).height;
+} else {
+  console.error("❌ Missing elements for height sync", {
+    WWWEBItitles,
+    evenbetterifgeneral
+  });
+}
   
   
   
@@ -6073,4 +6024,6 @@ recognition_treatments.onend= function (){
   */
   
 
- 
+ } catch (e) {
+  console.error("Script crashed:", e);
+}
