@@ -283,19 +283,19 @@ Based on the full interview conversation:
 1. Give an overall score out of 10
 2. Provide an overall assessment in 2nd person + be specific + reason for score. Be ruthless + harsh in the assessment.
 3. List some of the strengths
-4. List areas for improvement + go in detail
+4. List areas for improvement + go into detail + specifics
 
 Format EXACTLY like:
 
-Score: **X/10**
+Score: X/10
 
 Overall: ...
 
-**Strengths:**
+Strengths:
 - ...
 - ...
 
-**Improvements:**
+Improvements:
 - ...
 - ...
 - ...

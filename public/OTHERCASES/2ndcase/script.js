@@ -1,4 +1,4 @@
-/*function displayDashboard(data) {
+function displayDashboard(data) {
   const container = document.getElementById("dashboard");
   container.innerHTML = "";
 
@@ -85,9 +85,13 @@ async function loadDashboard() {
   displayDashboard(data);
 }
 
-*/
 
-try {
+
+
+
+
+
+//try {
   try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
@@ -6023,7 +6027,7 @@ if (WWWEBItitles && evenbetterifgeneral) {
   
   */
   
-
+/*
  } catch (e) {
   console.error("Script crashed:", e);
-}
+}*/
