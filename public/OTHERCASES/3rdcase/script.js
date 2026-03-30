@@ -665,8 +665,6 @@ haemoptysisx = false;
 coloursputumx = false;
 quantityx = false;
 
-
-
 /*Examinations*/
 cardioexamx = false;
 
@@ -1900,6 +1898,7 @@ audio.load();
 
 const userInput = noteContent;
 handleUserInput(userInput);
+let generatedText = "";
 
 response_question = generatedText;
 };//end of the else statement

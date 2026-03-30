@@ -786,11 +786,11 @@ app.post("/api/voicezak", async (req, res) => {
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-/*admin.initializeApp({
+admin.initializeApp({
   credential: admin.credential.cert(
     JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
   )
-});*/
+});
 
 
 
@@ -809,8 +809,9 @@ async function verifyFirebaseUser(req, res, next) {
     req.email = decoded.email;
     next();
   } catch (err) {
-    res.status(401).json({ error: "Invalid token" });
-  }
+  console.error("❌ Token error:", err);
+  res.status(401).json({ error: "Invalid token" });
+}
 }
 
 

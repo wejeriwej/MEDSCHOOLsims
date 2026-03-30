@@ -1,3 +1,19 @@
+const questionArea = document.getElementById("questionArea");
+const answerArea = document.getElementById("answerArea");
+function loadQuestion(curr) {
+  if (!questionArea) {
+    console.error("❌ questionArea not found");
+    return;
+  }
+
+  var question = Object.keys(allQuestions)[curr];
+
+  questionArea.innerHTML = question;
+}
+
+
+
+
 function displayDashboard(data) {
   const container = document.getElementById("dashboard");
   container.innerHTML = "";
@@ -72,6 +88,11 @@ function displayDashboard(data) {
 
 
 async function loadDashboard() {
+  if (!auth.currentUser) {
+    console.error("❌ User not logged in");
+    return;
+  }
+
   const token = await auth.currentUser.getIdToken();
 
   const res = await fetch("https://medschoolsims-1.onrender.com/api/history", {
@@ -82,8 +103,16 @@ async function loadDashboard() {
 
   const data = await res.json();
 
+  console.log("📦 Dashboard data:", data);
+
+  if (!Array.isArray(data)) {
+    console.error("❌ Not an array:", data);
+    return;
+  }
+
   displayDashboard(data);
 }
+
 
 
 
@@ -111,8 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
   auth.onAuthStateChanged(user => {
     if (user) {
       authStatus.innerText = `Hello, ${user.email}`;
+      console.log("✅ User ready:", user.uid);
+
     } else {
       authStatus.innerText = "Not logged in";
+      console.log("❌ No user");
     }
   });
 });
@@ -820,7 +852,10 @@ async function initialstopConsultation() {
   itchingx = false;
   prevgallx = false;
   
-  
+  let generatedText = "";
+  let dyspnoeax = "";
+
+
   /*Examinations*/
   cardioexamx = false;
   
@@ -1067,7 +1102,7 @@ async function initialstopConsultation() {
          onesecdelaybeforestoprecog();
          actionTriggered = true; clearTimeout(silenceTimeout);
              document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('replayButton').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('loadingcircle').style.display = 'unset';  micisworking.style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
-         document.getElementById("executeButton").removeEventListener("click", arguments.callee);    document.removeEventListener("keydown", handleKeyDown);
+         document.getElementById("executeButton").removeEventListener("click", arguments.callee);    //document.removeEventListener("keydown", handleKeyDown);
          
         }   });
   
