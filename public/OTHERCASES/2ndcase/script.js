@@ -377,7 +377,7 @@ async function initRecognition() {
   }
 
   console.log("✅ Token received:", token);
-  
+
   // Setup WebSocket to Deepgram
   const sampleRate = 48000;
   const socket = new WebSocket(
@@ -463,8 +463,13 @@ window.addEventListener("load", () => {
 });
 
 
+console.log("Deepgram Key:", process.env.DEEPGRAM_API_KEY);
 
-
+if (recognition) {
+  recognition.start();
+} else {
+  console.error("Recognition not initialized yet");
+}
 
 
 
