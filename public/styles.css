@@ -20,6 +20,10 @@
 
 
 
+.hidden {
+  display: none;
+}
+
 #topheader {
   margin: 0;
   padding: 0;
@@ -892,7 +896,7 @@ content: "";
   
 }
 
-#mutedVideo {
+#mutedVideo, #speakingVideo {
   display: none;
 }
 

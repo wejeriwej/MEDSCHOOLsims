@@ -23,66 +23,294 @@ function displayDashboard(data) {
     return;
   }
 
+  container.scrollIntoView({ behavior: "smooth" });
+
   data.forEach(item => {
     const evaluation = item.evaluation;
 
-    // Extract sections using regex
-    const scoreMatch = evaluation.match(/Score:\s*(.*)/i);
+    const scoreMatch = evaluation.match(/Score[^0-9]*(\d+)/i);
     const overallMatch = evaluation.match(/Overall:\s*([\s\S]*?)\n(\*\*Strengths:\*\*|$)/i);
     const strengthsMatch = evaluation.match(/\*\*Strengths:\*\*\s*([\s\S]*?)\n(\*\*Improvements:\*\*|$)/i);
     const improvementsMatch = evaluation.match(/\*\*Improvements:\*\*\s*([\s\S]*)/i);
 
-    const score = scoreMatch ? scoreMatch[1].trim() : "N/A";
+    const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
     const overall = overallMatch ? overallMatch[1].trim() : "";
-    const strengths = strengthsMatch ? strengthsMatch[1].trim().split(/\n|-/).filter(s => s.trim() !== "") : [];
-    const improvements = improvementsMatch ? improvementsMatch[1].trim().split(/\n|-/).filter(s => s.trim() !== "") : [];
+    const strengths = strengthsMatch ? strengthsMatch[1].trim().split(/\n|-/).filter(s => s.trim()) : [];
+
+ const formatBullet = (text) => {
+  return text
+    .replace(/\*\*(.*?):\*\*/g, "<strong>$1:</strong>")
+    .replace(/\*\*/g, "")
+    .trim();
+};
+
+const improvements = improvementsMatch
+  ? improvementsMatch[1]
+      .trim()
+      .split(/\n|-/)
+      .map(s => formatBullet(s))
+      .filter(s => s)
+  : [];
+
+
+
+
+
+// 🔹 Helper to safely format Firestore timestamps
+function formatFirestoreDate(ts) {
+  if (!ts) return "Unknown";
+  const seconds = ts.seconds ?? ts._seconds ?? null;
+  if (seconds) return new Date(seconds * 1000).toLocaleString();
+  const d = new Date(ts);
+  return isNaN(d) ? "Unknown" : d.toLocaleString();
+}
+
+// 🔹 Use readable timestamp if available as fallback
+let date = formatFirestoreDate(item.createdAt ?? item.createdAtReadable);
+
+console.log("CreatedAt:", item.createdAt, "Readable:", date);
+
+
+
+
+
+
+// 🔹 Badge & progress color based on score
+let badge = "";
+let progressColor = "#0077cc";
+
+if (score >= 8) {
+  badge = `<span style="padding:4px 8px;border-radius:6px;background:#22c55e;color:white;font-weight:bold;">Excellent</span>`;
+  progressColor = "#22c55e";
+} else if (score >= 5) {
+  badge = `<span style="padding:4px 8px;border-radius:6px;background:#f59e0b;color:black;font-weight:bold;">Needs Improvement</span>`;
+  progressColor = "#f59e0b";
+} else {
+  badge = `<span style="padding:4px 8px;border-radius:6px;background:#ef4444;color:white;font-weight:bold;">Poor</span>`;
+  progressColor = "#ef4444";
+}
+    const progressWidth = score !== null ? (score / 10) * 100 : 0;
+
+    const highlightKeywords = text => {
+      return text
+        .replace(/\b(critical|must improve|highly recommended)\b/gi,
+          '<strong style="color:#ef4444;">$1</strong>')
+        .replace(/\b(excellent|outstanding|good|well done|strength|positive)\b/gi,
+          '<strong style="color:#22c55e;">$1</strong>');
+    };
 
     const div = document.createElement("div");
     div.className = "feedback-item";
+
     div.style = `
-      border: 1px solid #ddd; 
-      border-radius: 12px; 
-      padding: 20px; 
-      margin-bottom: 25px; 
-      background: linear-gradient(to bottom right, #fefefe, #f5f5f5);
-      box-shadow: 3px 3px 12px rgba(0,0,0,0.08);
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 25px;
+      background: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       font-family: Arial, sans-serif;
+      cursor: pointer;
     `;
 
-    const highlightKeywords = text => {
-      // Make key words stand out
-      return text
-        .replace(/\b(critical|must improve|highly recommended|excellent|outstanding)\b/gi,
-          '<strong style="color:#d9534f;">$1</strong>')
-        .replace(/\b(good|well done|strength|positive)\b/gi,
-          '<strong style="color:#28a745;">$1</strong>');
+    div.onmouseover = () => {
+      div.style.transform = "translateY(-4px)";
+      div.style.boxShadow = "0 8px 22px rgba(0,0,0,0.1)";
     };
 
+    div.onmouseout = () => {
+      div.style.transform = "translateY(0)";
+      div.style.boxShadow = "0 4px 14px rgba(0,0,0,0.06)";
+    };
+
+    const contentId = "content-" + Math.random();
+
+
+
     div.innerHTML = `
-      <h2 style="margin-top:0; color:#222; font-size:1.8em; border-bottom:2px solid #0077cc; padding-bottom:5px;">
-        Score: <span style="color:#0077cc;">${score}</span>
-      </h2>
-      <div style="margin:15px 0;">
-        <h3 style="margin-bottom:5px; color:#555;">Overall Assessment</h3>
-        <p style="line-height:1.5;">${highlightKeywords(overall).replace(/\n/g, "<br>")}</p>
+    <div style="
+  margin-bottom:18px;
+  padding-bottom:10px;
+  border-bottom:1px solid #e5e5e5;
+">
+  <h1 style="
+    margin:0;
+    font-size:1.35em;
+    font-weight:700;
+    color:#0f172a;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
+    letter-spacing:0.3px;
+  ">
+    🩺 Motivation for Medicine
+  </h1>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <h2 style="
+    margin-top:0;
+    color:#222;
+    font-size:1.8em;
+    border-bottom:2px solid #0077cc;
+    padding-bottom:5px;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
+  ">
+    Score: <span style="color:#0077cc;">${score ?? "N/A"}/10</span>
+  </h2>
+  ${badge}
+</div>
+
+<div style="text-align:right; margin-top:5px;">
+  <span id="arrow-${contentId}" style="
+    font-size:1.2em;
+    color:#888;
+    transition: transform 0.2s ease;
+    display:inline-block;
+  ">
+    ▶
+  </span>
+</div>
+
+<p style="
+  font-size:0.75em;
+  color:#888;
+  margin-top:4px;
+  font-style: italic;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+">
+  <span>Submitted on: ${date}</span>
+  <span class="expand-hint" style="font-size:0.7em; color:#aaa;">Click to expand</span>
+</p>
+
+
+
+      <div style="background:#eee;border-radius:10px;width:100%;height:14px;margin:12px 0;">
+        <div style="
+          width:${progressWidth}%;
+          background:${progressColor};
+          height:100%;
+          border-radius:10px;
+          transition: width 0.6s ease;
+        "></div>
       </div>
-      <div style="margin-bottom:15px;">
-        <h3 style="margin-bottom:5px; color:#555;">✅ Strengths</h3>
-        <ul style="line-height:1.5; color:#155724; font-weight:500;">
-          ${strengths.map(s => `<li>${highlightKeywords(s)}</li>`).join("")}
-        </ul>
-      </div>
-      <div>
-        <h3 style="margin-bottom:5px; color:#555;">❌ Improvements</h3>
-        <ul style="line-height:1.5; color:#721c24; font-weight:500;">
-          ${improvements.map(s => `<li>${highlightKeywords(s)}</li>`).join("")}
-        </ul>
+
+<div id="${contentId}" class="hidden" style="margin-top:35px;">
+
+        <div style="margin:45px 0;">
+          <h3 style="margin-bottom:10px; color:#555;">🌟 Overall Assessment</h3>
+          <p style="line-height:1.65; margin-top:20px;">
+            ${highlightKeywords(overall).replace(/\n/g, "<br>")}
+          </p>
+        </div>
+
+        <div style="margin-bottom:45px;">
+          <h3 style="margin-bottom:10px; color:#555;">✅ Strengths</h3>
+          <ul style="line-height:1.65; margin-top:23px; padding-left:70px; color:#155724; font-weight:500;">
+            ${strengths.map(s => `<li style="margin-bottom:14px;">${highlightKeywords(s)}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div>
+          <h3 style="margin-bottom:10px; color:#555;">❌ Improvements</h3>
+          <ul style="line-height:1.65; margin-top:23px; padding-left:70px; color:#721c24; font-weight:500;">
+            ${improvements.map(s => `<li style="margin-bottom:14px;">${highlightKeywords(s)}</li>`).join("")}
+          </ul>
+        </div>
+
+        <button class="copy-btn"
+  style="
+    margin-top:25px;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:#0077cc;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-width:160px;
+    height:40px;
+    transition: all 0.2s ease;
+  ">
+  <span class="btn-icon">📋</span>
+  <span class="btn-text">Copy Feedback</span>
+</button>
+
       </div>
     `;
 
+
+
+
+// Hide hint initially
+const hint = div.querySelector(".expand-hint");
+
+    // Toggle whole card
+    div.onclick = (e) => {
+  if (e.target.tagName === "BUTTON") return;
+
+  const content = document.getElementById(contentId);
+  const arrow = document.getElementById(`arrow-${contentId}`);
+
+  const isHidden = content.classList.toggle("hidden");
+
+  // Rotate arrow instead of changing layout
+  arrow.style.transform = isHidden ? "rotate(0deg)" : "rotate(90deg)";
+arrow.style.transition = "transform 0.25s ease";
+arrow.style.color = "#999";
+  if (hint) hint.style.display = isHidden ? "inline" : "none";
+
+};
+
+
+
+
+
+
     container.appendChild(div);
+
+    // FIXED COPY BUTTON
+    const btn = div.querySelector(".copy-btn");
+const btnText = btn.querySelector(".btn-text");
+const btnIcon = btn.querySelector(".btn-icon");
+
+btn.addEventListener("click", async (e) => {
+  e.stopPropagation();
+
+  try {
+    await navigator.clipboard.writeText(evaluation);
+  } catch {
+    const textarea = document.createElement("textarea");
+    textarea.value = evaluation;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+  }
+
+  // Change content WITHOUT resizing
+  btnText.innerText = "Copied!";
+  btnIcon.innerText = "✅";
+  btn.style.background = "#22c55e";
+
+  setTimeout(() => {
+    btnText.innerText = "Copy Feedback";
+    btnIcon.innerText = "📋";
+    btn.style.background = "#0077cc";
+  }, 1500);
+});
+
+// Hover effect
+btn.onmouseover = () => btn.style.background = "#005fa3";
+btn.onmouseout = () => btn.style.background = "#0077cc";
   });
 }
+
 
 
 
@@ -120,8 +348,10 @@ async function loadDashboard() {
 
 
 
-//try {
-  try {
+
+
+
+/*  try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
   }
@@ -129,7 +359,116 @@ async function loadDashboard() {
     console.error(e);
     $('.no-browser-support').show();
     $('.app').hide();
+  }*/
+
+
+// mimic the SpeechRecognition API
+let recognition = null;
+
+async function initRecognition() {
+  // Get a temporary Deepgram token from your backend
+  const res = await fetch("http://localhost:3000/api/deepgram-token");
+  const data = await res.json();
+  const token = data.token;
+
+  if (!token) {
+    console.error("❌ No token received from backend!");
+    return;
   }
+
+  console.log("✅ Token received:", token);
+  
+  // Setup WebSocket to Deepgram
+  const sampleRate = 48000;
+  const socket = new WebSocket(
+    `wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=${sampleRate}&token=${token}`
+  );
+
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const audioContext = new AudioContext();
+  const source = audioContext.createMediaStreamSource(stream);
+  const processor = audioContext.createScriptProcessor(4096, 1, 1);
+  source.connect(processor);
+  processor.connect(audioContext.destination);
+
+  processor.onaudioprocess = (e) => {
+    const input = e.inputBuffer.getChannelData(0);
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(floatTo16BitPCM(input));
+    }
+  };
+
+  socket.onmessage = (msg) => {
+    const msgData = JSON.parse(msg.data);
+    if (msgData.channel?.alternatives?.[0]?.transcript) {
+      const transcript = msgData.channel.alternatives[0].transcript;
+      if (recognition.onresult) {
+        recognition.onresult({
+          results: [
+            {
+              0: { transcript },
+              isFinal: msgData.is_final,
+            },
+          ],
+          length: 1,
+        });
+      }
+    }
+  };
+
+  socket.onopen = () => {
+    console.log("✅ Deepgram connected");
+    if (recognition.onstart) recognition.onstart();
+  };
+
+  socket.onclose = () => {
+    if (recognition.onend) recognition.onend();
+  };
+
+  socket.onerror = (err) => console.error("❌ WebSocket error:", err);
+
+  recognition = {
+    start: () => {
+      console.log("Recognition started");
+      // Audio streaming automatically starts with getUserMedia
+    },
+    stop: () => {
+      processor.disconnect();
+      stream.getTracks().forEach((t) => t.stop());
+      socket.close();
+      if (recognition.onend) recognition.onend();
+      console.log("Recognition stopped");
+    },
+    onstart: null,
+    onend: null,
+    onresult: null,
+  };
+}
+
+// helper
+function floatTo16BitPCM(float32Array) {
+  const buffer = new ArrayBuffer(float32Array.length * 2);
+  const view = new DataView(buffer);
+  let offset = 0;
+  for (let i = 0; i < float32Array.length; i++, offset += 2) {
+    let s = Math.max(-1, Math.min(1, float32Array[i]));
+    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+  return buffer;
+}
+
+// Initialize recognition on page load
+window.addEventListener("load", () => {
+  initRecognition();
+});
+
+
+
+
+
+
+
+
   
   //THIS IS ACTIONED FOR THOSE THAT ARE LOGGED IN!!!!
 document.addEventListener("DOMContentLoaded", () => {
@@ -332,6 +671,7 @@ async function initialstopConsultation() {
   document.getElementById('executeButton').style.display = 'none';
   document.getElementById('pause-countdown').style.display = 'none';
   document.getElementById('countdown-value').style.display = 'none';
+  document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
   silentmsg = true;
   messagebeforeacceptingmic.style.display = 'none';
 //
@@ -1093,7 +1433,7 @@ async function initialstopConsultation() {
     document.getElementById("executeButton").addEventListener("click", function() {
           onesecdelaybeforestoprecog();
           actionTriggered = true; clearTimeout(silenceTimeout);
-              document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('replayButton').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('loadingcircle').style.display = 'unset';  micisworking.style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
+              document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('replayButton').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('loadingcircle').style.display = 'unset';  micisworking.style.display = 'none'; initialpromptforpresssubmit.style.display = 'none'; 
           });
   
   
@@ -1101,7 +1441,7 @@ async function initialstopConsultation() {
       if (event.key === "Enter" && micisworking.style.display !== 'none') {// && !actionTriggered  
          onesecdelaybeforestoprecog();
          actionTriggered = true; clearTimeout(silenceTimeout);
-             document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('replayButton').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('loadingcircle').style.display = 'unset';  micisworking.style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
+             document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('replayButton').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('loadingcircle').style.display = 'unset';  micisworking.style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';    
          document.getElementById("executeButton").removeEventListener("click", arguments.callee);    //document.removeEventListener("keydown", handleKeyDown);
          
         }   });
@@ -1918,7 +2258,7 @@ const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndc
 
 
 
-
+ 
 
 
 
@@ -2183,7 +2523,8 @@ audio.load();
   };//end of the else statement
   
   function allifsaction(){
-    document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
+    document.getElementById("myVideo").load();      document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
+ document.getElementById('myVideo').onended = function(e) {
       recognition.start();      
       document.getElementById('stop-consultation-btn').style.display = 'unset';   
       document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; 
@@ -3073,9 +3414,17 @@ audio.load();
     micisworking.style.display = 'unset';
     messagebeforeacceptingmic.style.display = 'none';
   
-  
-  
-            
+
+
+  //for the video without speaking WHILST THE MIC IS ON ssssssssssss
+const inbetweenVideo = document.getElementById('inbetweenVideo'); inbetweenVideo.style.display = 'block';
+document.getElementById("inbetweenmp4_src").src = "videos/silentvideo.mp4"; inbetweenVideo.load();
+inbetweenVideo.onloadedmetadata = () => {
+  inbetweenVideo.muted = true;  inbetweenVideo.loop = true;  inbetweenVideo.play();
+};
+           
+
+
             if (counterforpresssubmitprompt==0){
               initialpromptforpresssubmit.style.display = 'unset';
               counterforpresssubmitprompt++;
@@ -3090,7 +3439,7 @@ audio.load();
   recognition.onend= function () {
     micisworking.style.display = 'none';
     //micisworking.style.backgroundColor = 'red';
-  
+
           if (actionTriggered == false && silentmsg == false){
           pauseBtn.click(); 
           silentmsg = false;

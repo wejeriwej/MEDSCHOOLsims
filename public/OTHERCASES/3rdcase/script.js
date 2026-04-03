@@ -1,4 +1,4 @@
-try {
+/*try {
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   var recognition = new SpeechRecognition();
 }
@@ -6,7 +6,107 @@ catch(e) {
   console.error(e);
   $('.no-browser-support').show();
   $('.app').hide();
+}*/
+
+
+
+
+// mimic the SpeechRecognition API
+var recognition = {
+  onresult: null,
+  onstart: null,
+  onend: null,
+  socket: null,
+  processor: null,
+  stream: null,
+
+  start: async function () {
+    if (this.onstart) this.onstart();
+
+    // get microphone
+    this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(this.stream);
+    this.processor = audioContext.createScriptProcessor(4096, 1, 1);
+    source.connect(this.processor);
+    this.processor.connect(audioContext.destination);
+
+    // get token from server
+    const tokenRes = await fetch("/api/deepgram-token");
+    const { token } = await tokenRes.json();
+
+    this.socket = new WebSocket(`wss://api.deepgram.com/v1/listen?punctuate=true`, ["token", token]);
+
+    // send audio to Deepgram
+    this.processor.onaudioprocess = (e) => {
+      const input = e.inputBuffer.getChannelData(0);
+      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+        this.socket.send(floatTo16BitPCM(input));
+      }
+    };
+
+    // receive transcripts
+    this.socket.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      if (data.channel && data.channel.alternatives && data.channel.alternatives[0]) {
+        const transcript = data.channel.alternatives[0].transcript;
+        if (transcript && this.onresult) {
+          this.onresult({
+            results: [
+              {
+                0: { transcript },
+                isFinal: data.is_final,
+              },
+            ],
+            length: 1,
+          });
+        }
+      }
+    };
+
+    this.socket.onclose = () => {
+      if (this.onend) this.onend();
+    };
+  },
+
+  stop: function () {
+    if (this.processor) {
+      this.processor.disconnect();
+      this.processor = null;
+    }
+    if (this.stream) {
+      this.stream.getTracks().forEach((track) => track.stop());
+      this.stream = null;
+    }
+    if (this.socket) {
+      this.socket.close();
+      this.socket = null;
+    }
+    if (this.onend) this.onend();
+  },
+};
+
+// helper to convert Float32 to 16bit PCM
+function floatTo16BitPCM(float32Array) {
+  const buffer = new ArrayBuffer(float32Array.length * 2);
+  const view = new DataView(buffer);
+  let offset = 0;
+  for (let i = 0; i < float32Array.length; i++, offset += 2) {
+    let s = Math.max(-1, Math.min(1, float32Array[i]));
+    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+  return buffer;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 //THIS IS ACTIONED FOR THOSE THAT ARE LOGGED IN!!!!
@@ -188,6 +288,8 @@ function initialstopConsultation(){
   recognition.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
   document.getElementById('pause-countdown').style.display = 'none';
   document.getElementById('countdown-value').style.display = 'none';
+  document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
+
   silentmsg = true;
   messagebeforeacceptingmic.style.display = 'none';
 
@@ -1904,7 +2006,8 @@ response_question = generatedText;
 };//end of the else statement
 
 function allifsaction(){
-  document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
+  document.getElementById("myVideo").load();       document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
+document.getElementById('myVideo').onended = function(e) {
     recognition.start();      
     document.getElementById('stop-consultation-btn').style.display = 'unset';   
     document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; 
@@ -2775,6 +2878,12 @@ recognition.onstart = function() {
   messagebeforeacceptingmic.style.display = 'none';
 
 
+   //for the video without speaking WHILST THE MIC IS ON ssssssssssss
+const inbetweenVideo = document.getElementById('inbetweenVideo'); inbetweenVideo.style.display = 'block';
+document.getElementById("inbetweenmp4_src").src = "videos/silentvideo.mp4"; inbetweenVideo.load();
+inbetweenVideo.onloadedmetadata = () => {
+  inbetweenVideo.muted = true;  inbetweenVideo.loop = true;  inbetweenVideo.play();
+};
 
           
           if (counterforpresssubmitprompt==0){

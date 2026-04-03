@@ -6,6 +6,8 @@ import "dotenv/config";
 import admin from "firebase-admin";
 import Stripe from "stripe";
 
+
+
 const app = express();
 
 // ✅ Allowed frontend origins
@@ -29,6 +31,37 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
+
+
+
+
+
+// ---------------- DEEPGRAM TOKEN ----------------
+app.get("/api/deepgram-token", async (req, res) => {
+  try {
+    const response = await fetch("https://api.deepgram.com/v1/auth/grant", {
+      method: "POST",
+      headers: {
+        "Authorization": `Token ${process.env.DEEPGRAM_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ttl: 60 }), // token valid for 60 seconds
+    });
+    const data = await response.json();
+    res.json({ token: data.access_token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to get Deepgram token" });
+  }
+});
+
+
+
+
+
+
+
+
 
 
 
@@ -334,8 +367,8 @@ await admin.firestore().collection("users").doc(doc.data().userId).collection("h
   sessionId,
   evaluation,
   score,
-  createdAt: admin.firestore.FieldValue.serverTimestamp()
-});
+createdAt: admin.firestore.FieldValue.serverTimestamp(),
+createdAtReadable: new Date().toISOString()});
 
 
 

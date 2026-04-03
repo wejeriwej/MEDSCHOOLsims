@@ -161,42 +161,28 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="logins/firebase.js"></script>
-            <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-            <script src="review.js"></script>
-    <!--<script src="../script.js"></script>-->
+
+    <script src="../script.js"></script>
     <script src="added.js"></script>
 
     <special-header></special-header>
 
 <div id="authStatus"></div>
     <div class="container">
-        <title>Review Dashboard</title>
-<h2>Your Past Feedback</h2>
+        <h2>About Us</h2>
         <br>
-
-
-<div id="dashboard"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="contact-info">
             <img src="../pics/aboutuspic.webp" id="profilepic" alt="OSCE Training">
 <br><br><br>
-<br><p>Through Sims, my goal is to provide an interactive and accessible tool that empowers medical students to excel in their exams and, ultimately, become more competent and confident clinicians.</p>     
+<p>My name is Zak, and I am a Senior House Officer doctor working in Leicester. I completed my medical degree at Hull York Medical School, where I developed a strong passion for both clinical practice and medical education.</p>
+<br>
+<p>In my free time, I enjoy learning how to code, as I believe that technology has the potential to enhance medical education and improve accessibility to high-quality learning resources. This passion led me to create OSCE Sims, a platform designed to support medical students in preparing for their Objective Structured Clinical Examinations (OSCEs).</p>
+<br><p>During my own training, I noticed a significant gap in resources available for independent OSCE practice. Many students struggle to find high-quality, structured materials, and practicing effectively often requires having a study partner, which isn’t always feasible. Recognizing this challenge, I wanted to develop a solution that would allow students to practice OSCEs independently, ensuring they can refine their clinical skills and build confidence regardless of their circumstances.</p>
+<br><p>Through OSCE Sims, my goal is to provide an interactive and accessible tool that empowers medical students to excel in their exams and, ultimately, become more competent and confident clinicians.</p>     
 
 <br><br><br><br>
-<p style="text-align: center;"><strong>Email:</strong> test@gmail.com</p>
-            <p style="text-align: center;"><strong>Whatsapp:</strong> +44 3452455</p><br><br><br>
+<p style="text-align: center;"><strong>Email:</strong> oscesims@gmail.com</p>
+            <p style="text-align: center;"><strong>Whatsapp:</strong> +44 480 609 640</p><br><br><br>
             <!--<p><strong>Address:</strong> 123 Business Street, City, Country</p>-->
         </div>
            </div>
@@ -211,3 +197,23 @@
 
 
 
+<script>document.addEventListener("DOMContentLoaded", () => {
+  const authStatus = document.getElementById("authStatus");
+  if (!authStatus) return;
+
+  // 🔒 Guard: Firebase not loaded
+  if (typeof auth === "undefined") {
+    authStatus.innerText = "Auth not available";
+    console.error("Firebase auth not loaded");
+    return;
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      authStatus.innerText = `Hello, ${user.email}`;
+    } else {
+      authStatus.innerText = "Not logged in";
+    }
+  });
+});
+</script>
