@@ -1,3 +1,5 @@
+console.log("DEEPGRAM_API_KEY is:", process.env.DEEPGRAM_API_KEY);
+
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
@@ -38,7 +40,6 @@ app.use(cors({
 
 // ---------------- DEEPGRAM TOKEN ----------------
 app.get("/api/deepgram-token", async (req, res) => {
-  console.log("Deepgram key:", process.env.DEEPGRAM_API_KEY);
   try {
     const response = await fetch("https://api.deepgram.com/v1/auth/grant", {
       method: "POST",
@@ -46,16 +47,29 @@ app.get("/api/deepgram-token", async (req, res) => {
         "Authorization": `Token ${process.env.DEEPGRAM_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ttl: 60 }),
+body: JSON.stringify({ 
+  ttl: 300,
+  scope: ["listen"] 
+})
     });
-    const data = await response.json();
-    console.log("Deepgram response:", data);
-    res.json({ token: data.access_token });
+
+    console.log("Deepgram response status:", response.status);
+const data = await response.json();
+console.log("Deepgram response body:", data);
+
+res.json({ token: data.access_token });
+
+if (!data.access_token) {
+  return res.status(500).json({ error: "No access token returned" });
+}
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to get Deepgram token" });
   }
 });
+
+app.use(express.static("public")); // serve frontend
 
 
 

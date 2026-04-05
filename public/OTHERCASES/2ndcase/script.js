@@ -363,113 +363,162 @@ async function loadDashboard() {
 
 
 // mimic the SpeechRecognition API
-let recognition = null;
+let recognition = {
+  start: () => console.log("🎤 Recognition started"),
+  stop: () => console.log("🛑 Recognition stopped"),
+  onresult: null,
+  onstart: null,
+  onend: null,
+  continuous: true
+};
+
+let recognitionReady = false;
 
 async function initRecognition() {
-  // Get a temporary Deepgram token from your backend
-  const res = await fetch("http://localhost:3000/api/deepgram-token");
-  const data = await res.json();
-  const token = data.token;
+  try {
+    // 1️⃣ Fetch token from backend
+    const res = await fetch("http://localhost:3000/api/deepgram-token");
+    const data = await res.json();
+    const token = data.token;
 
-  if (!token) {
-    console.error("❌ No token received from backend!");
-    return;
-  }
-
-  console.log("✅ Token received:", token);
-
-  // Setup WebSocket to Deepgram
-  const sampleRate = 48000;
-  const socket = new WebSocket(
-    `wss://api.deepgram.com/v1/listen?encoding=linear16&sample_rate=${sampleRate}&token=${token}`
-  );
-
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  const audioContext = new AudioContext();
-  const source = audioContext.createMediaStreamSource(stream);
-  const processor = audioContext.createScriptProcessor(4096, 1, 1);
-  source.connect(processor);
-  processor.connect(audioContext.destination);
-
-  processor.onaudioprocess = (e) => {
-    const input = e.inputBuffer.getChannelData(0);
-    if (socket.readyState === WebSocket.OPEN) {
-      socket.send(floatTo16BitPCM(input));
+    if (!token) {
+      console.error("❌ No token received from backend!");
+      return;
     }
-  };
+    console.log("✅ Token received:", token);
 
-  socket.onmessage = (msg) => {
-    const msgData = JSON.parse(msg.data);
-    if (msgData.channel?.alternatives?.[0]?.transcript) {
-      const transcript = msgData.channel.alternatives[0].transcript;
+    // 2️⃣ Get microphone access
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+    const processor = audioContext.createScriptProcessor(4096, 1, 1);
+    source.connect(processor);
+    processor.connect(audioContext.destination);
+
+    // 3️⃣ Connect to Deepgram WebSocket
+    const socket = new WebSocket(
+  `wss://api.deepgram.com/v1/listen?model=nova-2&encoding=linear16&sample_rate=16000&channels=1&punctuate=true&access_token=${token}`
+    );
+
+    socket.onopen = () => {
+      console.log("✅ Deepgram connected");
+      recognitionReady = true;
+      if (recognition.onstart) recognition.onstart();
+    };
+
+    socket.onmessage = (msg) => {
+      const msgData = JSON.parse(msg.data);
+      const transcript = msgData.channel?.alternatives?.[0]?.transcript;
+      if (!transcript) return;
+
       if (recognition.onresult) {
         recognition.onresult({
+          resultIndex: 0,
           results: [
-            {
-              0: { transcript },
-              isFinal: msgData.is_final,
-            },
-          ],
-          length: 1,
+            [{ transcript }]
+          ]
         });
       }
-    }
-  };
+    };
 
-  socket.onopen = () => {
-    console.log("✅ Deepgram connected");
-    if (recognition.onstart) recognition.onstart();
-  };
+    socket.onerror = (err) => console.error("❌ WebSocket error:", err);
 
-  socket.onclose = () => {
-    if (recognition.onend) recognition.onend();
-  };
+    socket.onclose = (e) => {
+      console.log("❌ Deepgram closed", e.code, e.reason);
+      if (recognition.onend) recognition.onend();
+    };
 
-  socket.onerror = (err) => console.error("❌ WebSocket error:", err);
+    // 4️⃣ Send audio to Deepgram
+    processor.onaudioprocess = (e) => {
+      const input = e.inputBuffer.getChannelData(0);
+      const downsampled = downsampleBuffer(input, audioContext.sampleRate, 16000);
+      const pcm = floatTo16BitPCM(downsampled);
+      if (socket.readyState === WebSocket.OPEN) socket.send(pcm);
+    };
 
-  recognition = {
-    start: () => {
-      console.log("Recognition started");
-      // Audio streaming automatically starts with getUserMedia
-    },
-    stop: () => {
+    // 5️⃣ Hook into your recognition object
+    recognition.start = () => {
+      if (socket.readyState === WebSocket.OPEN) {
+        console.log("🎤 Deepgram recognition started");
+        if (recognition.onstart) recognition.onstart();
+      } else {
+        console.log("⏳ Waiting for Deepgram to connect...");
+      }
+    };
+
+    recognition.stop = () => {
       processor.disconnect();
       stream.getTracks().forEach((t) => t.stop());
-      socket.close();
+      if (socket.readyState === WebSocket.OPEN) socket.close();
       if (recognition.onend) recognition.onend();
-      console.log("Recognition stopped");
-    },
-    onstart: null,
-    onend: null,
-    onresult: null,
-  };
+      console.log("🛑 Deepgram recognition stopped");
+    };
+
+    recognitionReady = true;
+
+  } catch (err) {
+    console.error("❌ Error initializing recognition:", err);
+  }
 }
 
-// helper
+// 6️⃣ Downsample helper
+function downsampleBuffer(buffer, sampleRate, outSampleRate) {
+  if (outSampleRate === sampleRate) return buffer;
+  const sampleRateRatio = sampleRate / outSampleRate;
+  const newLength = Math.round(buffer.length / sampleRateRatio);
+  const result = new Float32Array(newLength);
+
+  let offsetResult = 0;
+  let offsetBuffer = 0;
+
+  while (offsetResult < result.length) {
+    const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+    let accum = 0, count = 0;
+    for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
+      accum += buffer[i];
+      count++;
+    }
+    result[offsetResult++] = accum / count;
+    offsetBuffer = nextOffsetBuffer;
+  }
+
+  return result;
+}
+
+// 7️⃣ PCM helper
 function floatTo16BitPCM(float32Array) {
   const buffer = new ArrayBuffer(float32Array.length * 2);
   const view = new DataView(buffer);
   let offset = 0;
+
   for (let i = 0; i < float32Array.length; i++, offset += 2) {
     let s = Math.max(-1, Math.min(1, float32Array[i]));
     view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
   }
+
   return buffer;
 }
 
-// Initialize recognition on page load
-window.addEventListener("load", () => {
-  initRecognition();
+// 8️⃣ Start on page load
+window.addEventListener("load", async () => {
+  await initRecognition();
+  // Do NOT start recognition immediately; wait for button or Enter
 });
-
-
-console.log("Deepgram Key:", process.env.DEEPGRAM_API_KEY);
 
 if (recognition) {
   recognition.start();
 } else {
-  console.error("Recognition not initialized yet");
+  console.error("Recognition not ready yet");
 }
+
+
+
+
+
+
+
+
+
 
 
 
