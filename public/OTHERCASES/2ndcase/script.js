@@ -353,69 +353,93 @@ async function loadDashboard() {
 
 
 
-
+/*
 // ---------------- Global Variables ----------------
 let recognitionReady = false;
-let dgPC;          // RTCPeerConnection
-let dgStream;      // Mic stream
-let recognition = {
-  start: () => console.log("🎤 Recognition started"),
-  stop: () => console.log("🛑 Recognition stopped"),
-  onresult: null,
-  onstart: null,
-  onend: null
-};
+let dgSocket = null;
+let audioContext = null;
+let processor = null;
+let stream = null;
+let noteContent = "";
 
-// ---------------- Initialize Deepgram WebRTC ----------------
-async function initRecognitionWebRTC() {
+// ---------------- Helper: Downsample to 16kHz mono ----------------
+function downsampleBuffer(buffer, sampleRate, outSampleRate) {
+  if (outSampleRate === sampleRate) return buffer;
+  const sampleRateRatio = sampleRate / outSampleRate;
+  const newLength = Math.round(buffer.length / sampleRateRatio);
+  const result = new Float32Array(newLength);
+  let offsetResult = 0;
+  let offsetBuffer = 0;
+
+  while (offsetResult < result.length) {
+    const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+    let accum = 0, count = 0;
+    for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
+      accum += buffer[i];
+      count++;
+    }
+    result[offsetResult++] = accum / count;
+    offsetBuffer = nextOffsetBuffer;
+  }
+
+  return result;
+}
+
+// ---------------- Helper: Float32 -> PCM16 ----------------
+function floatTo16BitPCM(float32Array) {
+  const buffer = new ArrayBuffer(float32Array.length * 2);
+  const view = new DataView(buffer);
+  let offset = 0;
+  for (let i = 0; i < float32Array.length; i++, offset += 2) {
+    let s = Math.max(-1, Math.min(1, float32Array[i]));
+    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+  return buffer;
+}
+
+// ---------------- Initialize Deepgram recognition ----------------
+async function initRecognition() {
   if (recognitionReady) return;
 
   try {
-    // Get microphone
-    const localStream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true
-      }
+    // Get mic
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
     });
 
-    dgPC = new RTCPeerConnection();
-    dgStream = localStream;
+    audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+    processor = audioContext.createScriptProcessor(4096, 1, 1);
+    source.connect(processor);
+    processor.connect(audioContext.destination);
 
-    // Add tracks
-    localStream.getTracks().forEach(track => dgPC.addTrack(track, localStream));
+    // Connect to Deepgram WebSocket
+const socket = new WebSocket("ws://localhost:3000/deepgram");
 
-    // Data channel for transcripts
-    const dataChannel = dgPC.createDataChannel("transcripts");
-    dataChannel.onmessage = (event) => {
-      const msgData = JSON.parse(event.data);
-      const transcript = msgData.channel?.alternatives?.[0]?.transcript;
-      if (!transcript) return;
-
-      if (recognition.onresult) {
-        recognition.onresult({
-          resultIndex: 0,
-          results: [[{ transcript }]],
-        });
-      }
+    dgSocket.onopen = () => {
+      console.log("✅ Connected to Deepgram WebSocket");
+      recognitionReady = true;
     };
 
-    // Create offer
-    const offer = await dgPC.createOffer();
-    await dgPC.setLocalDescription(offer);
+    dgSocket.onmessage = (msg) => {
+      const msgData = JSON.parse(msg.data);
+      const transcript = msgData.channel?.alternatives?.[0]?.transcript;
+      if (!transcript) return;
+      noteContent = transcript.toLowerCase();
+      console.log("📝 Transcript:", noteContent);
+    };
 
-    // Send offer to backend for Deepgram SDP answer
-    const resp = await fetch("/deepgram-sdp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sdp: offer.sdp })
-    });
-    const answer = await resp.json();
-    await dgPC.setRemoteDescription({ type: "answer", sdp: answer.sdp });
+    dgSocket.onerror = (err) => console.error("❌ WebSocket error:", err);
+    dgSocket.onclose = () => console.log("❌ Deepgram connection closed");
 
-    recognitionReady = true;
-    console.log("✅ Recognition ready via WebRTC");
+    // Send mic audio to Deepgram
+    processor.onaudioprocess = (e) => {
+      if (!dgSocket || dgSocket.readyState !== WebSocket.OPEN) return;
+      const input = e.inputBuffer.getChannelData(0);
+      const downsampled = downsampleBuffer(input, audioContext.sampleRate, 16000);
+      const pcm = floatTo16BitPCM(downsampled);
+      dgSocket.send(pcm);
+    };
 
   } catch (err) {
     console.error("❌ Error initializing recognition:", err);
@@ -424,22 +448,18 @@ async function initRecognitionWebRTC() {
 
 // ---------------- Start / Stop Recognition ----------------
 function startRecognition() {
-  if (!recognitionReady) return;
+  if (!recognitionReady || !dgSocket || dgSocket.readyState !== WebSocket.OPEN) return;
   console.log("🎤 Recognition started");
-  if (recognition.onstart) recognition.onstart();
 }
 
 function stopRecognition() {
-  if (!dgPC) return;
-  dgStream.getTracks().forEach(track => track.stop());
-  dgPC.close();
-  dgPC = null;
+  if (processor) processor.disconnect();
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  if (dgSocket) dgSocket.close();
   recognitionReady = false;
   console.log("🛑 Recognition stopped");
-  if (recognition.onend) recognition.onend();
 }
-
-
+*/
 
 
 
@@ -471,7 +491,7 @@ function stopRecognition() {
 
 
 
-/*
+
 let recognition = {
   start: () => console.log("🎤 Recognition started"),
   stop: () => console.log("🛑 Recognition stopped"),
@@ -590,7 +610,7 @@ function floatTo16BitPCM(float32Array) {
   }
   return buffer;
 }
-*/
+
 
 
 
@@ -625,7 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
   var notesList = $('ul#notes');
   var whatforgottosay = $('#whatforgottosay');
    
-  var noteContent = '';
+  //var noteContent = '';
   
   let messagebeforeacceptingmic = document.getElementById('messagebeforeacceptingmic');
   let initialpromptforpresssubmit = document.getElementById('initialpromptforpresssubmit');
@@ -725,9 +745,7 @@ if (isMobile) {
   
     //readOutLoud("Enable the microphone and then start speaking, and once you've asked your question double press the ENTER key");
      // Only initialize recognition when this button is clicked
-   if (!recognitionReady) {
-      await initRecognitionWebRTC();
-    }
+   await initRecognition();
     startRecognition();
   //recognition.start();   
     document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';

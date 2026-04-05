@@ -13,6 +13,7 @@ import expressWs from "express-ws";
 
 
 const app = express();
+app.use(express.json());
 
 app.use(express.static("public"));
 
@@ -45,30 +46,29 @@ app.use(cors({
 
 
 
+/*
+expressWs(app);
 
-// ---------------- DEEPGRAM WEBRTC SDP ----------------
-app.post("/deepgram-sdp", async (req, res) => {
-  const offerSDP = req.body.sdp;
-
-  try {
-    const resp = await fetch("https://api.deepgram.com/v1/listen?punctuate=true", {
-      method: "POST",
+app.ws("/deepgram", (clientSocket) => {
+  const dgSocket = new WebSocket(
+    "wss://api.deepgram.com/v1/listen?punctuate=true&encoding=linear16&sample_rate=16000",
+    {
       headers: {
-        "Authorization": `Token ${process.env.DEEPGRAM_API_KEY}`,
-        "Content-Type": "application/sdp"
+        Authorization: `Token ${process.env.DEEPGRAM_API_KEY}`,
       },
-      body: offerSDP
-    });
+    }
+  );
 
-    const answerSDP = await resp.text();
-    res.json({ sdp: answerSDP });
+  clientSocket.on("message", (msg) => {
+    if (dgSocket.readyState === WebSocket.OPEN) dgSocket.send(msg);
+  });
 
-  } catch (err) {
-    console.error("Deepgram SDP error:", err);
-    res.status(500).send("Deepgram SDP failed");
-  }
+  dgSocket.on("message", (data) => clientSocket.send(data.toString()));
+
+  dgSocket.on("close", () => clientSocket.close());
+  dgSocket.on("error", () => clientSocket.close());
 });
-
+*/
 
 
 
