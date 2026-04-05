@@ -8,14 +8,20 @@ import "dotenv/config";
 import admin from "firebase-admin";
 import Stripe from "stripe";
 
+import WebSocket from "ws";
+import expressWs from "express-ws";
 
 
 const app = express();
 
+app.use(express.static("public"));
+
+
+
 // ✅ Allowed frontend origins
 const allowedOrigins = [
-  "http://127.0.0.1:5501",
-  "http://localhost:5501",
+  "http://127.0.0.1:3000",
+  "http://localhost:3000",
   "https://oscereal-706d4.web.app"
 ];
 
@@ -38,38 +44,68 @@ app.use(cors({
 
 
 
-// ---------------- DEEPGRAM TOKEN ----------------
-app.get("/api/deepgram-token", async (req, res) => {
+
+
+// ---------------- DEEPGRAM WEBRTC SDP ----------------
+app.post("/deepgram-sdp", async (req, res) => {
+  const offerSDP = req.body.sdp;
+
   try {
-    const response = await fetch("https://api.deepgram.com/v1/auth/grant", {
+    const resp = await fetch("https://api.deepgram.com/v1/listen?punctuate=true", {
       method: "POST",
       headers: {
         "Authorization": `Token ${process.env.DEEPGRAM_API_KEY}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/sdp"
       },
-body: JSON.stringify({ 
-  ttl: 300,
-  scope: ["listen"] 
-})
+      body: offerSDP
     });
 
-    console.log("Deepgram response status:", response.status);
-const data = await response.json();
-console.log("Deepgram response body:", data);
-
-res.json({ token: data.access_token });
-
-if (!data.access_token) {
-  return res.status(500).json({ error: "No access token returned" });
-}
+    const answerSDP = await resp.text();
+    res.json({ sdp: answerSDP });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to get Deepgram token" });
+    console.error("Deepgram SDP error:", err);
+    res.status(500).send("Deepgram SDP failed");
   }
 });
 
-app.use(express.static("public")); // serve frontend
+
+
+
+
+
+
+
+// ---------------- DEEPGRAM TOKEN ----------------
+/*
+expressWs(app);
+
+app.ws("/deepgram", (clientSocket) => {
+  const dgSocket = new WebSocket(
+    "wss://api.deepgram.com/v1/listen?punctuate=true&encoding=linear16&sample_rate=16000",
+    {
+      headers: {
+        Authorization: `Token ${process.env.DEEPGRAM_API_KEY}`,
+      },
+    }
+  );
+
+  // Forward audio from browser → Deepgram
+  clientSocket.on("message", (msg) => {
+    if (dgSocket.readyState === WebSocket.OPEN) dgSocket.send(msg);
+  });
+
+  // Send transcript back to browser
+  dgSocket.on("message", (data) => clientSocket.send(data.toString()));
+
+  dgSocket.on("close", () => clientSocket.close());
+  dgSocket.on("error", () => clientSocket.close());
+});
+*/
+
+
+
+
 
 
 

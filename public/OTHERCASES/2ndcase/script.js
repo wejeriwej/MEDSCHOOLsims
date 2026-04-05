@@ -351,6 +351,109 @@ async function loadDashboard() {
 
 
 
+
+
+
+// ---------------- Global Variables ----------------
+let recognitionReady = false;
+let dgPC;          // RTCPeerConnection
+let dgStream;      // Mic stream
+let recognition = {
+  start: () => console.log("🎤 Recognition started"),
+  stop: () => console.log("🛑 Recognition stopped"),
+  onresult: null,
+  onstart: null,
+  onend: null
+};
+
+// ---------------- Initialize Deepgram WebRTC ----------------
+async function initRecognitionWebRTC() {
+  if (recognitionReady) return;
+
+  try {
+    // Get microphone
+    const localStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      }
+    });
+
+    dgPC = new RTCPeerConnection();
+    dgStream = localStream;
+
+    // Add tracks
+    localStream.getTracks().forEach(track => dgPC.addTrack(track, localStream));
+
+    // Data channel for transcripts
+    const dataChannel = dgPC.createDataChannel("transcripts");
+    dataChannel.onmessage = (event) => {
+      const msgData = JSON.parse(event.data);
+      const transcript = msgData.channel?.alternatives?.[0]?.transcript;
+      if (!transcript) return;
+
+      if (recognition.onresult) {
+        recognition.onresult({
+          resultIndex: 0,
+          results: [[{ transcript }]],
+        });
+      }
+    };
+
+    // Create offer
+    const offer = await dgPC.createOffer();
+    await dgPC.setLocalDescription(offer);
+
+    // Send offer to backend for Deepgram SDP answer
+    const resp = await fetch("/deepgram-sdp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sdp: offer.sdp })
+    });
+    const answer = await resp.json();
+    await dgPC.setRemoteDescription({ type: "answer", sdp: answer.sdp });
+
+    recognitionReady = true;
+    console.log("✅ Recognition ready via WebRTC");
+
+  } catch (err) {
+    console.error("❌ Error initializing recognition:", err);
+  }
+}
+
+// ---------------- Start / Stop Recognition ----------------
+function startRecognition() {
+  if (!recognitionReady) return;
+  console.log("🎤 Recognition started");
+  if (recognition.onstart) recognition.onstart();
+}
+
+function stopRecognition() {
+  if (!dgPC) return;
+  dgStream.getTracks().forEach(track => track.stop());
+  dgPC.close();
+  dgPC = null;
+  recognitionReady = false;
+  console.log("🛑 Recognition stopped");
+  if (recognition.onend) recognition.onend();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*  try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
@@ -363,31 +466,26 @@ async function loadDashboard() {
 
 
 // mimic the SpeechRecognition API
+
+
+
+
+
+/*
 let recognition = {
   start: () => console.log("🎤 Recognition started"),
   stop: () => console.log("🛑 Recognition stopped"),
   onresult: null,
   onstart: null,
   onend: null,
-  continuous: true
 };
 
 let recognitionReady = false;
 
+// Init recognition
 async function initRecognition() {
+  if (recognitionReady) return;
   try {
-    // 1️⃣ Fetch token from backend
-    const res = await fetch("http://localhost:3000/api/deepgram-token");
-    const data = await res.json();
-    const token = data.token;
-
-    if (!token) {
-      console.error("❌ No token received from backend!");
-      return;
-    }
-    console.log("✅ Token received:", token);
-
-    // 2️⃣ Get microphone access
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const audioContext = new AudioContext();
     const source = audioContext.createMediaStreamSource(stream);
@@ -395,13 +493,11 @@ async function initRecognition() {
     source.connect(processor);
     processor.connect(audioContext.destination);
 
-    // 3️⃣ Connect to Deepgram WebSocket
-    const socket = new WebSocket(
-  `wss://api.deepgram.com/v1/listen?model=nova-2&encoding=linear16&sample_rate=16000&channels=1&punctuate=true&access_token=${token}`
-    );
+    // Connect to backend proxy
+    const socket = new WebSocket("ws://localhost:3000/deepgram");
 
     socket.onopen = () => {
-      console.log("✅ Deepgram connected");
+      console.log("✅ Connected to backend Deepgram proxy");
       recognitionReady = true;
       if (recognition.onstart) recognition.onstart();
     };
@@ -414,9 +510,7 @@ async function initRecognition() {
       if (recognition.onresult) {
         recognition.onresult({
           resultIndex: 0,
-          results: [
-            [{ transcript }]
-          ]
+          results: [[{ transcript }]],
         });
       }
     };
@@ -424,11 +518,11 @@ async function initRecognition() {
     socket.onerror = (err) => console.error("❌ WebSocket error:", err);
 
     socket.onclose = (e) => {
-      console.log("❌ Deepgram closed", e.code, e.reason);
+      console.log("❌ Deepgram connection closed", e.code, e.reason);
       if (recognition.onend) recognition.onend();
     };
 
-    // 4️⃣ Send audio to Deepgram
+    // Send mic audio to backend
     processor.onaudioprocess = (e) => {
       const input = e.inputBuffer.getChannelData(0);
       const downsampled = downsampleBuffer(input, audioContext.sampleRate, 16000);
@@ -436,13 +530,13 @@ async function initRecognition() {
       if (socket.readyState === WebSocket.OPEN) socket.send(pcm);
     };
 
-    // 5️⃣ Hook into your recognition object
+    // Start / stop hooks
     recognition.start = () => {
       if (socket.readyState === WebSocket.OPEN) {
-        console.log("🎤 Deepgram recognition started");
+        console.log("🎤 Recognition started");
         if (recognition.onstart) recognition.onstart();
       } else {
-        console.log("⏳ Waiting for Deepgram to connect...");
+        console.log("⏳ Waiting for backend connection...");
       }
     };
 
@@ -451,23 +545,23 @@ async function initRecognition() {
       stream.getTracks().forEach((t) => t.stop());
       if (socket.readyState === WebSocket.OPEN) socket.close();
       if (recognition.onend) recognition.onend();
-      console.log("🛑 Deepgram recognition stopped");
+      console.log("🛑 Recognition stopped");
     };
 
     recognitionReady = true;
+    console.log("✅ Recognition ready");
 
   } catch (err) {
     console.error("❌ Error initializing recognition:", err);
   }
 }
 
-// 6️⃣ Downsample helper
+// Downsample helper
 function downsampleBuffer(buffer, sampleRate, outSampleRate) {
   if (outSampleRate === sampleRate) return buffer;
   const sampleRateRatio = sampleRate / outSampleRate;
   const newLength = Math.round(buffer.length / sampleRateRatio);
   const result = new Float32Array(newLength);
-
   let offsetResult = 0;
   let offsetBuffer = 0;
 
@@ -485,35 +579,18 @@ function downsampleBuffer(buffer, sampleRate, outSampleRate) {
   return result;
 }
 
-// 7️⃣ PCM helper
+// PCM helper
 function floatTo16BitPCM(float32Array) {
   const buffer = new ArrayBuffer(float32Array.length * 2);
   const view = new DataView(buffer);
   let offset = 0;
-
   for (let i = 0; i < float32Array.length; i++, offset += 2) {
     let s = Math.max(-1, Math.min(1, float32Array[i]));
     view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
   }
-
   return buffer;
 }
-
-// 8️⃣ Start on page load
-window.addEventListener("load", async () => {
-  await initRecognition();
-  // Do NOT start recognition immediately; wait for button or Enter
-});
-
-if (recognition) {
-  recognition.start();
-} else {
-  console.error("Recognition not ready yet");
-}
-
-
-
-
+*/
 
 
 
@@ -631,7 +708,7 @@ if (isMobile) {
   
   
   
-  function startFunction() { 
+  async function startFunction() { 
     timeLeft = slider.value * 60;//this and the next one is to start the timer
     timer = setInterval(updateTimeLeft, 1000);
   
@@ -642,12 +719,17 @@ if (isMobile) {
   
     
   
-    document.getElementById('myVideo').onended = function(e) {
+    document.getElementById('myVideo').onended = async () => {
       //readOutLoud("Go");
       messagebeforeacceptingmic.style.display = 'unset';
   
     //readOutLoud("Enable the microphone and then start speaking, and once you've asked your question double press the ENTER key");
-    recognition.start();   
+     // Only initialize recognition when this button is clicked
+   if (!recognitionReady) {
+      await initRecognitionWebRTC();
+    }
+    startRecognition();
+  //recognition.start();   
     document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
     document.getElementById('replayButton').style.display = 'unset';  document.getElementById('home').style.display = 'unset';
     
