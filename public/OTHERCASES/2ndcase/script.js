@@ -473,8 +473,8 @@ function stopRecognition() {
 
 
 
-
-/*  try {
+/*
+  try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
   }
@@ -482,16 +482,74 @@ function stopRecognition() {
     console.error(e);
     $('.no-browser-support').show();
     $('.app').hide();
-  }*/
-
+  }
+*/
 
 // mimic the SpeechRecognition API
 
+window.addEventListener("load", () => {
+  initRecorder();
+});
+
+
+
+let mediaRecorder;
+let audioChunks = [];
+
+async function initRecorder() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        noiseSuppression: true,
+        echoCancellation: true,
+        autoGainControl: true
+      }
+    });
+
+    mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = e => {
+      audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      audioChunks = [];
+
+      const formData = new FormData();
+      formData.append("file", audioBlob);
+
+      const res = await fetch("/api/transcribe", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      noteContent = data.text.toLowerCase();
+
+      submitquestion(); // your existing function
+    };
+
+  } catch (e) {
+    console.error(e);
+    $('.no-browser-support').show();
+    $('.app').hide();
+  }
+}
 
 
 
 
 
+
+
+
+
+
+
+
+
+/*
 let recognition = {
   start: () => console.log("🎤 Recognition started"),
   stop: () => console.log("🛑 Recognition stopped"),
@@ -506,12 +564,39 @@ let recognitionReady = false;
 async function initRecognition() {
   if (recognitionReady) return;
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+const stream = await navigator.mediaDevices.getUserMedia({
+  audio: {
+    channelCount: 1,
+    echoCancellation: true,
+    noiseSuppression: true,
+    autoGainControl: true,
+    sampleRate: 48000
+  }
+});
+
+
+
+
+
     const audioContext = new AudioContext();
+    await audioContext.resume();
     const source = audioContext.createMediaStreamSource(stream);
     const processor = audioContext.createScriptProcessor(4096, 1, 1);
-    source.connect(processor);
+    
     processor.connect(audioContext.destination);
+
+   
+
+// 🔥 BOOST MIC
+const gainNode = audioContext.createGain();
+gainNode.gain.value = 80.0; // 👈 BIG boost (you NEED this)
+
+
+
+// Chain
+source.connect(gainNode);
+gainNode.connect(processor);
+processor.connect(audioContext.destination);
 
     // Connect to backend proxy
     const socket = new WebSocket("ws://localhost:3000/deepgram");
@@ -522,18 +607,40 @@ async function initRecognition() {
       if (recognition.onstart) recognition.onstart();
     };
 
-    socket.onmessage = (msg) => {
-      const msgData = JSON.parse(msg.data);
-      const transcript = msgData.channel?.alternatives?.[0]?.transcript;
-      if (!transcript) return;
+    let finalTranscript = "";
 
-      if (recognition.onresult) {
-        recognition.onresult({
-          resultIndex: 0,
-          results: [[{ transcript }]],
-        });
-      }
-    };
+socket.onmessage = (msg) => {
+  const msgData = JSON.parse(msg.data);
+  const transcript = msgData.channel?.alternatives?.[0]?.transcript;
+  const isFinal = msgData.is_final;
+
+  if (!transcript) return;
+
+  if (isFinal) {
+    finalTranscript += transcript + " ";
+    console.log("✅ FINAL:", finalTranscript);
+  } else {
+    console.log("📝 interim:", transcript);
+  }
+
+  if (recognition.onresult) {
+    recognition.onresult({
+      resultIndex: 0,
+      results: [[{ transcript }]],
+    });
+  }
+};
+
+function stopAndSubmit() {
+  mediaRecorder.stop();
+
+  // ⏳ WAIT before using transcript
+  setTimeout(() => {
+    console.log("📤 Submitting:", finalTranscript);
+
+    submitquestion(finalTranscript); // 👈 use THIS
+  }, 500); // small delay for final packet
+}
 
     socket.onerror = (err) => console.error("❌ WebSocket error:", err);
 
@@ -543,15 +650,29 @@ async function initRecognition() {
     };
 
     // Send mic audio to backend
-    processor.onaudioprocess = (e) => {
-      const input = e.inputBuffer.getChannelData(0);
-      const downsampled = downsampleBuffer(input, audioContext.sampleRate, 16000);
-      const pcm = floatTo16BitPCM(downsampled);
-      if (socket.readyState === WebSocket.OPEN) socket.send(pcm);
-    };
+  processor.onaudioprocess = (e) => {
+  const input = e.inputBuffer.getChannelData(0);
+
+  // 🔍 DEBUG volume
+  let volume = 0;
+  for (let i = 0; i < input.length; i++) {
+    volume += Math.abs(input[i]);
+  }
+  volume = volume / input.length;
+
+  console.log("🎤 volume:", volume);
+
+  const downsampled = downsampleBuffer(input, audioContext.sampleRate, 16000);
+  const pcm = floatTo16BitPCM(downsampled);
+
+  if (socket.readyState === WebSocket.OPEN) {
+    console.log("📤 sending", pcm.byteLength);
+    socket.send(pcm);
+  }
+};
 
     // Start / stop hooks
-    recognition.start = () => {
+    mediaRecorder.start = () => {
       if (socket.readyState === WebSocket.OPEN) {
         console.log("🎤 Recognition started");
         if (recognition.onstart) recognition.onstart();
@@ -560,7 +681,7 @@ async function initRecognition() {
       }
     };
 
-    recognition.stop = () => {
+    mediaRecorder.stop = () => {
       processor.disconnect();
       stream.getTracks().forEach((t) => t.stop());
       if (socket.readyState === WebSocket.OPEN) socket.close();
@@ -603,13 +724,22 @@ function downsampleBuffer(buffer, sampleRate, outSampleRate) {
 function floatTo16BitPCM(float32Array) {
   const buffer = new ArrayBuffer(float32Array.length * 2);
   const view = new DataView(buffer);
+
   let offset = 0;
   for (let i = 0; i < float32Array.length; i++, offset += 2) {
-    let s = Math.max(-1, Math.min(1, float32Array[i]));
-    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+    let s = float32Array[i];
+
+    // 🔥 clamp AFTER big gain
+    s = Math.max(-1, Math.min(1, s));
+
+    view.setInt16(offset, s * 0x7fff, true);
   }
   return buffer;
 }
+*/
+
+
+
 
 
 
@@ -706,7 +836,7 @@ if (isMobile) {
   //For the replay video Button!!
   document.getElementById('replayButton').addEventListener('click', function() {
     replayVideo();
-    document.getElementById('replayButton').style.display = 'none'; recognition.stop();      document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('messagebeforeacceptingmic').style.display = 'none';
+    document.getElementById('replayButton').style.display = 'none'; mediaRecorder.stop();      document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('messagebeforeacceptingmic').style.display = 'none';
       
   });
   
@@ -716,7 +846,7 @@ if (isMobile) {
     videoElement.currentTime = 0; // Set the current time of the video to the beginning
     videoElement.play(); // Start playing the video
     document.getElementById('myVideo').onended = function(e) {
-      recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';    document.getElementById('home').style.display = 'unset';
+      mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';    document.getElementById('home').style.display = 'unset';
       document.getElementById('replayButton').style.display = 'unset';  document.getElementById('executeButton').style.display = 'unset';  document.getElementById('messagebeforeacceptingmic').style.display = 'unset';
     }}
   
@@ -728,7 +858,7 @@ if (isMobile) {
   
   
   
-  async function startFunction() { 
+  function startFunction() { 
     timeLeft = slider.value * 60;//this and the next one is to start the timer
     timer = setInterval(updateTimeLeft, 1000);
   
@@ -739,15 +869,15 @@ if (isMobile) {
   
     
   
-    document.getElementById('myVideo').onended = async () => {
+  document.getElementById('myVideo').onended = function(e) {
       //readOutLoud("Go");
       messagebeforeacceptingmic.style.display = 'unset';
   
     //readOutLoud("Enable the microphone and then start speaking, and once you've asked your question double press the ENTER key");
      // Only initialize recognition when this button is clicked
-   await initRecognition();
-    startRecognition();
-  //recognition.start();   
+   
+    mediaRecorder.start();   
+    
     document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
     document.getElementById('replayButton').style.display = 'unset';  document.getElementById('home').style.display = 'unset';
     
@@ -797,7 +927,7 @@ if (isMobile) {
     document.getElementById('move-onto-questions-btn').style.display = 'unset';//this button goes to the first question
     document.getElementById('end-consultation-btn').style.display = 'unset';
   
-    recognition.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
+    mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
     document.getElementById('pause-countdown').style.display = 'none';
     document.getElementById('countdown-value').style.display = 'none';
     silentmsg = true;
@@ -818,7 +948,8 @@ async function initialstopConsultation() {
   
   document.getElementById('move-onto-questions-btn').style.display = 'unset';
   document.getElementById('end-consultation-btn').style.display = 'unset';
-  recognition.stop();
+   
+    mediaRecorder.stop();
   document.getElementById('replayButton').style.display = 'none';
   document.getElementById('stop-consultation-btn').style.display = 'none';
   document.getElementById('home').style.display = 'none';
@@ -876,7 +1007,7 @@ async function initialstopConsultation() {
     document.getElementById('move-onto-questions-btn').style.display = 'none';
   
     document.getElementById('myVideo').pause();
-    recognition.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
+    mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
     recognition1.stop(); recognition1.stop(); recognition_differentials.stop(); recognition_investigations.stop(); recognition_riskfactors.stop(); recognition_treatments.stop();
   
     document.getElementById('examinations').style.display = 'none';
@@ -1187,14 +1318,14 @@ async function initialstopConsultation() {
       pauseBtn.style.top = '50%'; pauseBtn.style.left = '50%'; pauseBtn.style.transform = 'translate(-50%, -50%)';
       pauseBtn.style.backgroundImage = "url('../../art/play-button-black-and-white.png')";
   
-      myVideo.pause(); recognition.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
+      myVideo.pause(); mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
       pauseBtn.style.display = "unset"; //actionTriggered = true;
       silentmsg = true; document.getElementById('emptyif').style.display = 'none';
   
     } else {
       timer = setInterval(updateTimeLeft, 1000);
       pauseBtn.innerHTML = ""; pauseBtn.style.fontWeight = "normal"; pauseBtn.style.fontSize = "15px"; pauseBtn.style.height = '35px'; pauseBtn.style.padding = '10px 17px'; 
-      recognition.start();  document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; document.getElementById('replayButton').style.display = 'unset';document.getElementById('home').style.display = 'unset';
+      mediaRecorder.start();  document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; document.getElementById('replayButton').style.display = 'unset';document.getElementById('home').style.display = 'unset';
       pauseBtn.style.backgroundImage = "url('../../art/pause_button_black_and_white-removebg-preview.png')";  document.getElementById('silencemessage').style.display = 'none';
   
       pauseBtn.style.top = ''; pauseBtn.style.left = ''; pauseBtn.style.transform = ''; // Reset the position property to its default value
@@ -1214,7 +1345,7 @@ async function initialstopConsultation() {
   function homeButton() {
     document.getElementById('taking-history-section').style.display = 'unset';
     document.getElementById('taking-history-section-part2').style.display = 'unset'; actionTriggered = true;
-    recognition.stop();      document.getElementById('replayButton').style.display = 'none';   
+    mediaRecorder.stop();      document.getElementById('replayButton').style.display = 'none';   
     document.getElementById('stop-consultation-btn').style.display = 'none'; 
     document.getElementById('executeButton').style.display = 'none';
     document.getElementById('messagebeforeacceptingmic').style.display = 'none';
@@ -1264,12 +1395,12 @@ async function initialstopConsultation() {
       clearInterval(timer);
       pauseBtn.innerHTML = "Unpause consultation"; pauseBtn.style.fontWeight = "bold"; pauseBtn.style.fontSize = "45px"; pauseBtn.style.height = '85px'; pauseBtn.style.padding = '1px 50px';
       myVideo.pause(); readOutLoud.pause();
-      recognition.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
+      mediaRecorder.stop();    document.getElementById('stop-consultation-btn').style.display = 'none';
   
     } else {
       timer = setInterval(updateTimeLeft, 1000);
       pauseBtn.innerHTML = "Pause consultation"; pauseBtn.style.fontWeight = "normal"; pauseBtn.style.fontSize = "15px"; pauseBtn.style.height = '35px'; pauseBtn.style.padding = '1px 5px';
-      recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
+      mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
   
     }
   });
@@ -1513,7 +1644,7 @@ async function initialstopConsultation() {
   // When true, the silence period is longer (about 15 seconds),
   // allowing us to keep recording even when the user pauses.
   
-  recognition.continuous = true;
+  mediaRecorder.continuous = true;
   
   
   var silenceTimeout = null;
@@ -1529,7 +1660,7 @@ async function initialstopConsultation() {
   
   
   // This block is called every time the Speech APi captures a line.
-  recognition.onresult = function(event) {
+  mediaRecorder.onresult = function(event) {
   
     
     
@@ -1606,7 +1737,7 @@ async function initialstopConsultation() {
   var onesecdelay = null;
     function onesecdelaybeforestoprecog() {
       onesecdelay = setTimeout(function () {
-        recognition.stop();executeActionAfterDelay(); clearTimeout(silenceTimeout);
+        mediaRecorder.stop();executeActionAfterDelay(); clearTimeout(silenceTimeout);
       }, 1000);
     }
   //////
@@ -1674,7 +1805,7 @@ async function initialstopConsultation() {
                                         };*/
                                     
                                         /*executeButton.addEventListener('click', function() {
-                                          recognition.start();
+                                          mediaRecorder.start();
                                         });*/
                                     
                                         // Check for microphone permission on page load
@@ -1704,7 +1835,7 @@ async function initialstopConsultation() {
   
     
   
-    recognition.stop();
+    mediaRecorder.stop();
        document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
   
        
@@ -2259,7 +2390,7 @@ async function initialstopConsultation() {
         //readOutLoud("good");
         previousquestion = noteContent;   response_question = "good";
         document.getElementById("mp4_src").src = "videos/good.mp4"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
-          recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
+          mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
           }}//I'm good thank you (in response to how are you)
   */
   
@@ -2432,7 +2563,7 @@ const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndc
   
   
             document.getElementById("mp4_src").src = "WIN_20230328_13_59_49_Pro.mp4"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
-              recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
+              mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
             }      
       }
   */
@@ -2462,7 +2593,7 @@ const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndc
         gptvideo.muted = false; // Unmute the video after 2 seconds
       }, 2000);
   
-      recognition.start();
+      mediaRecorder.start();
       
       document.getElementById('stop-consultation-btn').style.display = 'unset';
     };
@@ -2538,7 +2669,7 @@ const handleUserInput = async (noteContent) => {
 
 
     gptvideo.onended =  function(e) {
-      recognition.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';   document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; actionTriggered = false;
+      mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';   document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; actionTriggered = false;
       
       document.getElementById('myVideo').style.display = 'unset';
       document.getElementById('mutedVideo').style.display = 'none';
@@ -2600,7 +2731,7 @@ audio.load();
     const gptvideo = document.getElementById('mutedVideo');
     gptvideo.pause();
 
-    recognition.start();
+    mediaRecorder.start();
     document.getElementById('stop-consultation-btn').style.display = 'unset';
     document.getElementById('executeButton').style.display = 'unset';
     document.getElementById('myVideo').style.display = 'unset';
@@ -2647,7 +2778,7 @@ audio.load();
     const gptvideo = document.getElementById('mutedVideo');
     gptvideo.pause(); // Pause the video after the speech synthesis finishes
     //gptvideo.volume = 1;
-    recognition.start();   document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
+    mediaRecorder.start();   document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
     document.getElementById('myVideo').style.display = 'unset';
     document.getElementById('mutedVideo').style.display = 'none';
     
@@ -2679,7 +2810,7 @@ audio.load();
   function allifsaction(){
     document.getElementById("myVideo").load();      document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
  document.getElementById('myVideo').onended = function(e) {
-      recognition.start();      
+      mediaRecorder.start();      
       document.getElementById('stop-consultation-btn').style.display = 'unset';   
       document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; 
       document.getElementById('executeButton').style.display = 'unset';   
@@ -3564,7 +3695,7 @@ audio.load();
     let micisworking = document.getElementById('micisworking');//THIS IS NOT NEEDED FOR THE MIC TO WORK!!!!!!!!!!!
   
     
-  recognition.onstart = function() {
+  mediaRecorder.onstart = function() {
     micisworking.style.display = 'unset';
     messagebeforeacceptingmic.style.display = 'none';
   
@@ -3590,7 +3721,7 @@ inbetweenVideo.onloadedmetadata = () => {
   
   
   
-  recognition.onend= function () {
+  mediaRecorder.onend= function () {
     micisworking.style.display = 'none';
     //micisworking.style.backgroundColor = 'red';
 
@@ -3810,12 +3941,12 @@ inbetweenVideo.onloadedmetadata = () => {
     if (noteContent.length) {
       noteContent += ' ';
     }
-    recognition.start();
+    mediaRecorder.start();
   });
    
    
   //$('#pause-record-btn').on('click', function(e) {
-    //recognition.stop();
+    //mediaRecorder.stop();
     //instructions.text('Voice recognition paused.');
   //});
    

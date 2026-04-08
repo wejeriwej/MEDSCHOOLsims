@@ -1,5 +1,3 @@
-console.log("DEEPGRAM_API_KEY is:", process.env.DEEPGRAM_API_KEY);
-
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
@@ -46,6 +44,44 @@ app.use(cors({
 
 
 
+
+
+
+
+
+
+//------Whisper:--------
+
+import multer from "multer";
+import fs from "fs";
+import OpenAI from "openai";
+
+const upload = multer({ dest: "uploads/" });
+const openai = new OpenAI();
+
+app.post("/api/transcribe", upload.single("file"), async (req, res) => {
+  try {
+    const transcription = await openai.audio.transcriptions.create({
+      file: fs.createReadStream(req.file.path),
+      model: "gpt-4o-transcribe"
+    });
+
+    res.json({ text: transcription.text });
+
+    fs.unlinkSync(req.file.path); // cleanup
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "transcription failed" });
+  }
+});
+
+
+
+
+
+
+
+
 /*
 expressWs(app);
 
@@ -75,14 +111,14 @@ app.ws("/deepgram", (clientSocket) => {
 
 
 
-
-// ---------------- DEEPGRAM TOKEN ----------------
 /*
+// ---------------- DEEPGRAM TOKEN ----------------
+
 expressWs(app);
 
 app.ws("/deepgram", (clientSocket) => {
   const dgSocket = new WebSocket(
-    "wss://api.deepgram.com/v1/listen?punctuate=true&encoding=linear16&sample_rate=16000",
+"wss://api.deepgram.com/v1/listen?punctuate=true",
     {
       headers: {
         Authorization: `Token ${process.env.DEEPGRAM_API_KEY}`,
