@@ -467,7 +467,8 @@ function stopRecognition() {
 
 
 
-
+ let messagebeforeacceptingmic = document.getElementById('messagebeforeacceptingmic');
+    let micisworking = document.getElementById('micisworking');//THIS IS NOT NEEDED FOR THE MIC TO WORK!!!!!!!!!!!
 
 
 
@@ -491,12 +492,12 @@ window.addEventListener("load", () => {
   initRecorder();
 });
 
-
-
 let mediaRecorder;
 let audioChunks = [];
 
 async function initRecorder() {
+  console.log("🎤 initRecorder called");
+
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: {
@@ -506,37 +507,141 @@ async function initRecorder() {
       }
     });
 
+    console.log("✅ Microphone access granted");
+
     mediaRecorder = new MediaRecorder(stream);
+    console.log("✅ MediaRecorder created:", mediaRecorder);
+
+    mediaRecorder.onstart = () => console.log("🟢 Recording STARTED");
+
+
+
+mediaRecorder.onstart = () => {
+  console.log("🟢 Recording STARTED");
+
+  micisworking.style.display = 'unset';
+  messagebeforeacceptingmic.style.display = 'none';
+
+  console.log("💡 Mic shown, message hidden (RECORDER START)");
+};
+
+
 
     mediaRecorder.ondataavailable = e => {
+      console.log("📦 Data chunk received:", e.data.size);
       audioChunks.push(e.data);
     };
 
     mediaRecorder.onstop = async () => {
+      console.log("🔴 Recording STOPPED");
+      console.log("📦 Total chunks:", audioChunks.length);
+
       const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      console.log("🎧 Blob created:", audioBlob.size);
+
       audioChunks = [];
 
       const formData = new FormData();
       formData.append("file", audioBlob);
 
-      const res = await fetch("/api/transcribe", {
-        method: "POST",
-        body: formData
-      });
+      console.log("📤 Sending audio to backend...");
 
-      const data = await res.json();
-      noteContent = data.text.toLowerCase();
+      try {
+        const res = await fetch("http://localhost:3000/api/transcribe", { method: "POST", body: formData });
+        console.log("📥 Response status:", res.status);
 
-      submitquestion(); // your existing function
+        let data;
+try {
+  data = await res.json();
+} catch {
+  console.error("❌ No JSON returned");
+  return;
+}
+        console.log("🧠 Transcription result:", data);
+
+        noteContent = data.text.toLowerCase();
+        console.log("📝 noteContent set:", noteContent);
+
+        submitquestion();
+
+      } catch (err) {
+        console.error("❌ Error sending audio:", err);
+      }
     };
 
   } catch (e) {
-    console.error(e);
+    console.error("❌ Mic init failed:", e);
     $('.no-browser-support').show();
     $('.app').hide();
   }
 }
 
+
+
+function safeStartRecorder() {
+  console.log("💡 About to start recorder. Current state:", mediaRecorder?.state);
+  console.trace("📝 Start called here");
+
+  if (mediaRecorder && mediaRecorder.state === "inactive") {
+    mediaRecorder.start(1000);
+    console.log("🟢 Recording STARTED");
+  } else {
+    console.log("⚠️ Recorder not started, current state:", mediaRecorder?.state);
+  }
+}
+
+
+
+// Video ended
+let recorderStarted = false;
+
+document.getElementById('myVideo').onended = function () {
+  console.log("🎬 Video ended");
+
+  if (!mediaRecorder) {
+    console.error("❌ mediaRecorder not ready");
+    return;
+  }
+
+  if (recorderStarted) {
+    console.log("⚠️ Recorder already started, skipping");
+    return;
+  }
+
+  // Hide message BEFORE starting recording
+  messagebeforeacceptingmic.style.display = 'none';
+  console.log("💡 messagebeforeacceptingmic hidden");
+
+  try {
+    console.log("🎤 Starting recorder...");
+    safeStartRecorder();
+    recorderStarted = true;
+    console.log("🟢 Recording STARTED");
+  } catch (err) {
+    console.error("❌ Failed to start MediaRecorder:", err);
+  }
+};
+
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    console.log("⌨️ Enter pressed");
+
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      console.log("🛑 Stopping recorder...");
+      mediaRecorder.stop();
+    }
+  }
+});
+
+
+document.getElementById("executeButton").onclick = () => {
+  console.log("🖱️ Submit clicked");
+
+  if (mediaRecorder.state === "recording") {
+    mediaRecorder.stop();
+  }
+};
 
 
 
@@ -672,7 +777,7 @@ function stopAndSubmit() {
 };
 
     // Start / stop hooks
-    mediaRecorder.start = () => {
+    safeStartRecorder = () => {
       if (socket.readyState === WebSocket.OPEN) {
         console.log("🎤 Recognition started");
         if (recognition.onstart) recognition.onstart();
@@ -777,7 +882,7 @@ document.addEventListener("DOMContentLoaded", () => {
    
   //var noteContent = '';
   
-  let messagebeforeacceptingmic = document.getElementById('messagebeforeacceptingmic');
+ 
   let initialpromptforpresssubmit = document.getElementById('initialpromptforpresssubmit');
   let emptyif = document.getElementById('emptyif');
   
@@ -836,7 +941,8 @@ if (isMobile) {
   //For the replay video Button!!
   document.getElementById('replayButton').addEventListener('click', function() {
     replayVideo();
-    document.getElementById('replayButton').style.display = 'none'; mediaRecorder.stop();      document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('messagebeforeacceptingmic').style.display = 'none';
+    document.getElementById('replayButton').style.display = 'none'; console.log("👉 STOP recording triggered");
+mediaRecorder.stop();      document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('messagebeforeacceptingmic').style.display = 'none';
       
   });
   
@@ -846,7 +952,8 @@ if (isMobile) {
     videoElement.currentTime = 0; // Set the current time of the video to the beginning
     videoElement.play(); // Start playing the video
     document.getElementById('myVideo').onended = function(e) {
-      mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';    document.getElementById('home').style.display = 'unset';
+      console.log("👉 START recording triggered");
+safeStartRecorder();      document.getElementById('stop-consultation-btn').style.display = 'unset';    document.getElementById('home').style.display = 'unset';
       document.getElementById('replayButton').style.display = 'unset';  document.getElementById('executeButton').style.display = 'unset';  document.getElementById('messagebeforeacceptingmic').style.display = 'unset';
     }}
   
@@ -870,13 +977,24 @@ if (isMobile) {
     
   
   document.getElementById('myVideo').onended = function(e) {
-      //readOutLoud("Go");
-      messagebeforeacceptingmic.style.display = 'unset';
+      console.log("🎬 Video ended");
+      if (!mediaRecorder) {
+    console.error("❌ mediaRecorder not ready");
+    return;
+  }
+
+  console.log("🎤 Starting recorder...");
+  safeStartRecorder();
+
+  /*console.log("💡 Setting messagebeforeacceptingmic to UNSET");
+  messagebeforeacceptingmic.style.display = 'unset';*/
+  //readOutLoud("Go");
   
     //readOutLoud("Enable the microphone and then start speaking, and once you've asked your question double press the ENTER key");
      // Only initialize recognition when this button is clicked
    
-    mediaRecorder.start();   
+    console.log("👉 START recording triggered");
+safeStartRecorder();   
     
     document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
     document.getElementById('replayButton').style.display = 'unset';  document.getElementById('home').style.display = 'unset';
@@ -949,7 +1067,8 @@ async function initialstopConsultation() {
   document.getElementById('move-onto-questions-btn').style.display = 'unset';
   document.getElementById('end-consultation-btn').style.display = 'unset';
    
-    mediaRecorder.stop();
+    console.log("👉 STOP recording triggered");
+mediaRecorder.stop();
   document.getElementById('replayButton').style.display = 'none';
   document.getElementById('stop-consultation-btn').style.display = 'none';
   document.getElementById('home').style.display = 'none';
@@ -958,6 +1077,9 @@ async function initialstopConsultation() {
   document.getElementById('countdown-value').style.display = 'none';
   document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
   silentmsg = true;
+  console.log("🙈 Hiding mic message");
+console.trace();
+
   messagebeforeacceptingmic.style.display = 'none';
 //
 
@@ -1007,7 +1129,8 @@ async function initialstopConsultation() {
     document.getElementById('move-onto-questions-btn').style.display = 'none';
   
     document.getElementById('myVideo').pause();
-    mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
+    console.log("👉 STOP recording triggered");
+mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
     recognition1.stop(); recognition1.stop(); recognition_differentials.stop(); recognition_investigations.stop(); recognition_riskfactors.stop(); recognition_treatments.stop();
   
     document.getElementById('examinations').style.display = 'none';
@@ -1318,14 +1441,16 @@ async function initialstopConsultation() {
       pauseBtn.style.top = '50%'; pauseBtn.style.left = '50%'; pauseBtn.style.transform = 'translate(-50%, -50%)';
       pauseBtn.style.backgroundImage = "url('../../art/play-button-black-and-white.png')";
   
-      myVideo.pause(); mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
+      myVideo.pause(); console.log("👉 STOP recording triggered");
+mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';
       pauseBtn.style.display = "unset"; //actionTriggered = true;
       silentmsg = true; document.getElementById('emptyif').style.display = 'none';
   
     } else {
       timer = setInterval(updateTimeLeft, 1000);
       pauseBtn.innerHTML = ""; pauseBtn.style.fontWeight = "normal"; pauseBtn.style.fontSize = "15px"; pauseBtn.style.height = '35px'; pauseBtn.style.padding = '10px 17px'; 
-      mediaRecorder.start();  document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; document.getElementById('replayButton').style.display = 'unset';document.getElementById('home').style.display = 'unset';
+      console.log("👉 START recording triggered");
+safeStartRecorder();  document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; document.getElementById('replayButton').style.display = 'unset';document.getElementById('home').style.display = 'unset';
       pauseBtn.style.backgroundImage = "url('../../art/pause_button_black_and_white-removebg-preview.png')";  document.getElementById('silencemessage').style.display = 'none';
   
       pauseBtn.style.top = ''; pauseBtn.style.left = ''; pauseBtn.style.transform = ''; // Reset the position property to its default value
@@ -1345,7 +1470,8 @@ async function initialstopConsultation() {
   function homeButton() {
     document.getElementById('taking-history-section').style.display = 'unset';
     document.getElementById('taking-history-section-part2').style.display = 'unset'; actionTriggered = true;
-    mediaRecorder.stop();      document.getElementById('replayButton').style.display = 'none';   
+    console.log("👉 STOP recording triggered");
+mediaRecorder.stop();      document.getElementById('replayButton').style.display = 'none';   
     document.getElementById('stop-consultation-btn').style.display = 'none'; 
     document.getElementById('executeButton').style.display = 'none';
     document.getElementById('messagebeforeacceptingmic').style.display = 'none';
@@ -1400,7 +1526,8 @@ async function initialstopConsultation() {
     } else {
       timer = setInterval(updateTimeLeft, 1000);
       pauseBtn.innerHTML = "Pause consultation"; pauseBtn.style.fontWeight = "normal"; pauseBtn.style.fontSize = "15px"; pauseBtn.style.height = '35px'; pauseBtn.style.padding = '1px 5px';
-      mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
+      console.log("👉 START recording triggered");
+safeStartRecorder();      document.getElementById('stop-consultation-btn').style.display = 'unset';
   
     }
   });
@@ -1644,7 +1771,7 @@ async function initialstopConsultation() {
   // When true, the silence period is longer (about 15 seconds),
   // allowing us to keep recording even when the user pauses.
   
-  mediaRecorder.continuous = true;
+  recognition.continuous = true;
   
   
   var silenceTimeout = null;
@@ -1660,7 +1787,7 @@ async function initialstopConsultation() {
   
   
   // This block is called every time the Speech APi captures a line.
-  mediaRecorder.onresult = function(event) {
+  recognition.onresult = function(event) {
   
     
     
@@ -1737,7 +1864,8 @@ async function initialstopConsultation() {
   var onesecdelay = null;
     function onesecdelaybeforestoprecog() {
       onesecdelay = setTimeout(function () {
-        mediaRecorder.stop();executeActionAfterDelay(); clearTimeout(silenceTimeout);
+        console.log("👉 STOP recording triggered");
+mediaRecorder.stop();executeActionAfterDelay(); clearTimeout(silenceTimeout);
       }, 1000);
     }
   //////
@@ -1805,7 +1933,7 @@ async function initialstopConsultation() {
                                         };*/
                                     
                                         /*executeButton.addEventListener('click', function() {
-                                          mediaRecorder.start();
+                                          safeStartRecorder();
                                         });*/
                                     
                                         // Check for microphone permission on page load
@@ -1835,7 +1963,8 @@ async function initialstopConsultation() {
   
     
   
-    mediaRecorder.stop();
+    console.log("👉 STOP recording triggered");
+mediaRecorder.stop();
        document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
   
        
@@ -2390,7 +2519,7 @@ async function initialstopConsultation() {
         //readOutLoud("good");
         previousquestion = noteContent;   response_question = "good";
         document.getElementById("mp4_src").src = "videos/good.mp4"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
-          mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
+          safeStartRecorder();      document.getElementById('stop-consultation-btn').style.display = 'unset';
           }}//I'm good thank you (in response to how are you)
   */
   
@@ -2563,7 +2692,7 @@ const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndc
   
   
             document.getElementById("mp4_src").src = "WIN_20230328_13_59_49_Pro.mp4"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
-              mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';
+              safeStartRecorder();      document.getElementById('stop-consultation-btn').style.display = 'unset';
             }      
       }
   */
@@ -2593,7 +2722,7 @@ const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndc
         gptvideo.muted = false; // Unmute the video after 2 seconds
       }, 2000);
   
-      mediaRecorder.start();
+      safeStartRecorder();
       
       document.getElementById('stop-consultation-btn').style.display = 'unset';
     };
@@ -2669,7 +2798,8 @@ const handleUserInput = async (noteContent) => {
 
 
     gptvideo.onended =  function(e) {
-      mediaRecorder.start();      document.getElementById('stop-consultation-btn').style.display = 'unset';   document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; actionTriggered = false;
+      console.log("👉 START recording triggered");
+safeStartRecorder();      document.getElementById('stop-consultation-btn').style.display = 'unset';   document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset'; actionTriggered = false;
       
       document.getElementById('myVideo').style.display = 'unset';
       document.getElementById('mutedVideo').style.display = 'none';
@@ -2731,12 +2861,14 @@ audio.load();
     const gptvideo = document.getElementById('mutedVideo');
     gptvideo.pause();
 
-    mediaRecorder.start();
+    console.log("👉 START recording triggered");
+safeStartRecorder();
     document.getElementById('stop-consultation-btn').style.display = 'unset';
     document.getElementById('executeButton').style.display = 'unset';
     document.getElementById('myVideo').style.display = 'unset';
     document.getElementById('mutedVideo').style.display = 'none';
-    messagebeforeacceptingmic.style.display = 'unset';
+    console.log("💡 Setting messagebeforeacceptingmic to UNSET");
+messagebeforeacceptingmic.style.display = 'unset';
     document.getElementById('errormsg').style.display = 'none';
 
     actionTriggered = false;
@@ -2778,7 +2910,7 @@ audio.load();
     const gptvideo = document.getElementById('mutedVideo');
     gptvideo.pause(); // Pause the video after the speech synthesis finishes
     //gptvideo.volume = 1;
-    mediaRecorder.start();   document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
+    safeStartRecorder();   document.getElementById('stop-consultation-btn').style.display = 'unset'; document.getElementById('executeButton').style.display = 'unset';
     document.getElementById('myVideo').style.display = 'unset';
     document.getElementById('mutedVideo').style.display = 'none';
     
@@ -2810,12 +2942,14 @@ audio.load();
   function allifsaction(){
     document.getElementById("myVideo").load();      document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
  document.getElementById('myVideo').onended = function(e) {
-      mediaRecorder.start();      
+      console.log("👉 START recording triggered");
+safeStartRecorder();      
       document.getElementById('stop-consultation-btn').style.display = 'unset';   
       document.getElementById('replayButton').style.display = 'unset';   document.getElementById('home').style.display = 'unset'; 
       document.getElementById('executeButton').style.display = 'unset';   
       actionTriggered = false;
-      messagebeforeacceptingmic.style.display = 'unset';
+      console.log("💡 Setting messagebeforeacceptingmic to UNSET");
+messagebeforeacceptingmic.style.display = 'unset';
     }
   }
   
@@ -3692,12 +3826,16 @@ audio.load();
   
   /*--------------------Is for bringing up the 'listening icon/microphone icon once the user accepts the use of the mic-------------- */
   
-    let micisworking = document.getElementById('micisworking');//THIS IS NOT NEEDED FOR THE MIC TO WORK!!!!!!!!!!!
+   // let micisworking = document.getElementById('micisworking');//THIS IS NOT NEEDED FOR THE MIC TO WORK!!!!!!!!!!!
   
     
-  mediaRecorder.onstart = function() {
+  recognition.onstart = function() {
     micisworking.style.display = 'unset';
+    console.log("🙈 Hiding mic message");
+console.trace();
+
     messagebeforeacceptingmic.style.display = 'none';
+
   
 
 
@@ -3721,7 +3859,7 @@ inbetweenVideo.onloadedmetadata = () => {
   
   
   
-  mediaRecorder.onend= function () {
+  recognition.onend= function () {
     micisworking.style.display = 'none';
     //micisworking.style.backgroundColor = 'red';
 
@@ -3941,7 +4079,8 @@ inbetweenVideo.onloadedmetadata = () => {
     if (noteContent.length) {
       noteContent += ' ';
     }
-    mediaRecorder.start();
+    console.log("👉 START recording triggered");
+safeStartRecorder();
   });
    
    

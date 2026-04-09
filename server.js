@@ -12,7 +12,7 @@ import expressWs from "express-ws";
 
 const app = express();
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 
@@ -61,19 +61,32 @@ const openai = new OpenAI();
 
 app.post("/api/transcribe", upload.single("file"), async (req, res) => {
   try {
+    console.log("📥 Incoming request to /api/transcribe");
+
+    if (!req.file) {
+      console.error("❌ No file received");
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    console.log("📦 File received:", req.file.path);
+
     const transcription = await openai.audio.transcriptions.create({
       file: fs.createReadStream(req.file.path),
       model: "gpt-4o-transcribe"
     });
 
+    console.log("🧠 Transcription:", transcription.text);
+
     res.json({ text: transcription.text });
 
     fs.unlinkSync(req.file.path); // cleanup
+
   } catch (err) {
-    console.error(err);
+    console.error("❌ Transcription error:", err);
     res.status(500).json({ error: "transcription failed" });
   }
 });
+
 
 
 
