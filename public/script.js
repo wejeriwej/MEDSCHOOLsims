@@ -3347,38 +3347,60 @@ function showSlides1() {
   slides1[slideIndex1-1].style.display = "block";  
   dots1[slideIndex1-1].className += " active";
   setTimeout(showSlides1, 2000); // Change image every 2 seconds
-}*/
- //#endregion
-
-
-
-
+}
+*/
 /*-------------------------------------for the 3 lines of the nav bar when it goes to phone-----*/
-
- function myFunction() {
-  var x = document.getElementById("myLinks");
+function showTitles() {
+  var title = document.getElementById("title");
+  var title1 = document.getElementById("title1");
+  var title2 = document.getElementById("title2");
   
-  if (x.style.display === "block") {
-    x.style.display = "none";
-    
-    document.getElementById("title").style.display = "block";
-    document.getElementById("title1").style.display = "block";
-    document.getElementById("title2").style.display = "block";
-  } else {
-    x.style.display = "block";
-    
-  document.getElementById("title").style.display = "none";
-  document.getElementById("title1").style.display = "none";
-  document.getElementById("title2").style.display = "none";
+  if (title) {
+    title.style.display = "block";
+    title.classList.remove("hidden");
+  }
+  if (title1) {
+    title1.style.display = "block";
+    title1.classList.remove("hidden");
+  }
+  if (title2) {
+    title2.style.display = "block";
+    title2.classList.remove("hidden");
   }
 }
 
-
-
- 
+function myFunction() {
+  var x = document.getElementById("myLinks");
+  
+  // Check if menu is currently visible (not hidden)
+  if (x.style.display === "block") {
+    // Hide menu, show titles
+    x.style.display = "none";
+    showTitles();
+  } else {
+    // Show menu, hide titles
+    x.style.display = "block";
+    
+    var title = document.getElementById("title");
+    var title1 = document.getElementById("title1");
+    var title2 = document.getElementById("title2");
+    
+    if (title) {
+      title.style.display = "none";
+      title.classList.add("hidden");
+    }
+    if (title1) {
+      title1.style.display = "none";
+      title1.classList.add("hidden");
+    }
+    if (title2) {
+      title2.style.display = "none";
+      title2.classList.add("hidden");
+    }
+  }
+}
 
 /*----------------------------------SLIDESHOW IN REVIEW SECTION----------------------------------*/
-
 let slideIndex = 1;
 showSlides(slideIndex);
 
@@ -6107,9 +6129,12 @@ treatmentsmodel.text('model');
 window.onload = function () {
   
   var questionArea = document.getElementsByClassName('questions')[0],
-      answerArea   = document.getElementsByClassName('answers')[0],
-      checker      = document.getElementsByClassName('checker')[0],
-      current      = 0,
+      answerArea   = document.getElementsByClassName('answers')[0];
+      
+  // Make "Learn. Grow. Succeed." text visible on page load
+  showTitles();
+  var checker = document.getElementsByClassName('checker')[0];
+  var current = 0;
   
      // An object that holds all the questions + possible answers.
      // In the array --> last digit gives the right answer position
@@ -6129,7 +6154,6 @@ window.onload = function () {
   
     var question = Object.keys(allQuestions)[curr];
     
-    questionArea.innerHTML = '';
     questionArea.innerHTML = question;    
   }
   

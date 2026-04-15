@@ -251,21 +251,372 @@
 
 
 
-        @media (max-width: 768px) {  /* Targets tablets and smaller devices */
+        /* Comprehensive mobile improvements */
+@media (max-width: 768px) {
+    body {
+        background: linear-gradient(180deg, #f7f1e7 0%, #f3eee4 100%);
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 0 8px 16px;
+    }
+
+    .sidebar,
+    .data {
+        width: 100%;
+        height: auto;
+    }
+
+    .sidebar {
+        padding: 12px 10px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(74, 60, 44, 0.1);
+        gap: 10px;
+        max-height: 280px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .sidebody {
+        height: auto !important;
+        gap: 8px;
+        padding: 10px 8px 34px;
+        margin-top: 0;
+        position: relative;
+        max-height: 240px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(250, 247, 239, 0.98) 100%);
+        border: 1px solid rgba(138, 140, 37, 0.14);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+        scrollbar-width: thin;
+        scrollbar-color: rgba(138, 140, 37, 0.75) rgba(138, 140, 37, 0.14);
+    }
+
+    .sidebody::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 54px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(248, 244, 234, 0.82) 55%, rgba(244, 239, 225, 0.98) 100%);
+        pointer-events: none;
+        z-index: 1;
+        border-bottom-left-radius: 14px;
+        border-bottom-right-radius: 14px;
+        opacity: 1;
+        transition: opacity 0.25s ease;
+    }
+
+    .sidebody::before {
+        content: 'Scroll for more topics';
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        color: rgba(110, 112, 30, 0.78);
+        font-weight: 700;
+        z-index: 2;
+        animation: scrollText 1.8s ease-in-out infinite;
+        text-transform: uppercase;
+        opacity: 1;
+        transition: opacity 0.25s ease;
+    }
+
+    @keyframes scrollText {
+        0%, 100% { opacity: 0.45; }
+        50% { opacity: 1; }
+    }
+
+    /* Hide scroll text when scrolled */
+    .sidebody.scrolled::before {
+        opacity: 0;
+        visibility: hidden;
+        animation: none;
+    }
+
+    .sidebody.scrolled::after {
+        opacity: 0;
+    }
+
+    .sidebody::-webkit-scrollbar {
+        display: block;
+        width: 8px;
+    }
+
+    .sidebody::-webkit-scrollbar-track {
+        background: rgba(138, 140, 37, 0.12);
+        border-radius: 999px;
+        margin: 10px 0;
+    }
+
+    .sidebody::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, rgba(138, 140, 37, 0.95) 0%, rgba(95, 98, 27, 0.8) 100%);
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .sidehead {
+        display: none; /* Hide the 3 buttons and line */
+    }
+
+    .sidefoot {
+        display: none;
+    }
+
+    /* Make search bar much smaller and more compact */
+    .searchBar {
+        padding: 8px 10px;
+        border-radius: 6px;
+        background-color: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(138, 140, 37, 0.15);
+        margin-bottom: 8px;
+        min-height: 40px;
+    }
+
+    #searchBar {
+        width: 100%;
+        font-size: 14px;
+        padding: 4px;
+    }
+
+    .glass {
+        font-size: 14px !important;
+        padding: 6px;
+    }
+
+    /* Make "Search by topic" section much smaller */
+    .sidebody p {
+        font-size: 13px !important;
+        margin: 4px 0 8px !important;
+        font-weight: 600;
+    }
+
+    #casebytopic {
+        width: 100%;
+        gap: 6px;
+        margin: 4px 0;
+    }
+
+    #casebytopic li {
+        width: 100%;
+    }
+
+    #casebytopic li a {
+        width: 100%;
+        max-width: none;
+        border-radius: 4px !important;
+        padding: 8px 10px;
+        font-size: 12px;
+        box-shadow: 0 2px 6px rgba(138, 140, 37, 0.06);
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    #casebytopic li a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(138, 140, 37, 0.12);
+    }
+
+    .data {
+        overflow: visible;
+    }
+
+    .top {
+        display: none; /* Hide Learn. Grow. Succeed section on mobile */
+    }
+
+    .header {
+        height: auto;
+        min-height: 80px;
+        margin: 8px 0; /* Reduce space above Search cases banner */
+        border-radius: 6px;
+        padding: 16px 12px; /* Smaller padding */
+        background-position: center;
+    }
+
     .header p {
-        font-size: 30px;
+        font-size: clamp(28px, 8vw, 38px);
+        text-align: center;
+        line-height: 1;
     }
-    h3 {
 
-        font-size: 13px;
+    #root {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
     }
-    h2 {
 
-font-size: 17px;
+    .box {
+        margin: 0;
+        border-radius: 18px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .img-box {
+        height: 150px;
+    }
+
+    .bottom {
+        height: auto;
+        gap: 8px;
+        padding: 14px 10px 16px;
+    }
+
+    .bottom h3 {
+        font-size: 16px;
+        line-height: 1.15;
+    }
+
+    .bottom h2 {
+        font-size: 17px;
+        line-height: 1.15;
+    }
+
+    .bottom p {
+        font-size: 18px;
+    }
 }
-.searchBar {
-padding: 2px;}
-        }
+
+@media (max-width: 560px) {
+    .container {
+        padding: 0 6px 14px;
+        gap: 10px;
+    }
+
+    .sidebar {
+        padding: 10px 8px;
+        max-height: 240px;
+        border-radius: 6px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sidebody {
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+        padding: 9px 7px 30px;
+        border-radius: 12px;
+    }
+
+    .sidebody::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 42px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(248, 244, 234, 0.84) 55%, rgba(244, 239, 225, 0.98) 100%);
+        pointer-events: none;
+        z-index: 1;
+        opacity: 1;
+        transition: opacity 0.25s ease;
+    }
+
+    .sidebody::before {
+        content: 'Scroll';
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        letter-spacing: 0.05em;
+        color: rgba(110, 112, 30, 0.78);
+        font-weight: 700;
+        z-index: 2;
+        animation: scrollText 2s infinite;
+        opacity: 1;
+        transition: opacity 0.25s ease;
+    }
+
+    .sidebody::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    /* Hide scroll text when scrolled for smaller screens */
+    .sidebody.scrolled::before {
+        opacity: 0;
+        visibility: hidden;
+        animation: none;
+    }
+
+    .sidebody.scrolled::after {
+        opacity: 0;
+    }
+
+    .searchBar {
+        padding: 6px 8px;
+        min-height: 36px;
+        margin-bottom: 6px;
+    }
+
+    #searchBar {
+        font-size: 13px;
+        padding: 3px;
+    }
+
+    .glass {
+        font-size: 12px !important;
+        padding: 4px;
+    }
+
+    .sidebody p {
+        font-size: 12px !important;
+        margin: 3px 0 !important;
+    }
+
+    #casebytopic {
+        gap: 4px;
+        margin: 3px 0;
+    }
+
+    #casebytopic li a {
+        padding: 6px 8px;
+        font-size: 11px;
+        min-height: 28px;
+        border-radius: 3px !important;
+    }
+
+    #root {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .img-box {
+        height: 180px;
+    }
+
+    .header {
+        min-height: 70px;
+        margin: 6px 0; /* Even smaller margin */
+        padding: 12px 10px; /* Even smaller padding */
+        border-radius: 4px;
+    }
+
+    .header p {
+        font-size: clamp(20px, 7vw, 26px);
+    }
+
+    .data {
+        overflow: visible;
+    }
+
+    .top {
+        display: none; /* Hide Learn. Grow. Succeed section on mobile */
+    }
+}
 
          /*  button {
             width: 100%;
@@ -513,6 +864,16 @@ displayItem(product);
      // Focus the search bar when the page loads
      document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('searchBar').focus();
+
+      const topicPanel = document.querySelector('.sidebody');
+      if (!topicPanel) return;
+
+      const syncTopicScrollCue = () => {
+        topicPanel.classList.toggle('scrolled', topicPanel.scrollTop > 4);
+      };
+
+      topicPanel.addEventListener('scroll', syncTopicScrollCue, { passive: true });
+      syncTopicScrollCue();
     });
 
 
@@ -586,7 +947,7 @@ displayItem(categories); // 👈 re-render cases after we know status
 <script src="../webpages/logins/firebase.js"></script>
 
     <script src="../script.js"></script>
-    <script src="added.js"></script>
+    <script src="../webpages/added.js"></script>
 </body>
 
 </html>

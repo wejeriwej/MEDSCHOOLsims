@@ -129,10 +129,10 @@ class SpecialHeader extends HTMLElement {
 
         
             <div id="myLinks" style="display: none;">
-    <a href="index.html">Home</a>
-    <a href="webpages/aboutus.html">About us</a>
-    <a href="webpages/contactus.html">Contact us</a>
-    <a href="webpages/searchbarr.html">Cases by topic</a>
+    <a href="../index.html">Home</a>
+    <a href="../webpages/aboutus.html">About us</a>
+    <a href="../webpages/contactus.html">Contact us</a>
+    <a href="../webpages/searchbarr.html">Cases by topic</a>
     
 </div>
             

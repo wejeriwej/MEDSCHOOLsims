@@ -1,3 +1,8 @@
+var jon = 'x';
+window.addEventListener("beforeunload", () => {
+  console.log("🚨 PAGE IS RELOADING");
+});
+
 const questionArea = document.getElementById("questionArea");
 const answerArea = document.getElementById("answerArea");
 function loadQuestion(curr) {
@@ -14,49 +19,6 @@ function loadQuestion(curr) {
 
 
 
-function displayDashboard(data) {
-  const container = document.getElementById("dashboard");
-  container.innerHTML = "";
-
-  if (!data || data.length === 0) {
-    container.innerHTML = "<p>No previous feedback found.</p>";
-    return;
-  }
-
-  container.scrollIntoView({ behavior: "smooth" });
-
-  data.forEach(item => {
-    const evaluation = item.evaluation;
-
-    const scoreMatch = evaluation.match(/Score[^0-9]*(\d+)/i);
-    const overallMatch = evaluation.match(/Overall:\s*([\s\S]*?)\n(\*\*Strengths:\*\*|$)/i);
-    const strengthsMatch = evaluation.match(/\*\*Strengths:\*\*\s*([\s\S]*?)\n(\*\*Improvements:\*\*|$)/i);
-    const improvementsMatch = evaluation.match(/\*\*Improvements:\*\*\s*([\s\S]*)/i);
-
-    const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
-    const overall = overallMatch ? overallMatch[1].trim() : "";
-    const strengths = strengthsMatch ? strengthsMatch[1].trim().split(/\n|-/).filter(s => s.trim()) : [];
-
- const formatBullet = (text) => {
-  return text
-    .replace(/\*\*(.*?):\*\*/g, "<strong>$1:</strong>")
-    .replace(/\*\*/g, "")
-    .trim();
-};
-
-const improvements = improvementsMatch
-  ? improvementsMatch[1]
-      .trim()
-      .split(/\n|-/)
-      .map(s => formatBullet(s))
-      .filter(s => s)
-  : [];
-
-
-
-
-
-// 🔹 Helper to safely format Firestore timestamps
 function formatFirestoreDate(ts) {
   if (!ts) return "Unknown";
   const seconds = ts.seconds ?? ts._seconds ?? null;
@@ -65,70 +27,352 @@ function formatFirestoreDate(ts) {
   return isNaN(d) ? "Unknown" : d.toLocaleString();
 }
 
-// 🔹 Use readable timestamp if available as fallback
-let date = formatFirestoreDate(item.createdAt ?? item.createdAtReadable);
-
-console.log("CreatedAt:", item.createdAt, "Readable:", date);
-
-
-
-
-
-
-// 🔹 Badge & progress color based on score
-let badge = "";
-let progressColor = "#0077cc";
-
-if (score >= 8) {
-  badge = `<span style="padding:4px 8px;border-radius:6px;background:#22c55e;color:white;font-weight:bold;">Excellent</span>`;
-  progressColor = "#22c55e";
-} else if (score >= 5) {
-  badge = `<span style="padding:4px 8px;border-radius:6px;background:#f59e0b;color:black;font-weight:bold;">Needs Improvement</span>`;
-  progressColor = "#f59e0b";
-} else {
-  badge = `<span style="padding:4px 8px;border-radius:6px;background:#ef4444;color:white;font-weight:bold;">Poor</span>`;
-  progressColor = "#ef4444";
+function formatBulletMarkdown(text) {
+  if (!text) return "";
+  return String(text)
+    .replace(/\*\*(.*?):\*\*/g, "<strong>$1:</strong>")
+    .replace(/\*\*/g, "")
+    .trim();
 }
-    const progressWidth = score !== null ? (score / 10) * 100 : 0;
 
-    const highlightKeywords = text => {
-      return text
-        .replace(/\b(critical|must improve|highly recommended)\b/gi,
-          '<strong style="color:#ef4444;">$1</strong>')
-        .replace(/\b(excellent|outstanding|good|well done|strength|positive)\b/gi,
-          '<strong style="color:#22c55e;">$1</strong>');
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function extractBulletLines(block) {
+  if (!block) return [];
+  return String(block)
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^\s*(?:[-*•]|\d+[\.)])\s+/, "").trim())
+    .filter((line) => line.length > 0);
+}
+
+function extractSection(raw, headings, stopHeadings) {
+  const labels = Array.isArray(headings) ? headings : [headings];
+  const stops = Array.isArray(stopHeadings) ? stopHeadings : [];
+  const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const startRegex = new RegExp(`(?:^|\\n)\\s*(?:${labels.map(escapeRegex).join("|")})\\s*:\\s*`, "i");
+  const startMatch = raw.match(startRegex);
+  if (!startMatch) return "";
+
+  const startIndex = startMatch.index + startMatch[0].length;
+  const remaining = raw.slice(startIndex);
+  if (stops.length === 0) return remaining.trim();
+
+  const stopRegex = new RegExp(`\\n\\s*(?:${stops.map(escapeRegex).join("|")})\\s*:`, "i");
+  const stopMatch = remaining.match(stopRegex);
+  return (stopMatch ? remaining.slice(0, stopMatch.index) : remaining).trim();
+}
+
+function parseFeedbackFromEvaluation(evaluation) {
+  const raw = evaluation != null ? String(evaluation).trim() : "";
+  if (!raw) {
+    return {
+      score: null,
+      overall: "",
+      strengths: [],
+      improvements: [],
+      breakdown: [],
+      clicheCheck: [],
+      topCandidateInsight: "",
+      modelAdvice: "",
+      confidence: "",
+      useRawFallback: true,
+      raw: ""
     };
+  }
 
-    const div = document.createElement("div");
-    div.className = "feedback-item";
+  let score = null;
+  const sm = raw.match(/Score\s*:\s*(\d+)\s*(?:\/\s*10)?/i);
+  if (sm) score = parseInt(sm[1], 10);
 
-    div.style = `
-      border: 1px solid #e5e5e5;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 25px;
-      background: white;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      font-family: Arial, sans-serif;
-      cursor: pointer;
-    `;
+  let overall = "";
+  let strengths = [];
+  let improvements = [];
+  let breakdown = [];
+  let clicheCheck = [];
+  let topCandidateInsight = "";
+  let modelAdvice = "";
+  let confidence = "";
 
-    div.onmouseover = () => {
-      div.style.transform = "translateY(-4px)";
-      div.style.boxShadow = "0 8px 22px rgba(0,0,0,0.1)";
+  overall = extractSection(raw, ["Overall", "Overall Assessment"], [
+    "Strengths",
+    "Improvements",
+    "ClichÃ© Check",
+    "Cliché Check",
+    "Cliche Check",
+    "Top 10% Candidate Insight",
+    "Model Advice",
+    "Confidence"
+  ]);
+
+  strengths = extractBulletLines(
+    extractSection(raw, "Strengths", [
+      "Improvements",
+      "ClichÃ© Check",
+      "Cliché Check",
+      "Cliche Check",
+      "Top 10% Candidate Insight",
+      "Model Advice",
+      "Confidence"
+    ])
+  );
+
+  improvements = extractBulletLines(
+    extractSection(raw, "Improvements", [
+      "ClichÃ© Check",
+      "Cliché Check",
+      "Cliche Check",
+      "Top 10% Candidate Insight",
+      "Model Advice",
+      "Confidence"
+    ])
+  ).map((t) => formatBulletMarkdown(t));
+
+  breakdown = extractBulletLines(
+    extractSection(raw, "Breakdown", [
+      "Overall",
+      "Strengths",
+      "Improvements",
+      "ClichÃ© Check",
+      "Cliché Check",
+      "Cliche Check",
+      "Top 10% Candidate Insight",
+      "Model Advice",
+      "Confidence"
+    ])
+  ).map((item) => {
+    const match = item.match(/^([^:]+):\s*(\d+)\s*\/\s*(\d+)/);
+    if (!match) return { label: item, score: null, max: null };
+    return {
+      label: match[1].trim(),
+      score: parseInt(match[2], 10),
+      max: parseInt(match[3], 10)
     };
+  });
 
-    div.onmouseout = () => {
-      div.style.transform = "translateY(0)";
-      div.style.boxShadow = "0 4px 14px rgba(0,0,0,0.06)";
-    };
+  clicheCheck = extractBulletLines(
+    extractSection(raw, ["ClichÃ© Check", "Cliché Check", "Cliche Check"], [
+      "Top 10% Candidate Insight",
+      "Model Advice",
+      "Confidence"
+    ])
+  );
 
-    const contentId = "content-" + Math.random();
+  topCandidateInsight = extractSection(raw, "Top 10% Candidate Insight", [
+    "Model Advice",
+    "Confidence"
+  ]);
+  modelAdvice = extractSection(raw, "Model Advice", ["Confidence"]);
+  confidence = extractSection(raw, "Confidence", []);
 
+  if (!confidence) {
+    const cm = raw.match(/Confidence\s*:\s*(High|Medium|Low)/i);
+    if (cm) confidence = cm[1];
+  }
 
+  if (!overall) {
+    const om = raw.match(/\*\*Overall[^*]*\*\*\s*:?\s*([\s\S]*?)(?=\n\s*\*\*Strengths|\n\s*Strengths\s*:)/i);
+    if (om) overall = om[1].trim();
+  }
+  if (strengths.length === 0) {
+    const stm = raw.match(/\*\*Strengths:\*\*\s*([\s\S]*?)(?=\n\s*\*\*Improvements|\n\s*Improvements\s*:)/i);
+    if (stm) strengths = extractBulletLines(stm[1]);
+  }
+  if (improvements.length === 0) {
+    const im = raw.match(/\*\*Improvements:\*\*\s*([\s\S]*)/i);
+    if (im) improvements = extractBulletLines(im[1]).map((t) => formatBulletMarkdown(t));
+  }
 
-    div.innerHTML = `
+  const useRawFallback =
+    !overall &&
+    strengths.length === 0 &&
+    improvements.length === 0 &&
+    breakdown.length === 0 &&
+    clicheCheck.length === 0 &&
+    !topCandidateInsight &&
+    !modelAdvice &&
+    !confidence;
+
+  return {
+    score,
+    overall,
+    strengths,
+    improvements,
+    breakdown,
+    clicheCheck,
+    topCandidateInsight,
+    modelAdvice,
+    confidence,
+    useRawFallback,
+    raw: raw
+  };
+}
+
+function highlightFeedbackKeywords(text) {
+  if (!text) return "";
+  return String(text)
+    .replace(/\b(critical|must improve|highly recommended)\b/gi, '<strong style="color:#ef4444;">$1</strong>')
+    .replace(/\b(excellent|outstanding|good|well done|strength|positive)\b/gi, '<strong style="color:#22c55e;">$1</strong>');
+}
+
+function formatOverallBodyHtml(overall) {
+  return highlightFeedbackKeywords(escapeHtml(overall || "")).replace(/\n/g, "<br>");
+}
+
+function formatStrengthItemHtml(s) {
+  return highlightFeedbackKeywords(escapeHtml(s || ""));
+}
+
+function formatImprovementItemHtml(s) {
+  const t = formatBulletMarkdown(s || "");
+  if (/<[a-z][\s\S]*>/i.test(t)) return highlightFeedbackKeywords(t);
+  return highlightFeedbackKeywords(escapeHtml(s || ""));
+}
+
+function formatInlineRichText(text) {
+  if (!text) return "";
+  const safe = escapeHtml(text)
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\n/g, "<br>");
+  return highlightFeedbackKeywords(safe);
+}
+
+function buildFeedbackCardHtml(parsed, opts) {
+  const {
+    score,
+    overall,
+    strengths,
+    improvements,
+    breakdown,
+    clicheCheck,
+    topCandidateInsight,
+    modelAdvice,
+    confidence,
+    useRawFallback,
+    raw
+  } = parsed;
+  const { contentId, dateStr, caseTitle, expanded } = opts;
+
+  let badge = "";
+  let progressColor = "#0077cc";
+  if (score != null && score >= 8) {
+    badge = `<span style="padding:4px 8px;border-radius:6px;background:#22c55e;color:white;font-weight:bold;">Excellent</span>`;
+    progressColor = "#22c55e";
+  } else if (score != null && score >= 5) {
+    badge = `<span style="padding:4px 8px;border-radius:6px;background:#f59e0b;color:black;font-weight:bold;">Needs Improvement</span>`;
+    progressColor = "#f59e0b";
+  } else if (score != null) {
+    badge = `<span style="padding:4px 8px;border-radius:6px;background:#ef4444;color:white;font-weight:bold;">Poor</span>`;
+    progressColor = "#ef4444";
+  } else {
+    badge = `<span style="padding:4px 8px;border-radius:6px;background:#94a3b8;color:white;font-weight:bold;">Unscored</span>`;
+  }
+
+  const progressWidth = score !== null ? (score / 10) * 100 : 0;
+  const detailClass = expanded ? "" : "hidden";
+  const arrowRot = expanded ? "rotate(90deg)" : "rotate(0deg)";
+  const hintDisplay = expanded ? "none" : "inline";
+
+  const strengthsHtml =
+    strengths.length > 0
+      ? strengths.map((s) => `<li style="margin-bottom:14px;">${formatStrengthItemHtml(s)}</li>`).join("")
+      : `<li style="margin-bottom:14px;color:#64748b;">No strengths list was detected in the saved text.</li>`;
+
+  const improvementsHtml =
+    improvements.length > 0
+      ? improvements.map((s) => `<li style="margin-bottom:14px;">${formatImprovementItemHtml(s)}</li>`).join("")
+      : `<li style="margin-bottom:14px;color:#64748b;">No improvements list was detected in the saved text.</li>`;
+
+  const breakdownHtml =
+    breakdown.length > 0
+      ? breakdown
+          .map((item) => {
+            const pct = item.score != null && item.max ? Math.max(0, Math.min(100, (item.score / item.max) * 100)) : 0;
+            return `<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;">
+                <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px;">
+                  <span style="font-weight:600;color:#1e293b;">${escapeHtml(item.label || "")}</span>
+                  <span style="font-weight:700;color:#0f172a;">${item.score != null ? `${item.score}/${item.max}` : ""}</span>
+                </div>
+                ${item.score != null ? `<div style="background:#e2e8f0;border-radius:999px;height:8px;overflow:hidden;"><div style="width:${pct}%;background:${progressColor};height:100%;border-radius:999px;"></div></div>` : ""}
+              </div>`;
+          })
+          .join("")
+      : `<div style="color:#64748b;">No breakdown section found.</div>`;
+
+  const clicheHtml =
+    clicheCheck.length > 0
+      ? `<ul style="margin:0;padding-left:22px;line-height:1.6;">${clicheCheck
+          .map((item) => `<li style="margin-bottom:10px;">${formatInlineRichText(item)}</li>`)
+          .join("")}</ul>`
+      : `<p style="margin:0;color:#64748b;">No cliché check section found.</p>`;
+
+  const confidenceTone = /high/i.test(confidence)
+    ? { bg: "#dcfce7", fg: "#166534" }
+    : /medium/i.test(confidence)
+      ? { bg: "#fef3c7", fg: "#92400e" }
+      : /low/i.test(confidence)
+        ? { bg: "#fee2e2", fg: "#991b1b" }
+        : null;
+  const confidenceHtml = confidenceTone
+    ? `<span style="display:inline-flex;align-items:center;padding:7px 12px;border-radius:999px;background:${confidenceTone.bg};color:${confidenceTone.fg};font-weight:700;">${escapeHtml(confidence)}</span>`
+    : `<span style="color:#64748b;">${confidence ? escapeHtml(confidence) : "Not provided"}</span>`;
+
+  const overallBlock =
+    useRawFallback && raw
+      ? `<div style="margin:20px 0;"><h3 style="margin-bottom:10px; color:#555;">Full feedback</h3><pre style="white-space:pre-wrap;line-height:1.6;font-family:inherit;background:#f8fafc;padding:14px;border-radius:10px;border:1px solid #e2e8f0;">${escapeHtml(raw)}</pre></div>`
+      : `<div style="margin:45px 0;">
+          <h3 style="margin-bottom:10px; color:#555;">🌟 Overall Assessment</h3>
+          <p style="line-height:1.65; margin-top:20px;">
+            ${overall ? formatOverallBodyHtml(overall) : '<span style="color:#64748b;">No overall section found.</span>'}
+          </p>
+        </div>
+        <div style="margin-bottom:45px;">
+          <h3 style="margin-bottom:10px; color:#555;">✅ Strengths</h3>
+          <ul style="line-height:1.65; margin-top:23px; padding-left:70px; color:#155724; font-weight:500;">
+            ${strengthsHtml}
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin-bottom:10px; color:#555;">❌ Improvements</h3>
+          <ul style="line-height:1.65; margin-top:23px; padding-left:70px; color:#721c24; font-weight:500;">
+            ${improvementsHtml}
+          </ul>
+        </div>
+        <div style="margin-top:45px;">
+          <h3 style="margin-bottom:16px; color:#555;">Breakdown</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
+            ${breakdownHtml}
+          </div>
+        </div>
+        <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;">
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:18px;">
+            <h3 style="margin:0 0 12px;color:#555;">Cliché Check</h3>
+            ${clicheHtml}
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:18px;">
+            <h3 style="margin:0 0 12px;color:#555;">Confidence</h3>
+            ${confidenceHtml}
+          </div>
+        </div>
+        <div style="margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:20px;">
+          <h3 style="margin:0 0 12px;color:#555;">Top 10% Candidate Insight</h3>
+          <p style="margin:0;line-height:1.7;color:#334155;">
+            ${topCandidateInsight ? formatInlineRichText(topCandidateInsight) : '<span style="color:#64748b;">No top-tier comparison was detected.</span>'}
+          </p>
+        </div>
+        <div style="margin-top:24px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:20px;">
+          <h3 style="margin:0 0 12px;color:#555;">Model Advice</h3>
+          <p style="margin:0;line-height:1.7;color:#334155;">
+            ${modelAdvice ? formatInlineRichText(modelAdvice) : '<span style="color:#64748b;">No model advice section was detected.</span>'}
+          </p>
+        </div>`;
+
+  return `
     <div style="
   margin-bottom:18px;
   padding-bottom:10px;
@@ -142,7 +386,7 @@ if (score >= 8) {
     font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
     letter-spacing:0.3px;
   ">
-    🩺 Motivation for Medicine
+    🩺 ${escapeHtml(caseTitle || "Consultation feedback")}
   </h1>
 </div>
 
@@ -166,6 +410,7 @@ if (score >= 8) {
     color:#888;
     transition: transform 0.2s ease;
     display:inline-block;
+    transform: ${arrowRot};
   ">
     ▶
   </span>
@@ -180,11 +425,9 @@ if (score >= 8) {
   justify-content:space-between;
   align-items:center;
 ">
-  <span>Submitted on: ${date}</span>
-  <span class="expand-hint" style="font-size:0.7em; color:#aaa;">Click to expand</span>
+  <span>Submitted on: ${escapeHtml(dateStr)}</span>
+  <span class="expand-hint" style="font-size:0.7em; color:#aaa; display:${hintDisplay};">Click to expand</span>
 </p>
-
-
 
       <div style="background:#eee;border-radius:10px;width:100%;height:14px;margin:12px 0;">
         <div style="
@@ -196,30 +439,12 @@ if (score >= 8) {
         "></div>
       </div>
 
-<div id="${contentId}" class="hidden" style="margin-top:35px;">
+<div id="${contentId}" class="${detailClass}" style="margin-top:35px;">
 
-        <div style="margin:45px 0;">
-          <h3 style="margin-bottom:10px; color:#555;">🌟 Overall Assessment</h3>
-          <p style="line-height:1.65; margin-top:20px;">
-            ${highlightKeywords(overall).replace(/\n/g, "<br>")}
-          </p>
-        </div>
-
-        <div style="margin-bottom:45px;">
-          <h3 style="margin-bottom:10px; color:#555;">✅ Strengths</h3>
-          <ul style="line-height:1.65; margin-top:23px; padding-left:70px; color:#155724; font-weight:500;">
-            ${strengths.map(s => `<li style="margin-bottom:14px;">${highlightKeywords(s)}</li>`).join("")}
-          </ul>
-        </div>
-
-        <div>
-          <h3 style="margin-bottom:10px; color:#555;">❌ Improvements</h3>
-          <ul style="line-height:1.65; margin-top:23px; padding-left:70px; color:#721c24; font-weight:500;">
-            ${improvements.map(s => `<li style="margin-bottom:14px;">${highlightKeywords(s)}</li>`).join("")}
-          </ul>
-        </div>
+        ${overallBlock}
 
         <button class="copy-btn"
+  type="button"
   style="
     margin-top:25px;
     padding:10px 16px;
@@ -243,71 +468,147 @@ if (score >= 8) {
 
       </div>
     `;
+}
 
+function wireFeedbackCard(div, fullEvaluationText, contentId) {
+  const hint = div.querySelector(".expand-hint");
+  div.addEventListener("click", (e) => {
+    if (e.target.closest("button")) return;
+    const content = document.getElementById(contentId);
+    const arrow = document.getElementById(`arrow-${contentId}`);
+    if (!content || !arrow) return;
+    const isHidden = content.classList.toggle("hidden");
+    arrow.style.transform = isHidden ? "rotate(0deg)" : "rotate(90deg)";
+    arrow.style.transition = "transform 0.25s ease";
+    arrow.style.color = "#999";
+    if (hint) hint.style.display = isHidden ? "inline" : "none";
+  });
 
+  const btn = div.querySelector(".copy-btn");
+  if (!btn) return;
+  const btnText = btn.querySelector(".btn-text");
+  const btnIcon = btn.querySelector(".btn-icon");
+  btn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(fullEvaluationText);
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = fullEvaluationText;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      textarea.remove();
+    }
+    if (btnText) btnText.innerText = "Copied!";
+    if (btnIcon) btnIcon.innerText = "✅";
+    btn.style.background = "#22c55e";
+    setTimeout(() => {
+      if (btnText) btnText.innerText = "Copy Feedback";
+      if (btnIcon) btnIcon.innerText = "📋";
+      btn.style.background = "#0077cc";
+    }, 1500);
+  });
+  btn.addEventListener("mouseenter", () => {
+    btn.style.background = "#005fa3";
+  });
+  btn.addEventListener("mouseleave", () => {
+    btn.style.background = "#0077cc";
+  });
+}
 
+function renderLiveEvaluationCard(evaluationText) {
+  const el = document.getElementById("evaluationBox");
+  if (!el) return;
+  
+  // Hide loading indicator
+  const loadingIndicator = document.getElementById("reviewLoadingIndicator");
+  if (loadingIndicator) {
+    loadingIndicator.style.display = "none";
+  }
+  const caseEl = document.getElementById("casename");
+  const title =
+    (caseEl && caseEl.textContent && caseEl.textContent.trim()) || "Consultation feedback";
+  const parsed = parseFeedbackFromEvaluation(evaluationText);
+  const contentId = "eval-live-" + Math.random().toString(36).slice(2);
+  const dateStr = new Date().toLocaleString();
+  const wrap = document.createElement("div");
+  wrap.className = "feedback-item";
+  wrap.style.cssText = `
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 25px;
+      background: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+    `;
+  wrap.innerHTML = buildFeedbackCardHtml(parsed, {
+    contentId,
+    dateStr,
+    caseTitle: title,
+    expanded: true
+  });
+  const inner = wrap.querySelector("#" + contentId);
+  if (inner) inner.classList.remove("hidden");
+  el.innerHTML = "";
+  el.appendChild(wrap);
+  wireFeedbackCard(wrap, evaluationText, contentId);
+}
 
-// Hide hint initially
-const hint = div.querySelector(".expand-hint");
+function displayDashboard(data) {
+  const container = document.getElementById("dashboard");
+  container.innerHTML = "";
 
-    // Toggle whole card
-    div.onclick = (e) => {
-  if (e.target.tagName === "BUTTON") return;
-
-  const content = document.getElementById(contentId);
-  const arrow = document.getElementById(`arrow-${contentId}`);
-
-  const isHidden = content.classList.toggle("hidden");
-
-  // Rotate arrow instead of changing layout
-  arrow.style.transform = isHidden ? "rotate(0deg)" : "rotate(90deg)";
-arrow.style.transition = "transform 0.25s ease";
-arrow.style.color = "#999";
-  if (hint) hint.style.display = isHidden ? "inline" : "none";
-
-};
-
-
-
-
-
-
-    container.appendChild(div);
-
-    // FIXED COPY BUTTON
-    const btn = div.querySelector(".copy-btn");
-const btnText = btn.querySelector(".btn-text");
-const btnIcon = btn.querySelector(".btn-icon");
-
-btn.addEventListener("click", async (e) => {
-  e.stopPropagation();
-
-  try {
-    await navigator.clipboard.writeText(evaluation);
-  } catch {
-    const textarea = document.createElement("textarea");
-    textarea.value = evaluation;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand("copy");
-    textarea.remove();
+  if (!data || data.length === 0) {
+    container.innerHTML = "<p>No previous feedback found.</p>";
+    return;
   }
 
-  // Change content WITHOUT resizing
-  btnText.innerText = "Copied!";
-  btnIcon.innerText = "✅";
-  btn.style.background = "#22c55e";
+  container.scrollIntoView({ behavior: "smooth" });
 
-  setTimeout(() => {
-    btnText.innerText = "Copy Feedback";
-    btnIcon.innerText = "📋";
-    btn.style.background = "#0077cc";
-  }, 1500);
-});
+  data.forEach((item) => {
+    const evaluation = item.evaluation != null ? String(item.evaluation) : "";
+    const parsed = parseFeedbackFromEvaluation(evaluation);
+    const date = formatFirestoreDate(item.createdAt ?? item.createdAtReadable);
+    const caseTitle =
+      (typeof item.caseName === "string" && item.caseName.trim()) ||
+      "Motivation for Medicine";
+    const contentId = "content-" + Math.random().toString(36).slice(2);
 
-// Hover effect
-btn.onmouseover = () => btn.style.background = "#005fa3";
-btn.onmouseout = () => btn.style.background = "#0077cc";
+    console.log("CreatedAt:", item.createdAt, "Readable:", date);
+
+    const div = document.createElement("div");
+    div.className = "feedback-item";
+    div.style.cssText = `      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 25px;
+      background: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-family: Arial, sans-serif;
+      cursor: pointer;`;
+
+    div.addEventListener("mouseenter", () => {
+      div.style.transform = "translateY(-4px)";
+      div.style.boxShadow = "0 8px 22px rgba(0,0,0,0.1)";
+    });
+    div.addEventListener("mouseleave", () => {
+      div.style.transform = "translateY(0)";
+      div.style.boxShadow = "0 4px 14px rgba(0,0,0,0.06)";
+    });
+
+    div.innerHTML = buildFeedbackCardHtml(parsed, {
+      contentId,
+      dateStr: date,
+      caseTitle,
+      expanded: false
+    });
+
+    container.appendChild(div);
+    wireFeedbackCard(div, evaluation, contentId);
   });
 }
 
@@ -467,8 +768,151 @@ function stopRecognition() {
 
 
 
- let messagebeforeacceptingmic = document.getElementById('messagebeforeacceptingmic');
-    let micisworking = document.getElementById('micisworking');//THIS IS NOT NEEDED FOR THE MIC TO WORK!!!!!!!!!!!
+let messagebeforeacceptingmic = document.getElementById('messagebeforeacceptingmic');
+   let micisworking = document.getElementById('micisworking');//THIS IS NOT NEEDED FOR THE MIC TO WORK!!!!!!!!!!!
+const inbetweenVideo = document.getElementById('inbetweenVideo');
+const inbetweenSource = document.getElementById("inbetweenmp4_src");
+let micGlowAudioContext = null;
+let micGlowAnalyser = null;
+let micGlowDataArray = null;
+let micGlowAnimationFrame = null;
+let smoothedPrimaryGlowLevel = 0;
+
+function setPrimaryMicGlow(level = 0) {
+  const clampedLevel = Math.max(0, Math.min(level, 1));
+  const blur = 14 + clampedLevel * 38;
+  const spread = 4 + clampedLevel * 12;
+  const scale = 1 + clampedLevel * 0.05;
+
+  if (micisworking) {
+    micisworking.style.boxShadow = `0 0 ${blur}px ${spread}px rgba(255, 45, 45, 0.72)`;
+    micisworking.style.transform = `scale(${scale})`;
+    micisworking.style.transition = "box-shadow 260ms ease-out, transform 260ms ease-out, filter 260ms ease-out";
+    micisworking.style.filter = `brightness(${1 + clampedLevel * 0.2}) saturate(${1 + clampedLevel * 0.15})`;
+  }
+}
+
+function showPrimaryListeningVideo(onReady) {
+  if (!inbetweenVideo || !inbetweenSource) return;
+  const handleReady = () => {
+    inbetweenVideo.play().then(() => {
+      if (typeof onReady === "function") onReady();
+    }).catch(() => {
+      if (typeof onReady === "function") onReady();
+    });
+  };
+
+  if (inbetweenSource.getAttribute("src") !== "videos/silentvideo.mp4") {
+    inbetweenSource.setAttribute("src", "videos/silentvideo.mp4");
+  }
+  inbetweenVideo.loop = true;
+  inbetweenVideo.muted = true;
+  inbetweenVideo.style.display = 'unset';
+  inbetweenVideo.onplaying = () => {
+    inbetweenVideo.onplaying = null;
+    if (typeof onReady === "function") onReady();
+  };
+
+  if (inbetweenVideo.readyState >= 2) {
+    handleReady();
+    return;
+  }
+
+  inbetweenVideo.load();
+  inbetweenVideo.onloadeddata = () => {
+    inbetweenVideo.onloadeddata = null;
+    handleReady();
+  };
+}
+
+function hidePrimaryListeningVideo() {
+  if (!inbetweenVideo) return;
+  inbetweenVideo.pause();
+  inbetweenVideo.style.display = 'none';
+}
+
+function showPrimaryThinkingState() {
+  if (messagebeforeacceptingmic) messagebeforeacceptingmic.style.display = 'none';
+  if (micisworking) micisworking.style.display = 'none';
+  const mainVideo = document.getElementById('myVideo');
+  showPrimaryListeningVideo(() => {
+    if (mainVideo) {
+      mainVideo.pause();
+      mainVideo.style.display = 'none';
+    }
+  });
+}
+
+function hidePrimaryThinkingState() {
+  hidePrimaryListeningVideo();
+  const mainVideo = document.getElementById('myVideo');
+  if (mainVideo) {
+    mainVideo.style.display = 'unset';
+  }
+}
+
+function setPrimaryListeningState(isListening) {
+  if (isListening) {
+    if (micisworking) micisworking.style.display = 'unset';
+    if (messagebeforeacceptingmic) messagebeforeacceptingmic.style.display = 'none';
+    showPrimaryListeningVideo();
+    return;
+  }
+
+  if (micisworking) micisworking.style.display = 'none';
+  if (messagebeforeacceptingmic) messagebeforeacceptingmic.style.display = 'none';
+  hidePrimaryListeningVideo();
+  setPrimaryMicGlow(0);
+  if (micisworking) {
+    micisworking.style.filter = "";
+  }
+}
+
+function startPrimaryMicGlow(stream) {
+  if (!stream) return;
+
+  if (micGlowAnimationFrame) {
+    cancelAnimationFrame(micGlowAnimationFrame);
+    micGlowAnimationFrame = null;
+  }
+
+  if (!micGlowAudioContext || micGlowAudioContext.state === "closed") {
+    micGlowAudioContext = new AudioContext();
+  }
+
+  const source = micGlowAudioContext.createMediaStreamSource(stream);
+  micGlowAnalyser = micGlowAudioContext.createAnalyser();
+  micGlowAnalyser.fftSize = 1024;
+  micGlowAnalyser.smoothingTimeConstant = 0.05;
+  source.connect(micGlowAnalyser);
+  micGlowDataArray = new Uint8Array(micGlowAnalyser.fftSize);
+
+  const tick = () => {
+    if (!micGlowAnalyser || !micGlowDataArray) return;
+
+    micGlowAnalyser.getByteTimeDomainData(micGlowDataArray);
+    let sumSquares = 0;
+    for (let i = 0; i < micGlowDataArray.length; i++) {
+      const normalized = (micGlowDataArray[i] - 128) / 128;
+      sumSquares += normalized * normalized;
+    }
+
+    const rms = Math.sqrt(sumSquares / micGlowDataArray.length);
+    const normalizedLevel = Math.max(0, Math.min((rms - 0.01) * 24, 1));
+    smoothedPrimaryGlowLevel = smoothedPrimaryGlowLevel * 0.9 + normalizedLevel * 0.1;
+
+    if (isPrimaryMicFlowActive()) {
+      setPrimaryMicGlow(smoothedPrimaryGlowLevel);
+    } else {
+      smoothedPrimaryGlowLevel = 0;
+      setPrimaryMicGlow(0);
+    }
+
+    micGlowAnimationFrame = requestAnimationFrame(tick);
+  };
+
+  micGlowAnimationFrame = requestAnimationFrame(tick);
+}
 
 
 
@@ -492,15 +936,34 @@ window.addEventListener("load", () => {
   initRecorder();
 });
 
+let isRecording = false;
 let mediaRecorder;
 let audioChunks = [];
+let rawMicStream = null;
+let processedMicAudioContext = null;
+let suppressNextTranscription = false;
+const API_BASE_URL =
+  window.location.port === "3000" || window.location.origin.includes("127.0.0.1:3000")
+    ? ""
+    : "http://localhost:3000";
+
+/** Same host as other /api calls in dev (CORS on local server); Render in production. */
+function getTutor2ndCaseApiUrl() {
+  if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    const base = API_BASE_URL || window.location.origin;
+    return base.replace(/\/$/, "") + "/api/TUTOR2ndcase";
+  }
+  return "https://medschoolsims-1.onrender.com/api/TUTOR2ndcase";
+}
 
 async function initRecorder() {
   console.log("🎤 initRecorder called");
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
+    rawMicStream = await navigator.mediaDevices.getUserMedia({
       audio: {
+        channelCount: 1,
+        sampleRate: 48000,
         noiseSuppression: true,
         echoCancellation: true,
         autoGainControl: true
@@ -509,7 +972,28 @@ async function initRecorder() {
 
     console.log("✅ Microphone access granted");
 
-    mediaRecorder = new MediaRecorder(stream);
+    startPrimaryMicGlow(rawMicStream);
+    processedMicAudioContext = new AudioContext();
+    const micSource = processedMicAudioContext.createMediaStreamSource(rawMicStream);
+    const gainNode = processedMicAudioContext.createGain();
+    gainNode.gain.value = 2.8;
+    const compressor = processedMicAudioContext.createDynamicsCompressor();
+    compressor.threshold.value = -30;
+    compressor.knee.value = 20;
+    compressor.ratio.value = 12;
+    compressor.attack.value = 0.003;
+    compressor.release.value = 0.2;
+    const destination = processedMicAudioContext.createMediaStreamDestination();
+    micSource.connect(gainNode);
+    gainNode.connect(compressor);
+    compressor.connect(destination);
+
+    const preferredMimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+      ? "audio/webm;codecs=opus"
+      : "";
+    mediaRecorder = preferredMimeType
+      ? new MediaRecorder(destination.stream, { mimeType: preferredMimeType, audioBitsPerSecond: 160000 })
+      : new MediaRecorder(destination.stream);
     console.log("✅ MediaRecorder created:", mediaRecorder);
 
     mediaRecorder.onstart = () => console.log("🟢 Recording STARTED");
@@ -519,8 +1003,7 @@ async function initRecorder() {
 mediaRecorder.onstart = () => {
   console.log("🟢 Recording STARTED");
 
-  micisworking.style.display = 'unset';
-  messagebeforeacceptingmic.style.display = 'none';
+  setPrimaryListeningState(true);
 
   console.log("💡 Mic shown, message hidden (RECORDER START)");
 };
@@ -533,22 +1016,39 @@ mediaRecorder.onstart = () => {
     };
 
     mediaRecorder.onstop = async () => {
+        isRecording = false;
+      recorderStarted = false;
+      if (!actionTriggered) {
+        setPrimaryListeningState(false);
+      }
+
+      if (suppressNextTranscription) {
+        suppressNextTranscription = false;
+        audioChunks = [];
+        document.getElementById('loadingcircle').style.display = 'none';
+        return;
+      }
+
       console.log("🔴 Recording STOPPED");
       console.log("📦 Total chunks:", audioChunks.length);
 
-      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
       console.log("🎧 Blob created:", audioBlob.size);
 
       audioChunks = [];
 
       const formData = new FormData();
-      formData.append("file", audioBlob);
+      formData.append("file", audioBlob, "recording.webm");
 
       console.log("📤 Sending audio to backend...");
 
       try {
-        const res = await fetch("http://localhost:3000/api/transcribe", { method: "POST", body: formData });
+        const res = await fetch(`${API_BASE_URL}/api/transcribe`, { method: "POST", body: formData });
         console.log("📥 Response status:", res.status);
+
+        if (!res.ok) {
+          throw new Error(`Transcription request failed with status ${res.status}`);
+        }
 
         let data;
 try {
@@ -566,6 +1066,10 @@ try {
 
       } catch (err) {
         console.error("❌ Error sending audio:", err);
+        document.getElementById('loadingcircle').style.display = 'none';
+        actionTriggered = false;
+        hasSubmitted = false;
+        setPrimaryListeningState(false);
       }
     };
 
@@ -582,11 +1086,37 @@ function safeStartRecorder() {
   console.log("💡 About to start recorder. Current state:", mediaRecorder?.state);
   console.trace("📝 Start called here");
 
-  if (mediaRecorder && mediaRecorder.state === "inactive") {
-    mediaRecorder.start(1000);
-    console.log("🟢 Recording STARTED");
+  if (!mediaRecorder || mediaRecorder.state !== "inactive" || isRecording) {
+    console.log("⚠️ جلوگیری duplicate start");
+    return;
+  }
+
+  isRecording = true;
+  recorderStarted = true;
+  hasSubmitted = false;
+  actionTriggered = false;
+  mediaRecorder.start(1000);
+}
+
+function stopPrimaryRecorderForNavigation() {
+  suppressNextTranscription = true;
+  actionTriggered = false;
+  hasSubmitted = false;
+  setPrimaryListeningState(false);
+
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    mediaRecorder.stop();
   } else {
-    console.log("⚠️ Recorder not started, current state:", mediaRecorder?.state);
+    audioChunks = [];
+  }
+}
+
+function safeStopRecognitionInstance(instance) {
+  if (!instance || typeof instance.stop !== "function") return;
+  try {
+    instance.stop();
+  } catch (err) {
+    console.warn("Recognition stop skipped:", err);
   }
 }
 
@@ -594,6 +1124,47 @@ function safeStartRecorder() {
 
 // Video ended
 let recorderStarted = false;
+let actionTriggered = false;
+let hasSubmitted = false;
+
+const video = document.getElementById('myVideo');
+video.onended = null;
+
+function beginQuestionSubmission(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
+  }
+
+  if (actionTriggered || hasSubmitted) {
+    console.log("⚠️ Submission already in progress");
+    return;
+  }
+
+  if (!mediaRecorder || mediaRecorder.state !== "recording") {
+    console.log("⚠️ Submit ignored because recorder is not active");
+    return;
+  }
+
+  onesecdelaybeforestoprecog();
+  actionTriggered = true;
+  clearTimeout(silenceTimeout);
+  document.getElementById('stop-consultation-btn').style.display = 'none';
+  document.getElementById('replayButton').style.display = 'none';
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('executeButton').style.display = 'none';
+  document.getElementById('loadingcircle').style.display = 'unset';
+  setPrimaryListeningState(false);
+  showPrimaryThinkingState();
+  initialpromptforpresssubmit.style.display = 'none';
+}
+
+function isPrimaryMicFlowActive() {
+  return Boolean(micisworking) && micisworking.style.display !== 'none';
+}
 
 document.getElementById('myVideo').onended = function () {
   console.log("🎬 Video ended");
@@ -603,20 +1174,17 @@ document.getElementById('myVideo').onended = function () {
     return;
   }
 
-  if (recorderStarted) {
+  if (mediaRecorder.state !== "inactive" || isRecording) {
     console.log("⚠️ Recorder already started, skipping");
     return;
   }
 
-  // Hide message BEFORE starting recording
   messagebeforeacceptingmic.style.display = 'none';
   console.log("💡 messagebeforeacceptingmic hidden");
 
   try {
     console.log("🎤 Starting recorder...");
     safeStartRecorder();
-    recorderStarted = true;
-    console.log("🟢 Recording STARTED");
   } catch (err) {
     console.error("❌ Failed to start MediaRecorder:", err);
   }
@@ -624,23 +1192,23 @@ document.getElementById('myVideo').onended = function () {
 
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
+  if (e.key === "Enter" && isPrimaryMicFlowActive()) {
     console.log("⌨️ Enter pressed");
-
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      console.log("🛑 Stopping recorder...");
-      mediaRecorder.stop();
-    }
+    beginQuestionSubmission(e);
   }
 });
 
-
-document.getElementById("executeButton").onclick = () => {
-  console.log("🖱️ Submit clicked");
-
-  if (mediaRecorder.state === "recording") {
-    mediaRecorder.stop();
+document.addEventListener("keypress", (e) => {
+  if (e.key === "Enter" && isPrimaryMicFlowActive()) {
+    console.log("⌨️ Enter keypress intercepted for primary mic flow");
+    beginQuestionSubmission(e);
   }
+}, true);
+
+
+document.getElementById("executeButton").onclick = (e) => {
+  console.log("🖱️ Submit clicked");
+  beginQuestionSubmission(e);
 };
 
 
@@ -1067,8 +1635,8 @@ async function initialstopConsultation() {
   document.getElementById('move-onto-questions-btn').style.display = 'unset';
   document.getElementById('end-consultation-btn').style.display = 'unset';
    
-    console.log("👉 STOP recording triggered");
-mediaRecorder.stop();
+  console.log("👉 STOP recording triggered");
+  stopPrimaryRecorderForNavigation();
   document.getElementById('replayButton').style.display = 'none';
   document.getElementById('stop-consultation-btn').style.display = 'none';
   document.getElementById('home').style.display = 'none';
@@ -1086,7 +1654,7 @@ console.trace();
   try {
     const token = await auth.currentUser.getIdToken(); // ✅ ADD THIS
 
-    const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
+    const response = await fetch(getTutor2ndCaseApiUrl(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1102,7 +1670,19 @@ console.trace();
 
     console.log("📊 Evaluation:", data.evaluation);
 
-    document.getElementById("evaluationBox").innerText = data.evaluation;
+    if (data.evaluation) {
+      renderLiveEvaluationCard(data.evaluation);
+    } else {
+      const box = document.getElementById("evaluationBox");
+      const loadingIndicator = document.getElementById("reviewLoadingIndicator");
+      
+      // Hide loading indicator
+      if (loadingIndicator) {
+        loadingIndicator.style.display = "none";
+      }
+      
+      if (box) box.textContent = "No evaluation was returned.";
+    }
 
   } catch (err) {
     console.error("❌ Error ending session:", err);
@@ -1130,8 +1710,13 @@ console.trace();
   
     document.getElementById('myVideo').pause();
     console.log("👉 STOP recording triggered");
-mediaRecorder.stop();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
-    recognition1.stop(); recognition1.stop(); recognition_differentials.stop(); recognition_investigations.stop(); recognition_riskfactors.stop(); recognition_treatments.stop();
+stopPrimaryRecorderForNavigation();    document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
+    safeStopRecognitionInstance(recognition_examinations);
+    safeStopRecognitionInstance(recognition1);
+    safeStopRecognitionInstance(recognition_differentials);
+    safeStopRecognitionInstance(recognition_investigations);
+    safeStopRecognitionInstance(recognition_riskfactors);
+    safeStopRecognitionInstance(recognition_treatments);
   
     document.getElementById('examinations').style.display = 'none';
     document.getElementById('summary').style.display = 'none';
@@ -1145,7 +1730,21 @@ mediaRecorder.stop();    document.getElementById('replayButton').style.display =
     document.body.style.backgroundColor = 'rgb(255, 255, 255)';
     document.getElementById('logoduringconsultation').style.display = 'none';
     document.getElementById('myVideo').style.display = 'none';
-  
+    document.getElementById('fakeVideo').style.display = 'none';
+    hidePrimaryListeningVideo();
+    const mutedEl = document.getElementById('mutedVideo');
+    if (mutedEl) {
+      mutedEl.pause();
+      mutedEl.style.display = 'none';
+    }
+    document.getElementById('loadingcircle').style.display = 'none';
+
+    if (typeof showSlides === "function") {
+      slideIndex = 1;
+      showSlides(1);
+    }
+    document.getElementById("review-section").scrollIntoView({ behavior: "smooth", block: "start" });
+
   //FOR THE YELLOW WARNING FADE IN AND OUT:
   const message = document.getElementById('audio-warning');
   message.style.display = 'block';
@@ -1180,7 +1779,7 @@ mediaRecorder.stop();    document.getElementById('replayButton').style.display =
   --------*/
   
     //examinations - save the response if press the end consultation button
-      recognition_examinations.stop();    
+      safeStopRecognitionInstance(recognition_examinations);    
           setTimeout(function() {
           var recordinginstructionsforexaminations = $('#recording-instructions-for-examinations');
           recognition_examinations.onspeechend = function() {
@@ -1193,7 +1792,7 @@ mediaRecorder.stop();    document.getElementById('replayButton').style.display =
     
     
     //Summary - save the response if press the end consultation button
-      recognition1.stop();    
+      safeStopRecognitionInstance(recognition1);    
           setTimeout(function() {
           var recordinginstructionsforsummary = $('#recording-instructions-for-summary');
           recognition1.onspeechend = function() {
@@ -1219,7 +1818,7 @@ mediaRecorder.stop();    document.getElementById('replayButton').style.display =
      
     
     //Differentials - save the response if press the end consultation button
-      recognition_differentials.stop();   
+      safeStopRecognitionInstance(recognition_differentials);   
             setTimeout(function() {
             var recordinginstructionsfordifferentials = $('#recording-instructions-for-differentials');
             recognition_differentials.onspeechend = function() {
@@ -1232,7 +1831,7 @@ mediaRecorder.stop();    document.getElementById('replayButton').style.display =
   
   
     //Investigations - save the response if press the end consultation button
-      recognition_investigations.stop();    
+      safeStopRecognitionInstance(recognition_investigations);    
           setTimeout(function() {
           var recordinginstructionsforinvestigations = $('#recording-instructions-for-investigations');
           recognition_investigations.onspeechend = function() {
@@ -1245,7 +1844,7 @@ mediaRecorder.stop();    document.getElementById('replayButton').style.display =
     
   
     //riskfactors - save the response if press the end consultation button
-      recognition_riskfactors.stop();    
+      safeStopRecognitionInstance(recognition_riskfactors);    
           setTimeout(function() {
           var recordinginstructionsforriskfactors = $('#recording-instructions-for-riskfactors');
           recognition_riskfactors.onspeechend = function() {
@@ -1258,7 +1857,7 @@ mediaRecorder.stop();    document.getElementById('replayButton').style.display =
   
   
     //Treatments - save the response if press the end consultation button
-      recognition_treatments.stop();    
+      safeStopRecognitionInstance(recognition_treatments);    
           setTimeout(function() {
           var recordinginstructionsfortreatments = $('#recording-instructions-for-treatments');
           recognition_treatments.onspeechend = function() {
@@ -1562,21 +2161,28 @@ safeStartRecorder();      document.getElementById('stop-consultation-btn').style
   
   
   /*General information gathering*/
-  painlocationx = false;
-  onsetx = false;
-  characterx = false;
-  radiatex = false;
-  associatedsymptomsx = false;
-  timecoursex = false;
-  makeitbetterx = false;
-  makeitworsex = false;
-  ratepainx = false;
-  happenbeforex = false;
-  
-  ideasx = false;
-  concernsx = false;
-  expectationsx = false;
-  familyhistoryx = false;
+painlocationx = false;
+onsetx = false;
+characterx = false;
+radiatex = false;
+associatedsymptomsx = false;
+timecoursex = false;
+makeitbetterx = false;
+makeitworsex = false;
+ratepainx = false;
+happenbeforex = false;
+coughx = false;
+palpitationsx = false;
+orthopnoeax = false;
+pndx = false;
+physicalactivityx = false;
+medstestx = false;
+surgeriesx = false;
+
+ideasx = false;
+concernsx = false;
+expectationsx = false;
+familyhistoryx = false;
   
   pmhx = false;
   surgicalx = false;
@@ -1586,12 +2192,19 @@ safeStartRecorder();      document.getElementById('stop-consultation-btn').style
   jobx = false;
   walkdistancex = false;
   homesituationx = false;
-  smokingx = false;
-  alcoholx = false;
+smokingx = false;
+alcoholx = false;
+sleepapnoeax = false;
+padx = false;
+oedemax = false;
+FHheartconditionsx = false;
+diabetesx = false;
+hypertensionx = false;
+heartattacksx = false;
   
-  /*Important not to miss*/
-  dizzinessx = false;
-  feverx = false;
+/*Important not to miss*/
+dizzinessx = false;
+feverx = false;
   weightx = false;
   appetitex = false;
   jaundicex = false;
@@ -1604,8 +2217,8 @@ safeStartRecorder();      document.getElementById('stop-consultation-btn').style
   itchingx = false;
   prevgallx = false;
   
-  let generatedText = "";
-  let dyspnoeax = "";
+let generatedText = "";
+  let dyspnoeax = false;
 
 
   /*Examinations*/
@@ -1839,23 +2452,17 @@ safeStartRecorder();      document.getElementById('stop-consultation-btn').style
   
   
   //the button for submitting the question and if press enter then submits the question
-  let actionTriggered = false;
-  
-  
+
+
     document.getElementById("executeButton").addEventListener("click", function() {
-          onesecdelaybeforestoprecog();
-          actionTriggered = true; clearTimeout(silenceTimeout);
-              document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('replayButton').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('loadingcircle').style.display = 'unset';  micisworking.style.display = 'none'; initialpromptforpresssubmit.style.display = 'none'; 
+          beginQuestionSubmission();
           });
-  
-  
+
+
     document.addEventListener("keydown", function (event) {
       if (event.key === "Enter" && micisworking.style.display !== 'none') {// && !actionTriggered  
-         onesecdelaybeforestoprecog();
-         actionTriggered = true; clearTimeout(silenceTimeout);
-             document.getElementById('stop-consultation-btn').style.display = 'none';   document.getElementById('replayButton').style.display = 'none';   document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none'; document.getElementById('loadingcircle').style.display = 'unset';  micisworking.style.display = 'none'; initialpromptforpresssubmit.style.display = 'none';    
-         document.getElementById("executeButton").removeEventListener("click", arguments.callee);    //document.removeEventListener("keydown", handleKeyDown);
-         
+              beginQuestionSubmission(event);
+        
         }   });
   
   
@@ -1876,8 +2483,8 @@ mediaRecorder.stop();executeActionAfterDelay(); clearTimeout(silenceTimeout);
   
       function executeActionAfterDelay() {
       timerforsubmitting = setTimeout(function () {
-        clearTimeout(silenceTimeout); document.getElementById('loadingcircle').style.display = 'none';submitquestion();
-        document.getElementById('executeButton').style.display = 'none';      
+        clearTimeout(silenceTimeout);
+        document.getElementById('executeButton').style.display = 'none';
       }, 1500);
     }
   
@@ -1958,13 +2565,41 @@ mediaRecorder.stop();executeActionAfterDelay(); clearTimeout(silenceTimeout);
   
   
   
-  
-    function submitquestion(){
-  
-    
-  
-    console.log("👉 STOP recording triggered");
-mediaRecorder.stop();
+    function submitquestion(e){
+  const typedQuestion = noteTextarea?.val()?.trim() || "";
+  if (typeof noteContent === "undefined" || noteContent === null) {
+    noteContent = typedQuestion.toLowerCase();
+  }
+
+  if (!noteContent && typedQuestion) {
+    noteContent = typedQuestion.toLowerCase();
+  }
+
+  if (!noteContent) {
+    console.warn("⚠️ No question text available for submitquestion");
+    hasSubmitted = false;
+    actionTriggered = false;
+    document.getElementById('loadingcircle').style.display = 'none';
+    return;
+  }
+
+  if (hasSubmitted) return;
+  hasSubmitted = true;
+
+  console.log("🧠 submitquestion running");
+
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  console.log("🖱️ Submit clicked");
+
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    console.log("🛑 Stopping recorder...");
+    mediaRecorder.stop();
+  }
+
        document.getElementById('replayButton').style.display = 'none';   document.getElementById('stop-consultation-btn').style.display = 'none';  document.getElementById('home').style.display = 'none'; document.getElementById('executeButton').style.display = 'none';
   
        
@@ -1999,387 +2634,6 @@ mediaRecorder.stop();
         previousquestion = noteContent; nameage_repeat++;   response_question = "I'm Jason and am 40";
         document.getElementById("mp4_src").src = "videos/name+age.mp4"; allifsaction();}
       
-      else if(age_repeat == 0 && (noteContent.includes("age")||noteContent.includes("old"))){
-        //readOutLoud("I'm 40 years old")
-        previousquestion = noteContent; age_repeat++;   response_question = "I'm 40";
-        document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}
-  
-      else if (oktospeak_repeat == 0 && (noteContent.includes("is it ok")||noteContent.includes("would it be ok")||noteContent.includes("talk to you")
-        ||noteContent.includes("chat")||noteContent.includes("speak to you")||noteContent.includes("ask you")||noteContent.includes("may i"))) {
-        //readOutLoud("yes that's fine");
-        previousquestion = noteContent; oktospeak_repeat++;  response_question = "yes that's fine";
-        document.getElementById("mp4_src").src = "videos/yesthatsfine.mp4"; allifsaction();}//consent for consultation (can i ask you a few questions)
-  
-      else if (name_repeat == 0 && (noteContent.includes("your name")||noteContent.includes("full name"))) {
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        //My name is Jason Miller
-        previousquestion = noteContent; name_repeat++;  response_question = "I'm Jason";
-        document.getElementById("mp4_src").src = "videos/name.mp4"; allifsaction();}//name
-  
-      else if (call_repeat == 0 && (noteContent.includes("call")||noteContent.includes("address"))) {
-        //readOutLoud("Jason is fine");
-        previousquestion = noteContent; call_repeat++;  response_question = "Jason is fine";
-        document.getElementById("mp4_src").src = "videos/jasonisfine.mp4"; allifsaction();}//how would you like to be addressed as
-  
-    /*  else if (noteContent.includes("age")||noteContent.includes("old")) {
-        //readOutLoud("I'm 31");
-        previousquestion = noteContent;   response_question = "I'm 31";
-        document.getElementById("mp4_src").src = "videos/age.mp4"; allifsaction();}//age
-      */
-      else if (dob_repeat == 0 && (noteContent.includes("date of birth")||noteContent.includes("when")&&noteContent.includes("born"))) {
-        //readOutLoud("the 4th of June 1984");
-        previousquestion = noteContent; dob_repeat++;  response_question = "4th of June 1984";
-        document.getElementById("mp4_src").src = "videos/dob.mp4"; allifsaction();}//DOB
-  
-      else if (work_repeat == 0 &&(noteContent.includes("occupation")||noteContent.includes("job")||noteContent.includes("work"))) {
-        //readOutLoud("I work as a lawyer");
-        previousquestion = noteContent;   response_question = "I'm a lawyer";
-        jobx = true; work_repeat ++; 
-        document.getElementById("mp4_src").src = "videos/job.mp4"; allifsaction();}//job
-      
-      else if (stress_repeat == 0 && (noteContent.includes("stress"))) {
-        //readOutLoud("I don't feel like I have any stresses in my life at the moment");
-        previousquestion = noteContent; stress_repeat++;  response_question = "I've not been stressed recently";
-        document.getElementById("mp4_src").src = "videos/stress.mp4"; allifsaction();}//Are you stressed at work
-      
-      else if (howareyou_repeat == 0 && (noteContent.includes("how are you")||noteContent.includes("how are things")||noteContent.includes("what about you"))) {
-        //readOutLoud("I'm not feeling the best but I am ok");
-        previousquestion = noteContent; howareyou_repeat++;  response_question = "I'm not feeling the best but I am ok";
-        document.getElementById("mp4_src").src = "videos/imnotfeelingthebest.mp4"; allifsaction();}//how are you?
-  
-  
-  
-      
-  
-      else if (alwayspain_repeat == 0 && (noteContent.includes("always there")&&noteContent.includes("come"))) {
-        //readOutLoud("The pain is not constantly always there, but instead I would say it comes and goes");
-        previousquestion = noteContent; alwayspain_repeat++;  response_question = "The pain comes and goes";
-        timecoursex = true;
-        document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
-  
-      else if (constant_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("come"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; constant_repeat++;  response_question = "The pain's not constant";
-        timecoursex = true;
-        document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
-  
-      else if (painconstant_repeat == 0 && (noteContent.includes("always there")&&noteContent.includes("intermittent"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; painconstant_repeat++;  response_question = "The pain's not constant";
-        timecoursex = true;
-        document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
-  
-      else if (intermittent_repeat == 0 && (noteContent.includes("constant")&&noteContent.includes("intermittent"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; intermittent_repeat++;  response_question = "The pain's not constant";
-        timecoursex = true;
-        document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain always there OR constant (there's another one later too)
-  
-  
-  
-      else if (alwaysthere_repeat == 0 && (noteContent.includes("constant")||noteContent.includes("always there"))) {
-        //readOutLoud("The pain is not constantly always there");
-        previousquestion = noteContent; alwaysthere_repeat++;  response_question = "The pain's not constant";
-        timecoursex = true;
-        document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain constant
-  
-      else if (comeandgo_repeat == 0 && (noteContent.includes("intermittent")||noteContent.includes("come and go")||noteContent.includes("comes and go"))) {
-        //readOutLoud("The pain come and goes all the time");
-        previousquestion = noteContent; comeandgo_repeat++;  response_question = "The pain come and goes";
-        timecoursex = true;
-        document.getElementById("mp4_src").src = "videos/painconstantlyalwaysthere.mp4"; allifsaction();}//is the pain intermittent
-  
-  
-  
-      //Opening question    
-      else if (painlocationrepeat == 0 &&!noteContent.includes("family")&&!noteContent.includes("other")&&!noteContent.includes("medical")
-      &&(noteContent.includes("brought")||noteContent.includes("bring")||noteContent.includes("what can")||noteContent.includes("why")
-          ||noteContent.includes("come")||noteContent.includes("how do you feel")
-          ||noteContent.includes("I help")||(noteContent.includes("you have any pain")&&!noteContent.includes("else"))
-          ||noteContent.includes("i can do for you")||noteContent.includes("can i do for you")
-          ||noteContent.includes("problem"))) {
-        //readOutLoud("This morning I felt this pain in my tummy a few hours after eating breakfast, but now this is becoming quite regular and it's starting to really affect my life");
-        previousquestion = noteContent;   response_question = "I've got abdominal pain this morning and now this has been going on for quite a long time, I'd say about 2 months and affecting my life";
-        painlocationrepeat ++;  
-        painlocationx = true;
-        onsetx = true;
-        document.getElementById("mp4_src").src = "videos/vid-whatsbroughtyouin.mp4"; allifsaction();}//HOPC/whats made you come to the hospital/ why did you come to the hospital
-      
-  
-  
-  
-  
-  
-  
-  
-  ///////////////////////////////////////////////////////////////////////
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-      else if (onsetrepeat == 0 &&(noteContent.includes("bit more")||noteContent.includes("tell me more")||noteContent.includes("tell me about"))&&(noteContent.includes("pain")||noteContent.includes("it"))) {
-        //readOutLoud("The pain is quite debilitating for me I feel, and it just keeps coming back so I thought I would come get it checked out.");
-        previousquestion = noteContent; onsetrepeat++;  response_question = "The pain is quite debilitating for me, and it keeps coming back so came to get it checked out";
-        onsetx = true;
-        
-      document.getElementById("mp4_src").src = "videos/bitmore.mp4"; allifsaction();}//tell me a bit more
-  
-      else if (whathappened_repeat == 0 && (noteContent.includes("how")&&(noteContent.includes("pain")||noteContent.includes("it"))&&(noteContent.includes("develop")||noteContent.includes("start")||noteContent.includes("begin")||noteContent.includes("come")||noteContent.includes("brought"))
-      ||noteContent.includes("what happen"))) {
-        //readOutLoud("The pain started around half an hour after I ate breakfast. I did eat a lot as I had a full english breakfast and so I thought it could've been related to the food");
-        previousquestion = noteContent; whathappened_repeat++;  response_question = "The pain started 30 mins after full english breakfast"; onsetx = true;
-        document.getElementById("mp4_src").src = "videos/howhappen.mp4"; allifsaction();}//how did you get the pain/how did it start
-        
-      //pain
-      
-      else if (wherepainexactly_repeat == 0 && (noteContent.includes("where")&&(noteContent.includes("pain")||noteContent.includes("discomfort")||noteContent.includes("hurt"))&&!noteContent.includes("else")&&!noteContent.includes("somewhere")&&!noteContent.includes("anywhere")&&!noteContent.includes("everywhere")
-      )) {
-        //readOutLoud("The pain is in the upper right region of my tummy"); - DON'T REMOVE THE SPACE BEFORE 'WHERE' AS CAN BE 'ANYWHERE (ELSE)'FOR RADIATION OF PAIN
-        previousquestion = noteContent; wherepainexactly_repeat++;  response_question = "The pain's in the upper right region of my tummy";
-        painlocationx = true;
-  
-        document.getElementById("mp4_src").src = "videos/wherepain.mp4"; allifsaction();}//where is the pain
-      
-  
-  
-  
-  
-  
-          
-     
-      else if (describepain_repeat == 0 && (noteContent.includes("describe")||noteContent.includes("it feel like")
-          ||noteContent.includes("pain feel like"))) {
-        //readOutLoud("The pain feels like a sharp pain");
-        previousquestion = noteContent; describepain_repeat++;  response_question = "The pain feels like a sharp pain";
-        characterx = true;
-      document.getElementById("mp4_src").src = "videos/feelslikehorsekickedme.mp4"; allifsaction();}//describe the pain
-      
-    
-      
-  
-  ////
-      
-      
-  
-  
-      else if (radiate_repeat == 0 && (noteContent.includes("radiate")||noteContent.includes("other pain")
-      ||(noteContent.includes("anywhere")||noteContent.includes("other"))&&(noteContent.includes("move")||noteContent.includes("go")))) {
-        //readOutLoud("now you mention it, I have also noticed that the pain goes to the middle of my tummy as well, and also a bit in the middle of my back too");
-        previousquestion = noteContent; radiate_repeat++;  response_question = "I have pain that goes to the middle of my tummy, and also a bit in the middle of my back";
-        radiatex = true;
-  
-        document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//does the pain radiate/move anywhere/does the pain move to other parts of the body
-      
-      else if (ratethepain_repeat == 0 && (noteContent.includes("rate")&&(noteContent.includes("pain")||noteContent.includes("it")||noteContent.includes("sever"))
-      ||noteContent.includes("severe")&&(noteContent.includes("pain")||noteContent.includes("it"))
-      ||noteContent.includes("1-10")||noteContent.includes("1 to 10")||noteContent.includes("one to ten")||noteContent.includes("-10")
-          ||noteContent.includes("out of 10")||noteContent.includes("out of ten"))) {
-        //readOutLoud("Honesty I would say the pain is probably around 7/10, and I normally have quite a high pain threshold");
-        previousquestion = noteContent; ratethepain_repeat++;  response_question = "The pain is 7/10 in severity";
-        ratepainx = true;
-        document.getElementById("mp4_src").src = "videos/painis9outof10.mp4"; allifsaction();}//rate the pain
-      
-      else if (makeitbetter_repeat == 0 && (noteContent.includes("make it better")||noteContent.includes("make the pain better")
-          ||noteContent.includes("makes it better")||noteContent.includes("makes the pain better")
-          ||noteContent.includes("relieve")||noteContent.includes("ease"))) {
-        //readOutLoud("Honestly, nothing makes the pain better, it just seems to ease off by itself after 30 minutes");
-        previousquestion = noteContent; makeitbetter_repeat++;  response_question = "nothing makes the pain better, it just eases off by itself after 30 mins";
-        makeitbetterx = true;
-        document.getElementById("mp4_src").src = "videos/nothingmakesitbetter.mp4"; allifsaction();}//anything make it better/anything ease the pain
-      
-      else if (makeitworse_repeat == 0 && (noteContent.includes("make it worse")||noteContent.includes("exacerbate")
-          ||noteContent.includes("make the pain worse")||noteContent.includes("makes the pain worse")
-          ||noteContent.includes("makes it worse"))) {
-        //readOutLoud("Eating fatty meals like burgers or fish and chips makes the pain worse.");
-        previousquestion = noteContent; makeitworse_repeat++;  response_question = "Eating fatty meals, burgers, fish + chips makes the pain worse";
-        makeitworsex = true;
-      
-        document.getElementById("mp4_src").src = "videos/anymovementmakesitworse.mp4"; allifsaction();}//anything make it worse
-      
-     
-      else if (whenstarted_repeat == 0 && ((noteContent.includes("how long")||noteContent.includes("start"))&&!noteContent.includes("smok")&&!noteContent.includes("alcohol")&&!noteContent.includes("drink"))) {
-        //readOutLoud("This pain started this morning after breakfast but stopped after 30 minutes");
-        previousquestion = noteContent; whenstarted_repeat++;  response_question = "This pain started this morning after breakfast but stopped after 30 mins";
-        document.getElementById("mp4_src").src = "videos/startedthismorning.mp4"; allifsaction();}//How long have you had the pain for/when did the pain start
-      
-      else if (gottenworsethroughtime_repeat == 0 && (noteContent.includes("got worse")||noteContent.includes("gotten worse")
-          ||noteContent.includes("gotten better")||noteContent.includes("got better")||noteContent.includes("sudden"))) {
-        //readOutLoud("The pain has not gotten worse since this morning, and actually is not too bad now");
-        previousquestion = noteContent; gottenworsethroughtime_repeat++;  response_question = "The pain has not gotten worse since this morning, and actually is not too bad now";
-        document.getElementById("mp4_src").src = "videos/painisgottenworseovertheday.mp4"; allifsaction();}//Has the pain gradually gotten worse/better
-      
-      
-      
-      
-      else if(happenbefore_repeat == 0 && ((noteContent.includes("happen")||noteContent.includes("felt"))&& noteContent.includes("before"))){
-        //readOutLoud("This has now happened quite a few times actually and is happening more often recently");
-        previousquestion = noteContent; happenbefore_repeat++;  response_question = "This has now happened quite a few times actually and is happening more often recently";
-        happenbeforex = true;
-        document.getElementById("mp4_src").src = "videos/nothatsneverhappenedbefore.mp4"; allifsaction();}
-  
-  
-  
-  
-  
-  
-      //rule out pain anywhere else
-      else if (painin_repeat == 0 && ((noteContent.includes("have")||noteContent.includes("notice")||noteContent.includes("any"))&&(noteContent.includes("pain in")||noteContent.includes("pains in")))) {
-        //readOutLoud("I've mainly got pain in the upper right side of my abdomen, but also noticed in the middle of my abdomen and my back");
-        previousquestion = noteContent; painin_repeat++;  response_question = "I've mainly got pain in my upper right abdomen but also noticed in my back and upper abdomen";
-        radiatex = true;
-        backpainx = true;
-      document.getElementById("mp4_src").src = "videos/mainlyinchestbutalsoinneckandchestandarm.mp4"; allifsaction();}//any pain in X (eg in the shoulders, in the side etc)
-      
-      //other symptoms    
-      else if (othersymptoms_repeat == 0 && (noteContent.includes("symptoms")||noteContent.includes("come along with")
-          ||noteContent.includes("anything else")||noteContent.includes("come with"))) {
-        //readOutLoud("I've also vomited once earlier today, but I've been feeling sick for the whole day");
-        previousquestion = noteContent; othersymptoms_repeat++;  response_question = "I've also vomited once earlier today, but I've been feeling sick for the whole day";
-        associatedsymptomsx = true;
-        document.getElementById("mp4_src").src = "videos/sobbutcozofthepain.mp4"; allifsaction();}//any other Sx/does anything else come along with the pain
-      
-      else if (fever_repeat == 0 && (noteContent.includes("fever")||noteContent.includes("felt off")||noteContent.includes("felt yourself")
-          ||noteContent.includes("feel")&&noteContent.includes("off")||noteContent.includes("a cold")||noteContent.includes("under the weather")
-          ||noteContent.includes("temperature")&&noteContent.includes("high"))) {
-        //readOutLoud("Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently");
-        previousquestion = noteContent; fever_repeat++;  response_question = "Yes, I have been feeling a bit under the weather recently to be honest, and I feel quite tired and feverish recently";
-        associatedsymptomsx = true;
-        feverx = true;
-        document.getElementById("mp4_src").src = "videos/fever.mp4"; allifsaction();}//fever
-      
-      else if (tired_repeat == 0 && ((noteContent.includes("tired")&&!noteContent.includes("of"))
-      ||noteContent.includes("sore throat")||noteContent.includes("soar throat")||noteContent.includes("chills"))) {
-    //readOutLoud("No");
-    previousquestion = noteContent; tired_repeat++;  response_question = "No";
-    associatedsymptomsx = true;
-    document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you feel tired all the time/any chills (it eliminates if you say 'do you feel tired of X')
-  
-      else if (nausea_repeat == 0 && (noteContent.includes("naus")||noteContent.includes("vomit"))) {
-        //readOutLoud("Yes, I vomited earlier on today");
-        previousquestion = noteContent; nausea_repeat++;  response_question = "Yes, I vomited earlier on today";
-        associatedsymptomsx = true;
-        nauseax = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any vomiting/nausea/nauseous
-      
-      else if (dizzy_repeat == 0 && (noteContent.includes("dizz")||noteContent.includes("faint")||(noteContent.includes("light")&&noteContent.includes("head")))) {
-        //readOutLoud("No");
-        previousquestion = noteContent; dizzy_repeat++;  response_question = "No";
-        associatedsymptomsx = true;
-        dizzinessx = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any dizziness/fainting/lightheadedness
-  
-      else if (palpitations_repeat == 0 && (noteContent.includes("palpitation")||(noteContent.includes("beat")||noteContent.includes("pound")||noteContent.includes("rac"))&&(noteContent.includes("chest")||noteContent.includes("heart")))) {
-        //readOutLoud("No");
-        previousquestion = noteContent; palpitations_repeat++;  response_question = "No";
-        associatedsymptomsx = true;
-        palpitationsx = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//palpitations/heart beating/racing/pounding
-  
-      else if (sweat_repeat == 0 && (noteContent.includes("clam")||noteContent.includes("sweat"))) {
-        //readOutLoud("No");
-        previousquestion = noteContent; sweat_repeat++;  response_question = "No";
-        associatedsymptomsx = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//any sweating/clammy
-  
-      else if (cough_repeat == 0 && (noteContent.includes("cough")&&!noteContent.includes("colour")&&!noteContent.includes("texture")&&!noteContent.includes("consistency"))) {
-        //readOutLoud("No");
-        previousquestion = noteContent; cough_repeat++;  response_question = "No";
-        associatedsymptomsx = true;
-        coughx = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//cough
-      
-      else if (sputum_repeat == 0 && (noteContent.includes("bring up any")||noteContent.includes("sputum")||noteContent.includes("phlegm")
-      ||noteContent.includes("cough")&&(noteContent.includes("bring up")||noteContent.includes("come")))) {
-        //readOutLoud("No");
-        previousquestion = noteContent; sputum_repeat++;  response_question = "No";
-        associatedsymptomsx = true;
-        coughx = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//do you bring up anything when you cough/vomit/ anything come out?
-      
-      
-      //SOB   
-      else if (breathlessness_repeat == 0 && (noteContent.includes("short")||noteContent.includes("breathless")||noteContent.includes("breath")||noteContent.includes("dysp"))) {
-        //readOutLoud("No");
-        previousquestion = noteContent; breathlessness_repeat++;  response_question = "No";
-        dyspnoeax = true;
-        document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//SOB/dyspnoea
-      
-  
-  
-  
-      else if (walkdistance_repeat == 0 && (noteContent.includes("whilst walk")||noteContent.includes("when you walk")
-          ||noteContent.includes("whilst you walk")||noteContent.includes("when walk")||noteContent.includes("during walk")
-          ||noteContent.includes("walk")&&(noteContent.includes("far")||noteContent.includes("how much")||noteContent.includes("stop")||noteContent.includes("until")))) {
-        //readOutLoud("I can walk about 200 metres no problem, but after that I get a bit short of breath");
-        previousquestion = noteContent; walkdistance_repeat++;  response_question = "I can walk about 200 metres no problem, but after that I get a bit short of breath";
-        walkdistancex = true;
-        document.getElementById("mp4_src").src = "videos/icanwalk.mp4"; allifsaction();}//how far can you walk/when do you feel short of breath/ dyu get SOB whilst walking/when walking
-      
-        
-      
-      //Gastro
-      else if (bloating_repeat == 0 && (noteContent.includes("bloat"))) {
-        //readOutLoud("I haven't noticed any bloating");
-        previousquestion = noteContent; bloating_repeat++;  response_question = "I haven't noticed any bloating";
-        associatedsymptomsx = true;
-        document.getElementById("mp4_src").src = "videos/bloating.mp4"; allifsaction();}//bloating
-      
-      else if (yellow_repeat == 0 && (noteContent.includes("yellow")||noteContent.includes("jaundice"))) {
-        //readOutLoud("I've not noticed any yellowing of the skin or of my eyes");
-        previousquestion = noteContent; yellow_repeat++;  response_question = "I've not noticed any yellowing of the skin or of my eyes'";
-        associatedsymptomsx = true;
-        jaundicex = true;
-        document.getElementById("mp4_src").src = "videos/yellowingofskin.mp4"; allifsaction();}//jaundice
-  
-  
-  
-  
-  
-  
-  
-    //bowels+urine    
-    else if (bowels_repeat == 0 && (noteContent.includes("bowels")||noteContent.includes("poo")
-      ||noteContent.includes("stool")||noteContent.includes("back side")
-      ||noteContent.includes("constipation")||noteContent.includes("diarrhoea")||noteContent.includes("runny"))) {
-    //readOutLoud("I've not noticed any changes in my bowels");
-    previousquestion = noteContent; bowels_repeat++;  response_question = "I've not noticed any changes";
-    document.getElementById("mp4_src").src = "videos/changesinstools.mp4"; allifsaction();}//bowels
-  
-  else if (urine_repeat == 0 && (noteContent.includes("urin")||noteContent.includes("pee")
-      ||noteContent.includes("piss")||noteContent.includes("toilet")
-      ||noteContent.includes("bladder")||noteContent.includes("void"))) {
-    //readOutLoud("I've not noticed any changes in my urine");
-    previousquestion = noteContent; urine_repeat++;  response_question = "I've not noticed any changes in my urine";
-    
-    if (noteContent.includes("dark")||noteContent.includes("pale")){darkurinex = true;}
-    
-    document.getElementById("mp4_src").src = "videos/changesinurine.mp4"; allifsaction();}//urine/voiding
-  
-  //red flags   
-  else if (weight_repeat == 0 && (noteContent.includes("weigh"))) {
-    //readOutLoud("I've not noticed any weight loss to be honest");
-    previousquestion = noteContent; weight_repeat++;  response_question = "I've not noticed any weight loss";
-    weightx = true;
-    document.getElementById("mp4_src").src = "videos/wtlossgain.mp4"; allifsaction();}//weight loss
-  
-  else if (blood_repeat == 0 && (noteContent.includes("blood"))) {
-    //readOutLoud("I've not noticed any blood loss from anywhere");
-    previousquestion = noteContent; blood_repeat++;  response_question = "I've not noticed any blood loss from anywhere";
-    document.getElementById("mp4_src").src = "videos/bloodloss.mp4"; allifsaction();}//blood loss
-  
-  else if (appetite_repeat == 0 && (noteContent.includes("appetite")||noteContent.includes("eating"))) {
-    //readOutLoud("I've not noticed any changes in my appetite");
-    previousquestion = noteContent; appetite_repeat++;  response_question = "I've not noticed any changes in my appetite";
-    appetitex = true;
-    document.getElementById("mp4_src").src = "videos/changesinappetite.mp4"; allifsaction();}//changes in appetite
-  
-  
     //ICE
     else if (idea_repeat == 0 && (noteContent.includes("idea")||noteContent.includes("do you think")||noteContent.includes("do you think")&&((noteContent.includes("going on")
       ||noteContent.includes("reckon")||noteContent.includes("happening"))))) {
@@ -2403,61 +2657,6 @@ mediaRecorder.stop();
   
   
   
-  
-  //PMHx+FHx+allergies+meds   
- 
-///  
-  else if (familyheart_repeat == 0 && (noteContent.includes("family")||noteContent.includes("run in the"))) {
-    //readOutLoud("My dad and my uncle both have high blood pressure");
-    previousquestion = noteContent; familyheart_repeat++;  response_question = "My dad and my uncle both have high blood pressure";
-    familyhistoryx = true;
-    document.getElementById("mp4_src").src = "videos/familyhistory.mp4"; allifsaction();}//FHx
-  
-  
-  
-  else if (pmhx_repeat == 0 && (!noteContent.includes("famil")&&!noteContent.includes("ask")&&(noteContent.includes("anything else")||noteContent.includes("other problem")||noteContent.includes("other condition"))
-  ||(noteContent.includes("medical")&&(noteContent.includes("problem")||noteContent.includes("condition")||noteContent.includes("issue"))))) {
-    //readOutLoud("I have high cholesterol and my blood pressure is on the high side. I'm also prediabetic as well.");
-    previousquestion = noteContent; pmhx_repeat++;  response_question = "I have high cholesterol and my blood pressure is on the high side. I'm also prediabetic as well";
-    pmhx = true;
-    document.getElementById("mp4_src").src = "videos/pmhx.mp4"; allifsaction();}//PMHx / suffere from anything else (you also want to rule out is there anything else you want to ask me)
-  
-      
- 
-  
-  
-      
-
-  
-  else if (surgery_repeat == 0 && (noteContent.includes("surger")||noteContent.includes("operat"))) {
-    //readOutLoud("I've not had any surgeries in the past");
-    previousquestion = noteContent; surgery_repeat++;  response_question = "I've not had any surgeries";
-    surgeriesx = true;
-    document.getElementById("mp4_src").src = "videos/surgeries.mp4"; allifsaction();}//Any surgeries
-  
-  
-  else if (allergy_repeat == 0 && (noteContent.includes("allerg"))) {
-    //readOutLoud("no");
-    previousquestion = noteContent; allergy_repeat++;  response_question = "no";
-    allergiesx = true;
-    document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//FHx
-  
-  else if (takeforpain_repeat == 0 && (noteContent.includes("do you take anything for")||noteContent.includes("paracetamol")||noteContent.includes("pain relief")||noteContent.includes("relie")&&noteContent.includes("pain"))) {
-    //readOutLoud("I take paracetamol, but it doesn't work");
-    previousquestion = noteContent; takeforpain_repeat++;  response_question = "I take paracetomol but it doesn't work";
-    medstestx = true;
-    document.getElementById("mp4_src").src = "videos/itakeparacetamolbutdoesntwork.mp4"; allifsaction();}//Do you take anything for the pain? + does it work
-  
-  else if (illicitdrugs_repeat == 0 && (noteContent.includes("meds")||noteContent.includes("medication")||noteContent.includes("drugs")&&!noteContent.includes("illicit")&&!noteContent.includes("illegal"))) {
-    //readOutLoud("I only take Ramipril 1.25 milligrams once a day for my blood pressure");
-    previousquestion = noteContent; illicitdrugs_repeat++;  response_question = "I take ramipril for high BP";
-    medstestx = true;
-    document.getElementById("mp4_src").src = "videos/medicationsaspirin.mp4"; allifsaction();}//meds
-  
-  
-  //social Hx
-  
-  
   else if (howmuchsmoke_repeat == 0 && (noteContent.includes("smok")||noteContent.includes("how much do you smoke"))) {
     //readOutLoud("I smoke around 15 cigarettes every day and i started when i was 15");
     previousquestion = noteContent; howmuchsmoke_repeat++;  response_question = "i smoke 15 cigarettes a day + started when i was 15";
@@ -2470,66 +2669,6 @@ mediaRecorder.stop();
     previousquestion = noteContent; drinkingalcohol_repeat++;  response_question = "i drink about half a bottle of wine per day";
     alcoholx = true;
     document.getElementById("mp4_src").src = "videos/alcohol.mp4"; allifsaction();}//alcohol
-  
-  else if (illegaldrugs_repeat == 0 && (noteContent.includes("illicit")||noteContent.includes("illegal drug"))){
-    //readOutLoud("No");
-    previousquestion = noteContent; illegaldrugs_repeat++;  response_question = "no i don't";
-    document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//illicit drugs
-  
-  else if (overthecounter_repeat == 0 && (noteContent.includes("over the counter")||noteContent.includes("not prescribed")||noteContent.includes("not given"))){
-    //readOutLoud("No");
-    previousquestion = noteContent; overthecounter_repeat++;  response_question = "no";
-    document.getElementById("mp4_src").src = "videos/no.mp4"; allifsaction();}//OTC drugs/have you been taking any drugs not given by the Dr
-  
-  else if (exercise_repeat == 0 && (noteContent.includes("exercise")||noteContent.includes("go on walk")||noteContent.includes("active")
-  ||noteContent.includes("sport")||noteContent.includes("physical"))){
-    //readOutLoud("I try and do exercise from time to time like going on walks with my dog and sometimes play badminton with my friends");
-    previousquestion = noteContent; exercise_repeat++;  response_question = "I try do exercise like going on walks with my dog and play badminton";
-    physicalactivityx = true;
-    document.getElementById("mp4_src").src = "videos/exercise.mp4"; allifsaction();}//exercise/do you keep active
-  
-  ////
-  
-  else if (diet_repeat == 0 && (noteContent.includes("diet")||noteContent.includes("do you eat")||noteContent.includes("what you eat"))){
-    //readOutLoud("I eat quite a lot of fatty products, a lot of cheese, eggs, meat, things like that.");
-    previousquestion = noteContent; diet_repeat++;  response_question = "I eat quite a lot of fatty products, a lot of cheese, eggs, meat, things like that";
-    appetitex = true;
-    document.getElementById("mp4_src").src = "videos/ieattoomuch.mp4"; allifsaction();}//how's your diet/what sorts of things do you eat/describe what you eat
-  
-  
-  
-  
-  //home situation    
-  else if (livewithathome_repeat == 0 && (noteContent.includes("at home")||noteContent.includes("live with"))){
-    //readOutLoud("I live alone in a flat in the city");
-    previousquestion = noteContent; livewithathome_repeat++;  response_question = "i live alone in a flat";
-    homesituationx = true;
-    document.getElementById("mp4_src").src = "videos/livingsituation.mp4"; allifsaction();}//who's at home/who lives at home/who dyu live with
-  
-  else if (bungalo_repeat == 0 && (noteContent.includes("bungalo")||noteContent.includes("house")||noteContent.includes("appartment")
-      ||noteContent.includes("live in")||noteContent.includes("you live")||noteContent.includes("living situation")||noteContent.includes("housing situation"))){
-    //readOutLoud("I live in a little flat in the city");
-    previousquestion = noteContent; bungalo_repeat++;  response_question = "i live in little flat in the city";
-    homesituationx = true;
-    document.getElementById("mp4_src").src = "videos/livingsituation.mp4"; allifsaction();}//where dyu live/dyu live in a flat etc
-  
-  
-  /*
-      else if ((noteContent.includes("good")||noteContent.includes("ok")||noteContent.includes("alright"))&&(noteContent.includes("i'm")||noteContent.includes("i am"))) {
-        //readOutLoud("good");
-        previousquestion = noteContent;   response_question = "good";
-        document.getElementById("mp4_src").src = "videos/good.mp4"; document.getElementById("myVideo").load(); document.getElementById('myVideo').onended = function(e) {
-          safeStartRecorder();      document.getElementById('stop-consultation-btn').style.display = 'unset';
-          }}//I'm good thank you (in response to how are you)
-  */
-  
-          else if (hithere_repeat == 0 && ((noteContent.includes("hello")||noteContent.toLowerCase() === "hi."||noteContent.toLowerCase() === "hi"||noteContent.toLowerCase() === "hey"
-          ||noteContent.toLowerCase() === "hey."||noteContent.includes("greeting")
-          ||noteContent.includes("hey there")||noteContent.includes("hi there")||noteContent.includes("hiya"))&&!noteContent.includes("children"))){
-            //readOutLoud("Hiya there");
-            previousquestion = noteContent; hithere_repeat++;  response_question = "hiya there";
-            document.getElementById("mp4_src").src = "videos/hiyathere.mp4"; allifsaction();}
-          
   
   
   
@@ -2544,7 +2683,6 @@ mediaRecorder.stop();
   
       else {
         
-        if (noteContent.includes("dark")||noteContent.includes("pale")){darkurinex = true;}
 
   
 
@@ -2566,17 +2704,21 @@ const generateResponse = async (input) => {
 
   const token = await auth.currentUser.getIdToken();
 
-const response = await fetch("https://medschoolsims-1.onrender.com/api/TUTOR2ndcase", {
+const response = await fetch(getTutor2ndCaseApiUrl(), {
   method: "POST",
   headers: { 
     "Content-Type": "application/json",
     Authorization: "Bearer " + token
   },
     body: JSON.stringify({ 
-      input: input,
-      sessionId: sessionId
-    })
+    input: input,
+    sessionId: sessionId
+  })
   });
+
+  if (!response.ok) {
+    throw new Error(`TUTOR2ndcase failed with status ${response.status}`);
+  }
 
   const data = await response.json();
   return data.content;
@@ -2752,7 +2894,7 @@ document.getElementById("inbetweenmp4_src").src = "videos/silentvideo.mp4";
 
 
 
-document.getElementById('mutedVideo').style.display = 'unset';  
+document.getElementById('mutedVideo').style.display = 'none';  
 const gptvideo = document.getElementById('mutedVideo');
 
 
@@ -2769,33 +2911,56 @@ const gptvideo = document.getElementById('mutedVideo');
 
 
 
-const handleUserInput = async (noteContent) => {
-  const responsePromise = generateResponse(noteContent);
-  const videoPromise = new Promise((resolve) => {
-    inbetweenVideo.onloadedmetadata = () => {
-      inbetweenVideo.muted = true;
+const finishGeneratedResponsePlayback = () => {
+  const gptvideo = document.getElementById('mutedVideo');
+  gptvideo.pause();
 
-      inbetweenVideo.play();
-      resolve();
+  console.log("👉 START recording triggered");
+  safeStartRecorder();
+  document.getElementById('stop-consultation-btn').style.display = 'unset';
+  document.getElementById('executeButton').style.display = 'unset';
+  document.getElementById('myVideo').style.display = 'unset';
+  document.getElementById('mutedVideo').style.display = 'none';
+  document.getElementById('errormsg').style.display = 'none';
+  messagebeforeacceptingmic.style.display = 'none';
+  actionTriggered = false;
+};
 
+const speakGeneratedFallback = (text) => {
+  const synth = window.speechSynthesis;
+  if (!synth) {
+    finishGeneratedResponsePlayback();
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.onstart = () => {
+    document.getElementById('loadingcircle').style.display = 'none';
+    document.getElementById('errormsg').style.display = 'none';
+    const gptvideo = document.getElementById('mutedVideo');
+    gptvideo.onplaying = () => {
+      gptvideo.onplaying = null;
+      hidePrimaryListeningVideo();
+      gptvideo.style.display = 'unset';
     };
-    ////////////////////is for playing the muted video///////////////////
+    gptvideo.play().catch(() => {});
+  };
+  utterance.onend = finishGeneratedResponsePlayback;
+  utterance.onerror = (err) => {
+    console.error("Speech synthesis fallback failed:", err);
+    finishGeneratedResponsePlayback();
+  };
+  synth.cancel();
+  synth.speak(utterance);
+};
+
+const handleUserInput = async (noteContent) => {
+  try {
+    showPrimaryThinkingState();
     document.getElementById('loadingcircle').style.display = 'unset';
     document.getElementById('errormsg').style.display = 'unset';
-
+    const responsePromise = generateResponse(noteContent);
     document.getElementById("mutedmp4_src").src = "videos/bitmore.mp4";
-    
-    
-   
-
-
-    setTimeout(() => {
-      inbetweenVideo.load(); inbetweenVideo.loop = true;
-      
-  }, 1);
-
-
-
 
     gptvideo.onended =  function(e) {
       console.log("👉 START recording triggered");
@@ -2808,11 +2973,11 @@ safeStartRecorder();      document.getElementById('stop-consultation-btn').style
 
     };
   
-
-  });
-  await Promise.all([responsePromise, videoPromise]);
   const response = await responsePromise;
-  document.getElementById('chatgpt-response').innerText = 'Your previous question' + previousquestion  + '\n' + 'The response of the candidate to the previous question:' + response_question  + '\n' + 'Candidate response: ' + response + '\n' + '\n' + noteContent ; // Update the content of the element with ID 'chatgpt-response' REMOVE THIS!!!!
+  const chatGptResponse = document.getElementById('chatgpt-response');
+  if (chatGptResponse) {
+    chatGptResponse.innerText = 'Your previous question' + previousquestion  + '\n' + 'The response of the candidate to the previous question:' + response_question  + '\n' + 'Candidate response: ' + response + '\n' + '\n' + noteContent;
+  }
 
   /*
   const synth = window.speechSynthesis;
@@ -2828,7 +2993,7 @@ safeStartRecorder();      document.getElementById('stop-consultation-btn').style
   const text11L = response;
 
 // Call the Eleven Labs API for text-to-speech
-fetch('https://oscesimstrial1.onrender.com/api/voicezak', {
+fetch(`${API_BASE_URL}/api/voicezak`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -2858,20 +3023,7 @@ audio.load();
 
   
   audio.onended = () => {
-    const gptvideo = document.getElementById('mutedVideo');
-    gptvideo.pause();
-
-    console.log("👉 START recording triggered");
-safeStartRecorder();
-    document.getElementById('stop-consultation-btn').style.display = 'unset';
-    document.getElementById('executeButton').style.display = 'unset';
-    document.getElementById('myVideo').style.display = 'unset';
-    document.getElementById('mutedVideo').style.display = 'none';
-    console.log("💡 Setting messagebeforeacceptingmic to UNSET");
-messagebeforeacceptingmic.style.display = 'unset';
-    document.getElementById('errormsg').style.display = 'none';
-
-    actionTriggered = false;
+    finishGeneratedResponsePlayback();
   };
 
           const gptvideo = document.getElementById('mutedVideo');//get the muted talking video loaded
@@ -2882,14 +3034,12 @@ messagebeforeacceptingmic.style.display = 'unset';
     document.getElementById('loadingcircle').style.display = 'none';
     document.getElementById('errormsg').style.display = 'none';
 
-    // Stop silent video
-    document.getElementById('inbetweenVideo').style.display = 'none';
-    silentVideo.pause();
-    silentVideo.style.display = 'none';
-
-    // Start muted talking video
-    gptvideo.style.display = 'unset';
-    gptvideo.play();
+    gptvideo.onplaying = () => {
+      gptvideo.onplaying = null;
+      hidePrimaryListeningVideo();
+      gptvideo.style.display = 'unset';
+    };
+    gptvideo.play().catch(err => console.error("Muted talking video failed to play:", err));
   };
 
   
@@ -2897,7 +3047,12 @@ messagebeforeacceptingmic.style.display = 'unset';
   // Now play (safe for desktop + mobile)
   audio.play().catch(err => {
     console.error("Audio play blocked:", err);
+    speakGeneratedFallback(response);
   });
+})
+.catch(err => {
+  console.error("ElevenLabs fallback failed:", err);
+  speakGeneratedFallback(response);
 });
 
 
@@ -2924,6 +3079,12 @@ messagebeforeacceptingmic.style.display = 'unset';
 
 
   previousquestion = noteContent; response_question = response;//is to put what the previous question was into chatgpt
+  } catch (err) {
+    console.error("Generated response flow failed:", err);
+    document.getElementById('loadingcircle').style.display = 'none';
+    document.getElementById('errormsg').style.display = 'unset';
+    finishGeneratedResponsePlayback();
+  }
 };  
   
   
@@ -2940,7 +3101,13 @@ messagebeforeacceptingmic.style.display = 'unset';
   };//end of the else statement
   
   function allifsaction(){
-    document.getElementById("myVideo").load();      document.getElementById('inbetweenVideo').style.display = 'none';//ssssssssss
+    const mainVideo = document.getElementById("myVideo");
+    mainVideo.onplaying = function () {
+      hidePrimaryThinkingState();
+      document.getElementById('loadingcircle').style.display = 'none';
+      mainVideo.onplaying = null;
+    };
+    mainVideo.load();
  document.getElementById('myVideo').onended = function(e) {
       console.log("👉 START recording triggered");
 safeStartRecorder();      
@@ -3936,8 +4103,8 @@ inbetweenVideo.onloadedmetadata = () => {
    
   
   /*----------------------------------SLIDESHOW IN REVIEW SECTION----------------------------------*/
-  
-  let slideIndex = 1;
+  /* var (not let): endConsultation is declared above this line and assigns slideIndex — let would stay in TDZ until here. */
+  var slideIndex = 1;
   showSlides(slideIndex);
   
   function plusSlides(n) {
@@ -4048,6 +4215,11 @@ inbetweenVideo.onloadedmetadata = () => {
   //input.
   addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
+      if (isPrimaryMicFlowActive()) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
       event.preventDefault();
       document.getElementById("save-note-btn").click();
     }
@@ -4056,6 +4228,11 @@ inbetweenVideo.onloadedmetadata = () => {
   var input = document.getElementById("note-textarea");
   input.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
+      if (isPrimaryMicFlowActive()) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
       event.preventDefault();
       document.getElementById("save-note-btn").click();
     }
@@ -6564,15 +6741,24 @@ recognition_treatments.onend= function (){
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
   
     analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.2;
     microphone.connect(analyser);
   
     function updateGlow() {
         analyser.getByteFrequencyData(dataArray);
-        let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
-  
+        let volume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+        const normalizedLevel = Math.max(0, Math.min((volume - 2) / 18, 1));
+
+        if (!micGlowAnalyser) {
+          if (isPrimaryMicFlowActive()) {
+            setPrimaryMicGlow(normalizedLevel);
+          } else {
+            setPrimaryMicGlow(0);
+          }
+        }
+
         let glowIntensity = Math.min(volume * 3.5, 50); // Cap intensity at 50px
-  
-        micisworking.style.boxShadow = `0px 0px ${glowIntensity}px ${glowIntensity / 2}px rgba(255, 0, 0, 0.8)`;
+
         micisworkingexaminations.style.boxShadow = `0px 0px ${glowIntensity}px ${glowIntensity / 2}px rgba(255, 0, 0, 0.8)`;
         micisworkingsummary.style.boxShadow = `0px 0px ${glowIntensity}px ${glowIntensity / 2}px rgba(255, 0, 0, 0.8)`;
         micisworkingdifferentials.style.boxShadow = `0px 0px ${glowIntensity}px ${glowIntensity / 2}px rgba(255, 0, 0, 0.8)`;
@@ -6716,6 +6902,11 @@ if (WWWEBItitles && evenbetterifgeneral) {
   function keyPress(e) {
     var x = e || window.event;
     var key = (x.keyCode || x.which);
+    if ((key == 13 || key == 3) && isPrimaryMicFlowActive()) {
+      if (x.preventDefault) x.preventDefault();
+      if (x.stopPropagation) x.stopPropagation();
+      return;
+    }
     if (key == 13 || key == 3) {
       //runs this function when enter is pressed
       newEntry();

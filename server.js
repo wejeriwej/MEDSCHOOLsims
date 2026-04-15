@@ -21,6 +21,7 @@ app.use(express.static("public"));
 const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:3000",
+  "http://localhost:5501",
   "https://oscereal-706d4.web.app"
 ];
 
@@ -54,10 +55,39 @@ app.use(cors({
 
 import multer from "multer";
 import fs from "fs";
+import path from "path";
 import OpenAI from "openai";
 
-const upload = multer({ dest: "uploads/" });
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (_req, file, cb) => {
+    const originalExt = path.extname(file.originalname || "");
+    const mimeExt =
+      file.mimetype === "audio/webm" ? ".webm" :
+      file.mimetype === "audio/mp4" ? ".mp4" :
+      file.mimetype === "audio/mpeg" ? ".mp3" :
+      file.mimetype === "audio/wav" ? ".wav" :
+      file.mimetype === "audio/ogg" ? ".ogg" :
+      "";
+    const ext = originalExt || mimeExt || ".webm";
+    cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
+  }
+});
+
+const upload = multer({ storage });
 const openai = new OpenAI();
+
+function looksSuspiciousForEnglish(text = "") {
+  const trimmed = text.trim();
+  if (!trimmed) return false;
+
+  const cyrillicMatches = trimmed.match(/[\u0400-\u04FF]/g) || [];
+  const latinMatches = trimmed.match(/[A-Za-z]/g) || [];
+
+  return cyrillicMatches.length > 0 && cyrillicMatches.length > latinMatches.length;
+}
 
 app.post("/api/transcribe", upload.single("file"), async (req, res) => {
   try {
@@ -69,11 +99,29 @@ app.post("/api/transcribe", upload.single("file"), async (req, res) => {
     }
 
     console.log("📦 File received:", req.file.path);
-
-    const transcription = await openai.audio.transcriptions.create({
-      file: fs.createReadStream(req.file.path),
-      model: "gpt-4o-transcribe"
+    console.log("📦 File info:", {
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      filename: req.file.filename
     });
+
+    let transcription = await openai.audio.transcriptions.create({
+      file: fs.createReadStream(req.file.path),
+      model: "gpt-4o-transcribe",
+      language: "en",
+      prompt: "This is an English-speaking medical OSCE consultation. Transcribe clearly in English. Prefer ordinary conversational English. Do not guess another language.",
+      temperature: 0
+    });
+
+    if (looksSuspiciousForEnglish(transcription.text)) {
+      console.warn("⚠️ Suspicious non-English transcript detected, retrying with whisper-1 English prompt");
+      transcription = await openai.audio.transcriptions.create({
+        file: fs.createReadStream(req.file.path),
+        model: "whisper-1",
+        language: "en",
+        prompt: "English medical consultation. Return the spoken words in English only."
+      });
+    }
 
     console.log("🧠 Transcription:", transcription.text);
 
@@ -83,6 +131,9 @@ app.post("/api/transcribe", upload.single("file"), async (req, res) => {
 
   } catch (err) {
     console.error("❌ Transcription error:", err);
+    if (req.file?.path && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
     res.status(500).json({ error: "transcription failed" });
   }
 });
@@ -404,81 +455,194 @@ app.post("/api/TUTOR2ndcase", verifyFirebaseUser, async (req, res) => {
       const evaluationMessages = [
         {
           role: "system",
-          content: `
-You are a medical school admissions assessor.
+content: `
 
-Based on the full interview conversation:
 
-1. Give an overall score out of 10
-2. Provide an overall assessment in 2nd person + be specific + reason for score. Be ruthless + harsh in the assessment.
-3. List some of the strengths
-4. List areas for improvement + go into detail + specifics
+You are a harsh + strict UK medical school admissions assessor.
 
-Format EXACTLY like:
+You are assessing a candidate’s response to "Why Medicine?" and related motivation questions.
+
+Your goal is to provide a HARSH, STRUCTURED, and HIGHLY ACTIONABLE evaluation.
+
+========================
+MARKING CRITERIA (Total = 10)
+========================
+
+1. Motivation & Insight into Medicine (0–3)
+- 0 = Vague, generic (e.g. "help people", "like science")
+- 1 = Some insight but lacks depth
+- 2 = Clear, thoughtful motivation
+- 3 = Deep, personal, insightful, and compelling
+
+2. Evidence & Experience (0–2)
+- 0 = No examples
+- 1 = Examples present but weak or not linked
+- 2 = Strong, relevant examples clearly linked to motivation
+
+3. Understanding of the Medical Profession (0–2)
+- 0 = Little understanding
+- 1 = Basic awareness
+- 2 = Realistic and nuanced (ethics, NHS pressures, MDT, responsibility)
+
+4. Communication & Structure (0–2)
+- 0 = Disorganised or unclear
+- 1 = Some structure but inconsistent
+- 2 = Clear, fluent, well-structured
+
+5. Authenticity & Reflection (0–1)
+- 0 = Rehearsed, cliché, superficial
+- 1 = Genuine, reflective, personal
+
+========================
+
+SCORING GUIDANCE:
+- Don't be afraid to give low scores
+- 9–10 only for exceptional depth, insight, and clarity
+- Penalise clichés and vague statements
+- Reward reflection and specific examples
+
+========================
+
+OUTPUT FORMAT (STRICT):
 
 Score: X/10
 
-Overall: ...
+Breakdown:
+- Motivation & Insight: X/3
+- Evidence & Experience: X/2
+- Understanding of Role: X/2
+- Communication: X/2
+- Authenticity: X/1
+
+Overall:
+[2–3 sentences: balanced, constructive, realistic]
 
 Strengths:
-- ...
-- ...
+- [Specific strength with example]
+- [Specific strength with example]
+- [Specific strength with example]
 
 Improvements:
-- ...
-- ...
-- ...
-- ...
+- [Specific actionable improvement]
+- [Specific actionable improvement]
+- [Specific actionable improvement]
+- [Specific actionable improvement]
+
+Cliché Check:
+- [List any clichés used OR say "No major clichés detected"]
+
+Top 10% Candidate Insight:
+[Briefly explain what a top-tier candidate would have done differently]
+
+Model Advice:
+[Rewrite 1–2 sentences of their answer to demonstrate a stronger version]
+
+Confidence: High / Medium / Low
+(based on how much detail the candidate provided)
 `
+
+          /*content: `
+You are a constructive and encouraging medical school admissions assessor. Your goal is to provide helpful, actionable feedback that helps candidates improve.
+
+Based on the full interview conversation, provide a balanced evaluation:
+
+1. Give an overall score out of 10 (be fair and reasonable)
+2. Provide an overall assessment - be constructive, specific, and encouraging. Focus on potential and growth areas.
+3. List genuine strengths observed during the interview (find at least 2-3 positive aspects)
+4. List specific, actionable areas for improvement with practical suggestions
+
+IMPORTANT GUIDELINES:
+- Always find something positive to say about the candidate
+- Provide specific, actionable advice rather than generic criticism
+- Focus on growth and improvement potential
+- Be encouraging and constructive in tone
+- If responses were limited, focus on how to improve preparation and communication strategies
+
+Format EXACTLY like this:
+
+Score: X/10
+
+Overall: [Provide 2-3 constructive sentences focusing on both current performance and improvement potential]
+
+Strengths:
+- [Specific positive observation with example]
+- [Specific positive observation with example]
+- [Specific positive observation with example]
+
+Improvements:
+- [Specific, actionable improvement suggestion with practical advice]
+- [Specific, actionable improvement suggestion with practical advice]
+- [Specific, actionable improvement suggestion with practical advice]
+- [Specific, actionable improvement suggestion with practical advice]
+`*/
         },
         ...messages
       ];
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: evaluationMessages,
-          temperature: 0.3,
-          max_tokens: 200
-        }),
-      });
+      let evaluation;
+      let score;
 
-      const data = await response.json();
-      const evaluation = data.choices[0].message.content.trim();
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: evaluationMessages,
+            temperature: 0.3,
+            max_tokens: 4000
+          }),
+        });
 
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(" OpenAI API error:", response.status, errorText);
+          return res.status(500).json({ error: "Failed to generate evaluation" });
+        }
 
+        const data = await response.json();
+        evaluation = data.choices[0].message.content.trim();
 
+        console.log(" Generated evaluation:", evaluation);
 
-// Extract score from evaluation text
-const scoreMatch = evaluation.match(/Score:\s*(\d+)\/10/);
-const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
+      // Extract score from evaluation text
+      const scoreMatch = evaluation.match(/Score:\s*(\d+)/);
+      score = scoreMatch ? parseInt(scoreMatch[1]) : null;
 
-// Save to user's history
-await admin.firestore().collection("users").doc(doc.data().userId).collection("history").add({
-  sessionId,
-  evaluation,
-  score,
-createdAt: admin.firestore.FieldValue.serverTimestamp(),
-createdAtReadable: new Date().toISOString()});
+      console.log(" Extracted score:", score);
+      } catch (error) {
+        console.error(" Evaluation generation error:", error);
+        return res.status(500).json({ error: "Failed to generate evaluation" });
+      }
 
+      try {
+        // Save to user's history
+        console.log("Saving evaluation to history...");
+        await admin.firestore().collection("users").doc(doc.data().userId).collection("history").add({
+          sessionId,
+          evaluation,
+          score,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          createdAtReadable: new Date().toISOString()
+        });
 
+        console.log("Evaluation saved to history");
 
+        await docRef.update({
+          evaluation,
+          completed: true,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
 
-      await docRef.update({
-        evaluation,
-        completed: true,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
-      });
-
-      return res.json({ evaluation });
-
-
-
+        console.log("Session marked as completed");
+        return res.json({ evaluation });
+      } catch (error) {
+        console.error("Error saving evaluation:", error);
+        return res.status(500).json({ error: "Failed to save evaluation" });
+      }
 
 
     }
@@ -496,13 +660,25 @@ createdAtReadable: new Date().toISOString()});
         {
           role: "system",
           content: `
-You are a medical school interviewer.
+You are a strict + severe unhappy UK medical school interviewer.
 
-- Ask one question at a time
+Your goals:
+- Identify weak answers
+- Probe deeper
+- Test insight and reflection
+
+Follow-up strategy:
+- If answer is vague → ask for SPECIFIC example
+- If answer lacks insight → ask "why does that matter?"
+- If answer lacks understanding → ask about NHS / ethics / role of doctor
+- If answer is strong → challenge further ("What would you find difficult about this?")
+
+Rules:
+- One question at a time (make them hard)
+- Keep it sharp, concise and probing
+- No feedback
+- No praise
 - Respond naturally
-- Ask follow-up questions
-- DO NOT give feedback during interview
-- Keep responses concise + ask hard questions + be a severe examiner
 `
         }
       ];
@@ -1007,6 +1183,36 @@ app.post("/api/create-portal-session", verifyFirebaseUser, async (req, res) => {
 
 
 
+
+// Delete feedback endpoint
+app.delete("/api/history/:id", verifyFirebaseUser, async (req, res) => {
+  console.log("DELETE route hit for ID:", req.params.id);
+  console.log("User UID:", req.uid);
+  
+  try {
+    const { id } = req.params;
+    const db = admin.firestore();
+    
+    // Get the user's history collection and delete the specific document
+    const historyRef = db.collection("users").doc(req.uid).collection("history").doc(id);
+    
+    const doc = await historyRef.get();
+    if (!doc.exists) {
+      console.log("Document not found:", id);
+      return res.status(404).json({ error: "Feedback entry not found" });
+    }
+    
+    await historyRef.delete();
+    console.log("Document deleted successfully:", id);
+    
+    res.json({ success: true, message: "Feedback entry deleted successfully" });
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).json({ error: "Failed to delete feedback entry" });
+  }
+});
+
+console.log("DELETE route registered: /api/history/:id");
 
 //Is to ping render when user accesses main page/index.html so that it wakes up render. Frontend JS is inside index.html btw
 app.get("/health", (req, res) => {
